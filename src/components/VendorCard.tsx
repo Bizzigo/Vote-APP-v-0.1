@@ -54,20 +54,6 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             />
             <AvatarFallback className="rounded-md bg-secondary">{vendor.name.substring(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
-          
-          {/* Rating under logo */}
-          <div className="flex items-center gap-1">
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-medium">{vendor.rating.toFixed(1)}</span>
-          </div>
-          
-          {/* Online status - smaller and more subtle */}
-          <div className="text-xs flex items-center gap-1">
-            <span className={`inline-block h-2 w-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
-            <span className={`text-xs ${isOnline ? 'text-green-600' : 'text-gray-500'}`}>
-              {isOnline ? 'Online' : 'Offline'}
-            </span>
-          </div>
         </div>
         
         {/* Right side - Content */}
@@ -77,7 +63,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             <h3 className="font-medium text-lg">{vendor.name}</h3>
           </div>
           
-          {/* Category, city, rating and distance in one row */}
+          {/* Category, city, rating, online status and distance in one row */}
           <div className="flex items-center flex-wrap gap-2 mb-2">
             <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
               <MapPin className="h-3 w-3 mr-1" />
@@ -89,6 +75,10 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
               <Star className="h-3 w-3 mr-1 fill-yellow-400 text-yellow-400" />
               {vendor.rating.toFixed(1)} / {reviewCount}
+            </span>
+            <span className={`text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center ${isOnline ? 'text-green-600' : 'text-gray-500'}`}>
+              <span className={`inline-block h-2 w-2 rounded-full mr-1 ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+              {isOnline ? 'Online' : 'Offline'}
             </span>
             {locationActive && distance && (
               <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
