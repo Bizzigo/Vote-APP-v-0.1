@@ -49,15 +49,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
             />
           </div>
           <Button 
-            className="ml-0 bg-[#1877F2] hover:bg-[#166FE5] text-white px-4 py-3 h-auto rounded-none"
+            className="ml-0 bg-[#1877F2] hover:bg-[#166FE5] text-white px-4 py-2 h-auto rounded-none"
             onClick={handleSearch}
           >
             ATRAST
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground px-2">
-          Search by vendor name, category, city, or description. Type at least 4 characters for instant results.
-        </p>
       </div>
     </div>
   );
