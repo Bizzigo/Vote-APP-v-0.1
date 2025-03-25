@@ -40,6 +40,18 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
       if (vendor.description.toLowerCase().includes(term)) {
         score += 3;
       }
+      
+      // Location information - if available
+      if (vendor.location) {
+        const locationString = `${vendor.location.lat},${vendor.location.lng}`;
+        if (locationString.includes(term)) {
+          score += 2;
+        }
+      }
+      
+      // Add any additional vendor fields that might be searchable
+      // For example, if vendors had tags, services, or other searchable attributes
+      // We would add them here with appropriate weights
     });
     
     // Boost score based on rating (0-5 additional points)

@@ -55,6 +55,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
             ATRAST
           </Button>
         </div>
+        <p className="text-xs text-muted-foreground px-2">
+          Search by vendor name, category, city, or description. Type at least 4 characters for instant results.
+        </p>
       </div>
     </div>
   );
