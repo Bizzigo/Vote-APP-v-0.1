@@ -15,7 +15,8 @@ import { ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const VendorProfile = () => {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params.id; // Get the actual ID parameter
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -78,6 +79,7 @@ const VendorProfile = () => {
       console.log("Fetching vendor with ID:", id);
       console.log("Available vendors:", mockVendors);
       
+      // Make sure to compare strings with strings
       const foundVendor = mockVendors.find(v => v.id === id);
       
       if (foundVendor) {
