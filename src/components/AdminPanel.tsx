@@ -1,22 +1,22 @@
 
 import React, { useState } from 'react';
-import { Candidate } from '@/lib/types';
+import { Vendor } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Edit, Trash } from 'lucide-react';
 import { toast } from 'sonner';
 import { placeholderImage } from '@/lib/mockData';
 
 interface AdminPanelProps {
-  candidates: Candidate[];
-  setCandidates: React.Dispatch<React.SetStateAction<Candidate[]>>;
+  vendors: Vendor[];
+  setVendors: React.Dispatch<React.SetStateAction<Vendor[]>>;
 }
 
-const AdminPanel: React.FC<AdminPanelProps> = ({ candidates, setCandidates }) => {
-  const [newCandidate, setNewCandidate] = useState<Partial<Candidate>>({
+const AdminPanel: React.FC<AdminPanelProps> = ({ vendors, setVendors }) => {
+  const [newVendor, setNewVendor] = useState<Partial<Vendor>>({
     name: '',
-    photo: '',
+    logo: '',
     city: '',
-    district: '',
+    category: '',
     description: '',
   });
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -24,8 +24,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ candidates, setCandidates }) =>
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setNewCandidate({
-      ...newCandidate,
+    setNewVendor({
+      ...newVendor,
       [name]: value,
     });
   };
@@ -33,72 +33,71 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ candidates, setCandidates }) =>
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!newCandidate.name || !newCandidate.district) {
-      toast.error('Name and district are required fields.');
+    if (!newVendor.name || !newVendor.category) {
+      toast.error('Name and category are required fields.');
       return;
     }
 
     if (editingId) {
-      // Update existing candidate
-      setCandidates(
-        candidates.map((candidate) =>
-          candidate.id === editingId
-            ? { ...candidate, ...newCandidate as Candidate }
-            : candidate
+      // Update existing vendor
+      setVendors(
+        vendors.map((vendor) =>
+          vendor.id === editingId
+            ? { ...vendor, ...newVendor as Vendor }
+            : vendor
         )
       );
-      toast.success('Candidate updated successfully!');
+      toast.success('Vendor updated successfully!');
     } else {
-      // Add new candidate
-      const candidate: Candidate = {
+      // Add new vendor
+      const vendor: Vendor = {
         id: Date.now().toString(),
-        name: newCandidate.name || '',
-        photo: newCandidate.photo || placeholderImage,
-        city: newCandidate.city || '',
-        district: newCandidate.district || '',
-        description: newCandidate.description || '',
-        voteCount: 0,
+        name: newVendor.name || '',
+        logo: newVendor.logo || placeholderImage,
+        city: newVendor.city || '',
+        category: newVendor.category || '',
+        description: newVendor.description || '',
       };
-      setCandidates([...candidates, candidate]);
-      toast.success('New candidate added successfully!');
+      setVendors([...vendors, vendor]);
+      toast.success('New vendor added successfully!');
     }
 
     // Reset form
-    setNewCandidate({
+    setNewVendor({
       name: '',
-      photo: '',
+      logo: '',
       city: '',
-      district: '',
+      category: '',
       description: '',
     });
     setEditingId(null);
     setIsFormVisible(false);
   };
 
-  const handleEdit = (candidate: Candidate) => {
-    setNewCandidate(candidate);
-    setEditingId(candidate.id);
+  const handleEdit = (vendor: Vendor) => {
+    setNewVendor(vendor);
+    setEditingId(vendor.id);
     setIsFormVisible(true);
   };
 
   const handleDelete = (id: string) => {
-    setCandidates(candidates.filter((candidate) => candidate.id !== id));
-    toast.success('Candidate deleted successfully!');
+    setVendors(vendors.filter((vendor) => vendor.id !== id));
+    toast.success('Vendor deleted successfully!');
   };
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Manage Candidates</h2>
+        <h2 className="text-2xl font-semibold">Manage Vendors</h2>
         <Button onClick={() => setIsFormVisible(!isFormVisible)}>
-          {isFormVisible ? 'Cancel' : 'Add New Candidate'}
+          {isFormVisible ? 'Cancel' : 'Add New Vendor'}
         </Button>
       </div>
 
       {isFormVisible && (
         <div className="border border-border/60 p-6 animate-scale-in">
           <h3 className="text-lg font-medium mb-4">
-            {editingId ? 'Edit Candidate' : 'Add New Candidate'}
+            {editingId ? 'Edit Vendor' : 'Add New Vendor'}
           </h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -107,18 +106,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ candidates, setCandidates }) =>
                 <input
                   type="text"
                   name="name"
-                  value={newCandidate.name || ''}
+                  value={newVendor.name || ''}
                   onChange={handleChange}
                   className="w-full bg-transparent border border-border/60 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Photo URL</label>
+                <label className="block text-sm font-medium mb-1">Logo URL</label>
                 <input
                   type="text"
-                  name="photo"
-                  value={newCandidate.photo || ''}
+                  name="logo"
+                  value={newVendor.logo || ''}
                   onChange={handleChange}
                   className="w-full bg-transparent border border-border/60 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
                   placeholder="Image URL (leave empty for placeholder)"
@@ -129,26 +128,31 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ candidates, setCandidates }) =>
                 <input
                   type="text"
                   name="city"
-                  value={newCandidate.city || ''}
+                  value={newVendor.city || ''}
                   onChange={handleChange}
                   className="w-full bg-transparent border border-border/60 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">District *</label>
+                <label className="block text-sm font-medium mb-1">Category *</label>
                 <select
-                  name="district"
-                  value={newCandidate.district || ''}
+                  name="category"
+                  value={newVendor.category || ''}
                   onChange={handleChange}
                   className="w-full bg-transparent border border-border/60 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
                   required
                 >
-                  <option value="">Select District</option>
-                  <option value="North">North</option>
-                  <option value="South">South</option>
-                  <option value="East">East</option>
-                  <option value="West">West</option>
-                  <option value="Central">Central</option>
+                  <option value="">Select Category</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Healthcare">Healthcare</option>
+                  <option value="Retail">Retail</option>
+                  <option value="Food">Food</option>
+                  <option value="Education">Education</option>
+                  <option value="Transportation">Transportation</option>
+                  <option value="Energy">Energy</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Construction">Construction</option>
                 </select>
               </div>
             </div>
@@ -156,13 +160,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ candidates, setCandidates }) =>
               <label className="block text-sm font-medium mb-1">Description</label>
               <textarea
                 name="description"
-                value={newCandidate.description || ''}
+                value={newVendor.description || ''}
                 onChange={handleChange}
                 className="w-full bg-transparent border border-border/60 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent min-h-[100px]"
               />
             </div>
             <div className="flex justify-end">
-              <Button type="submit">{editingId ? 'Update' : 'Add'} Candidate</Button>
+              <Button type="submit">{editingId ? 'Update' : 'Add'} Vendor</Button>
             </div>
           </form>
         </div>
@@ -173,36 +177,34 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ candidates, setCandidates }) =>
           <thead>
             <tr>
               <th className="border-b border-border/60 py-3 px-4 text-left">Name</th>
-              <th className="border-b border-border/60 py-3 px-4 text-left">District</th>
+              <th className="border-b border-border/60 py-3 px-4 text-left">Category</th>
               <th className="border-b border-border/60 py-3 px-4 text-left">City</th>
-              <th className="border-b border-border/60 py-3 px-4 text-right">Votes</th>
               <th className="border-b border-border/60 py-3 px-4 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {candidates.map((candidate) => (
-              <tr key={candidate.id} className="border-b border-border/30 hover:bg-secondary/30 transition-colors">
+            {vendors.map((vendor) => (
+              <tr key={vendor.id} className="border-b border-border/30 hover:bg-secondary/30 transition-colors">
                 <td className="py-3 px-4">
                   <div className="flex items-center">
                     <div className="h-10 w-10 mr-3 overflow-hidden">
                       <img
-                        src={candidate.photo || placeholderImage}
-                        alt={candidate.name}
+                        src={vendor.logo || placeholderImage}
+                        alt={vendor.name}
                         className="h-full w-full object-cover"
                       />
                     </div>
-                    <span>{candidate.name}</span>
+                    <span>{vendor.name}</span>
                   </div>
                 </td>
-                <td className="py-3 px-4">{candidate.district}</td>
-                <td className="py-3 px-4">{candidate.city}</td>
-                <td className="py-3 px-4 text-right">{candidate.voteCount}</td>
+                <td className="py-3 px-4">{vendor.category}</td>
+                <td className="py-3 px-4">{vendor.city}</td>
                 <td className="py-3 px-4">
                   <div className="flex justify-center space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(candidate)}>
+                    <Button variant="outline" size="sm" onClick={() => handleEdit(vendor)}>
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleDelete(candidate.id)}>
+                    <Button variant="outline" size="sm" onClick={() => handleDelete(vendor.id)}>
                       <Trash className="h-4 w-4" />
                     </Button>
                   </div>

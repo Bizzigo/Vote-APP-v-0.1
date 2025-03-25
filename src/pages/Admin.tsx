@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import AdminPanel from '@/components/AdminPanel';
 import { useAuth } from '@/hooks/useAuth';
-import { mockCandidates } from '@/lib/mockData';
-import { Candidate } from '@/lib/types';
+import { mockVendors } from '@/lib/mockData';
+import { Vendor } from '@/lib/types';
 import { toast } from 'sonner';
 
 const Admin = () => {
   const { isAdmin, isLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const [candidates, setCandidates] = useState<Candidate[]>(mockCandidates);
+  const [vendors, setVendors] = useState<Vendor[]>(mockVendors);
 
   useEffect(() => {
     // Redirect non-admin users
@@ -31,7 +31,7 @@ const Admin = () => {
       <div className="py-8 md:py-12">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
-          <AdminPanel candidates={candidates} setCandidates={setCandidates} />
+          <AdminPanel vendors={vendors} setVendors={setVendors} />
         </div>
       </div>
     </Layout>

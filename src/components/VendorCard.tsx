@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Vendor } from '@/lib/types';
-import { Card, CardContent } from '@/components/ui/card';
 import { placeholderImage } from '@/lib/mockData';
 
 interface VendorCardProps {
