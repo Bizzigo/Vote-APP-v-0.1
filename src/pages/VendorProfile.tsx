@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
@@ -148,18 +149,22 @@ const VendorProfile = () => {
           isOnline={isOnline}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
           <VendorContactInfoCard vendorId={vendor.id} contactMethods={contactMethods} />
-          <VendorPaymentInfoCard paymentMethods={paymentMethods} />
         </div>
 
         <VendorDescriptionCard vendor={vendor} />
 
-        <VendorServiceTabs
-          services={services}
-          jobVacancies={jobVacancies}
-          shopItems={shopItems}
-        />
+        <div className="mt-6 mb-6">
+          <VendorServiceTabs
+            services={services}
+            jobVacancies={jobVacancies}
+            shopItems={shopItems}
+          />
+        </div>
+
+        {/* Payment methods card moved to bottom */}
+        <VendorPaymentInfoCard paymentMethods={paymentMethods} />
       </div>
     </Layout>
   );
