@@ -25,11 +25,26 @@ import {
   Instagram, 
   MessageSquare,
   Save,
-  Upload
+  Upload,
+  Building,
+  Calendar,
+  Hash,
+  CreditCard,
+  Wallet,
+  BanknoteIcon
 } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const formSchema = z.object({
+  // Business info
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  category: z.string().min(2, { message: "Category must be at least 2 characters." }),
+  description: z.string().min(10, { message: "Description must be at least 10 characters." }),
+  registrationNumber: z.string().optional(),
+  registrationDate: z.string().optional(),
+  keywords: z.string().optional(),
+  
+  // Contact info
   email: z.string().email({ message: "Please enter a valid email address." }),
   phone: z.string().optional(),
   city: z.string().min(2, { message: "City must be at least 2 characters." }),
@@ -38,9 +53,16 @@ const formSchema = z.object({
   instagram: z.string().optional(),
   whatsapp: z.string().optional(),
   telegram: z.string().optional(),
-  description: z.string().min(10, { message: "Description must be at least 10 characters." }),
-  keywords: z.string().optional(),
-  category: z.string().min(2, { message: "Category must be at least 2 characters." }),
+  
+  // Payment info
+  acceptsCreditCard: z.boolean().optional(),
+  acceptsBankTransfer: z.boolean().optional(),
+  acceptsPaypal: z.boolean().optional(),
+  acceptsCrypto: z.boolean().optional(),
+  paymentNotes: z.string().optional(),
+  
+  // Services
+  services: z.string().optional(),
 });
 
 const UserProfile = () => {
@@ -51,18 +73,33 @@ const UserProfile = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      // Business info
       name: user?.name || "",
-      email: user?.email || "",
-      phone: "",
-      city: "Riga",
-      website: "",
-      facebook: "",
-      instagram: "",
-      whatsapp: "",
-      telegram: "",
-      description: "Professional services with a focus on quality and customer satisfaction.",
-      keywords: "Consulting, Development, Services",
       category: "Technology",
+      description: "Professional services with a focus on quality and customer satisfaction.",
+      registrationNumber: "LV12345678",
+      registrationDate: "2020-01-01",
+      keywords: "Consulting, Development, Services",
+      
+      // Contact info
+      email: user?.email || "",
+      phone: "+371 20000000",
+      city: "Riga",
+      website: "https://example.com",
+      facebook: "vendor_profile",
+      instagram: "vendor_profile",
+      whatsapp: "+37120000000",
+      telegram: "vendor_profile",
+      
+      // Payment info
+      acceptsCreditCard: true,
+      acceptsBankTransfer: true,
+      acceptsPaypal: false,
+      acceptsCrypto: false,
+      paymentNotes: "Payment due within 30 days of invoice.",
+      
+      // Services
+      services: "Web Development, Mobile Apps, Cloud Services, Consulting, UI/UX Design",
     },
   });
 
@@ -70,7 +107,7 @@ const UserProfile = () => {
     console.log(values);
     toast({
       title: "Profile updated",
-      description: "Your profile has been successfully updated.",
+      description: "Your vendor profile has been successfully updated.",
     });
   };
 
@@ -100,13 +137,13 @@ const UserProfile = () => {
   return (
     <Layout>
       <div className="container py-8 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Your Profile</h1>
+        <h1 className="text-3xl font-bold mb-6">Vendor Dashboard</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div className="md:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle>Profile Picture</CardTitle>
+                <CardTitle>Logo</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col items-center space-y-4">
                 <Avatar className="h-32 w-32 rounded-md">
@@ -117,7 +154,7 @@ const UserProfile = () => {
                 </Avatar>
                 
                 <div className="w-full">
-                  <Label htmlFor="avatar" className="mb-2 block">Change photo</Label>
+                  <Label htmlFor="avatar" className="mb-2 block">Change logo</Label>
                   <div className="flex items-center gap-2">
                     <Button asChild variant="outline" className="w-full" size="sm">
                       <label htmlFor="avatar" className="cursor-pointer flex items-center justify-center gap-2">
@@ -148,124 +185,29 @@ const UserProfile = () => {
           <div className="md:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle>Profile Information</CardTitle>
+                <CardTitle>Business Information</CardTitle>
               </CardHeader>
               <CardContent>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                    <Tabs defaultValue="business" className="w-full">
+                      <TabsList className="grid grid-cols-4 mb-4">
+                        <TabsTrigger value="business">Business</TabsTrigger>
+                        <TabsTrigger value="contact">Contact</TabsTrigger>
+                        <TabsTrigger value="payment">Payment</TabsTrigger>
+                        <TabsTrigger value="services">Services</TabsTrigger>
+                      </TabsList>
                       
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Phone</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="city"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>City</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="website"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Website</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Category</FormLabel>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    
-                    <div>
-                      <h3 className="font-medium mb-2">Social Media</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <TabsContent value="business" className="space-y-4">
                         <FormField
                           control={form.control}
-                          name="facebook"
+                          name="name"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Facebook</FormLabel>
+                              <FormLabel>Business Name</FormLabel>
                               <FormControl>
                                 <div className="relative">
-                                  <Facebook className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                   <Input className="pl-10" {...field} />
                                 </div>
                               </FormControl>
@@ -274,17 +216,85 @@ const UserProfile = () => {
                           )}
                         />
                         
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="category"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Category</FormLabel>
+                                <FormControl>
+                                  <Input {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="city"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>City</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="registrationNumber"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Registration Number</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="registrationDate"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Registration Date</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input type="date" className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        
                         <FormField
                           control={form.control}
-                          name="instagram"
+                          name="description"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Instagram</FormLabel>
+                              <FormLabel>Description</FormLabel>
                               <FormControl>
-                                <div className="relative">
-                                  <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input className="pl-10" {...field} />
-                                </div>
+                                <Textarea 
+                                  className="min-h-[120px]" 
+                                  placeholder="Tell customers about your business and services..."
+                                  {...field} 
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -293,74 +303,297 @@ const UserProfile = () => {
                         
                         <FormField
                           control={form.control}
-                          name="whatsapp"
+                          name="keywords"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>WhatsApp</FormLabel>
+                              <FormLabel>Keywords (comma separated)</FormLabel>
                               <FormControl>
-                                <div className="relative">
-                                  <MessageSquare className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input className="pl-10" {...field} />
+                                <Input 
+                                  placeholder="e.g., Development, Design, Marketing" 
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </TabsContent>
+                      
+                      <TabsContent value="contact" className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="phone"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Phone</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="website"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Website</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        
+                        <h3 className="font-medium mt-4 mb-2">Social Media</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="facebook"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Facebook</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Facebook className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="instagram"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Instagram</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="whatsapp"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>WhatsApp</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <MessageSquare className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="telegram"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Telegram</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <MessageSquare className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input className="pl-10" {...field} />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </TabsContent>
+                      
+                      <TabsContent value="payment" className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="acceptsCreditCard"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                                <FormControl>
+                                  <input
+                                    type="checkbox"
+                                    checked={field.value}
+                                    onChange={field.onChange}
+                                    className="h-4 w-4"
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel className="flex items-center">
+                                    <CreditCard className="mr-2 h-4 w-4" />
+                                    Credit Card
+                                  </FormLabel>
                                 </div>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="acceptsBankTransfer"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                                <FormControl>
+                                  <input
+                                    type="checkbox"
+                                    checked={field.value}
+                                    onChange={field.onChange}
+                                    className="h-4 w-4"
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel className="flex items-center">
+                                    <BanknoteIcon className="mr-2 h-4 w-4" />
+                                    Bank Transfer
+                                  </FormLabel>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="acceptsPaypal"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                                <FormControl>
+                                  <input
+                                    type="checkbox"
+                                    checked={field.value}
+                                    onChange={field.onChange}
+                                    className="h-4 w-4"
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel className="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                                      <path d="M7 11a4 4 0 0 0 4 4h1a4 4 0 0 0 4-4v-2a4 4 0 0 0-4-4h-1a4 4 0 0 0-4 4v2z"></path>
+                                      <path d="M19 5v14"></path>
+                                    </svg>
+                                    PayPal
+                                  </FormLabel>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="acceptsCrypto"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                                <FormControl>
+                                  <input
+                                    type="checkbox"
+                                    checked={field.value}
+                                    onChange={field.onChange}
+                                    className="h-4 w-4"
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel className="flex items-center">
+                                    <Wallet className="mr-2 h-4 w-4" />
+                                    Cryptocurrency
+                                  </FormLabel>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        
+                        <FormField
+                          control={form.control}
+                          name="paymentNotes"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Payment Notes</FormLabel>
+                              <FormControl>
+                                <Textarea 
+                                  placeholder="Additional payment information..." 
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </TabsContent>
+                      
+                      <TabsContent value="services" className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="services"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Services (comma separated)</FormLabel>
+                              <FormControl>
+                                <Textarea 
+                                  className="min-h-[120px]" 
+                                  placeholder="List your services separated by commas..."
+                                  {...field} 
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
                         
-                        <FormField
-                          control={form.control}
-                          name="telegram"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Telegram</FormLabel>
-                              <FormControl>
-                                <div className="relative">
-                                  <MessageSquare className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input className="pl-10" {...field} />
-                                </div>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    </div>
-                    
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              className="min-h-[120px]" 
-                              placeholder="Tell customers about your business and services..."
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="keywords"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Keywords (comma separated)</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="e.g., Development, Design, Marketing" 
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        <div className="mt-2">
+                          <p className="text-sm text-muted-foreground mb-2">Preview:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {form.watch("services")?.split(',').map((service, i) => (
+                              service.trim() && (
+                                <Badge key={i} variant="outline">
+                                  {service.trim()}
+                                </Badge>
+                              )
+                            ))}
+                          </div>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
                     
                     <Button type="submit" className="w-full sm:w-auto flex items-center gap-2">
                       <Save size={16} />
