@@ -17,7 +17,7 @@ const Index = () => {
 
   // Apply filters when search term, districts, or candidates change
   useEffect(() => {
-    const filtered = candidates.filter((candidate) => {
+    let filtered = candidates.filter((candidate) => {
       const matchesSearch =
         searchTerm === '' ||
         candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -29,6 +29,25 @@ const Index = () => {
 
       return matchesSearch && matchesDistrict;
     });
+
+    // Group candidates by district and sort by votes (ascending) within each district
+    const districtGroups: Record<string, Candidate[]> = {};
+    
+    // First group by district
+    filtered.forEach(candidate => {
+      if (!districtGroups[candidate.district]) {
+        districtGroups[candidate.district] = [];
+      }
+      districtGroups[candidate.district].push(candidate);
+    });
+    
+    // Sort each district group by votes (ascending)
+    Object.keys(districtGroups).forEach(district => {
+      districtGroups[district].sort((a, b) => a.voteCount - b.voteCount);
+    });
+    
+    // Flatten the grouped and sorted candidates
+    filtered = Object.values(districtGroups).flat();
 
     setFilteredCandidates(filtered);
   }, [searchTerm, selectedDistricts, candidates]);
