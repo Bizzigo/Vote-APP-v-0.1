@@ -60,12 +60,12 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="bg-black text-white py-8 md:py-12 -mx-4 sm:-mx-6 md:-mx-8 px-4 sm:px-6 md:px-8 mb-8">
-        <div className="text-center mb-6 max-w-3xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 typewriter animate-typing-no-blink mx-auto inline-block">
+      <div className="bg-black text-white py-6 md:py-8 -mx-4 sm:-mx-6 md:-mx-8 px-4 sm:px-6 md:px-8 mb-6">
+        <div className="text-center mb-3 max-w-3xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 typewriter animate-typing-no-blink mx-auto inline-block text-yellow-400">
             Ideālo pakalpojumu sniedzēju katalogs
           </h1>
-          <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto mt-3 animate-fade-in">
+          <p className="text-xs sm:text-sm text-gray-300 max-w-xl mx-auto mt-1 animate-fade-in">
             Vienkāršākais veids, kā atrast uzticamus un kvalificētus pakalpojumu sniedzējus Latvijā
           </p>
         </div>

@@ -78,7 +78,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
   };
 
   return (
-    <div className="relative max-w-lg w-full mx-auto mb-8">
+    <div className="relative max-w-lg w-full mx-auto mb-6">
       <div className="flex flex-col space-y-2">
         <div className="relative flex-grow">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
@@ -91,7 +91,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
               focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent 
               transition-all duration-200 rounded-none
               ${searchTerm ? 'border-2' : 'border-1'}`}
-            placeholder="Search vendors by name, category, services, or keywords..."
+            placeholder="sāc meklēt, piemēram, homeopāts rīgā..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleKeyDown}
