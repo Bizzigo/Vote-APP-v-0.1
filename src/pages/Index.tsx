@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
 import VendorCard from '@/components/VendorCard';
@@ -10,7 +11,7 @@ import { Vendor } from '@/lib/types';
 import { aiSearchVendors } from '@/lib/aiSearch';
 
 const Index = () => {
-  const [vendors, setVendors] = useState<Vendor[]>(mockVendors);
+  const [vendors] = useState<Vendor[]>(mockVendors);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
@@ -73,7 +74,7 @@ const Index = () => {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {filteredVendors.map((vendor, index) => (
                   <div 
                     key={vendor.id} 

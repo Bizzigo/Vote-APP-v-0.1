@@ -3,19 +3,57 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, MapPin } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Navbar: React.FC = () => {
   const { isLoggedIn, isAdmin, user, logout } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [locationActive, setLocationActive] = useState(false);
+  const { toast: uiToast } = useToast();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const toggleLocation = () => {
+    if (!locationActive) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLocationActive(true);
+            uiToast({
+              title: "Location accessed",
+              description: "Using your current location",
+            });
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            uiToast({
+              title: "Location error",
+              description: "Could not access your location",
+              variant: "destructive",
+            });
+          }
+        );
+      } else {
+        uiToast({
+          title: "Location not supported",
+          description: "Your browser doesn't support geolocation",
+          variant: "destructive",
+        });
+      }
+    } else {
+      setLocationActive(false);
+      uiToast({
+        title: "Location disabled",
+        description: "No longer using your location",
+      });
+    }
+  };
+
   const navLinks = [
-    { title: 'Home', href: '/' },
     ...(isAdmin ? [{ title: 'Admin Panel', href: '/admin' }] : []),
   ];
 
@@ -51,6 +89,18 @@ const Navbar: React.FC = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
+          <button
+            onClick={toggleLocation}
+            className="flex items-center justify-center h-8 w-8 rounded-full transition-colors"
+            aria-label="Toggle location"
+          >
+            <MapPin 
+              className={`h-5 w-5 transition-colors ${
+                locationActive ? 'text-green-500 fill-green-500' : 'text-gray-400'
+              }`} 
+            />
+          </button>
+          
           {isLoggedIn ? (
             <div className="flex items-center gap-4">
               <span className="text-sm">
@@ -95,6 +145,24 @@ const Navbar: React.FC = () => {
                 {link.title}
               </Link>
             ))}
+            
+            <div className="flex items-center py-2">
+              <button
+                onClick={toggleLocation}
+                className="flex items-center gap-2 py-2"
+                aria-label="Toggle location"
+              >
+                <MapPin 
+                  className={`h-5 w-5 ${
+                    locationActive ? 'text-green-500 fill-green-500' : 'text-gray-400'
+                  }`} 
+                />
+                <span className="text-sm">
+                  {locationActive ? 'Location active' : 'Use my location'}
+                </span>
+              </button>
+            </div>
+            
             {isLoggedIn ? (
               <div className="py-2 border-t border-border/60 mt-2">
                 <span className="block text-sm mb-2">

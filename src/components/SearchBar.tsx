@@ -1,9 +1,7 @@
 
-import React, { useState } from 'react';
-import { Search, MapPin } from 'lucide-react';
+import React from 'react';
+import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/hooks/use-toast';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -12,51 +10,7 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSearch }) => {
-  const [useLocation, setUseLocation] = useState(false);
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
-  const { toast: uiToast } = useToast();
-
-  const handleLocationToggle = (checked: boolean) => {
-    setUseLocation(checked);
-    
-    if (checked) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setUserLocation({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            });
-            uiToast({
-              title: "Location accessed",
-              description: "Using your current location for search",
-            });
-          },
-          (error) => {
-            console.error("Error getting location:", error);
-            uiToast({
-              title: "Location error",
-              description: "Could not access your location",
-              variant: "destructive",
-            });
-            setUseLocation(false);
-          }
-        );
-      } else {
-        uiToast({
-          title: "Location not supported",
-          description: "Your browser doesn't support geolocation",
-          variant: "destructive",
-        });
-        setUseLocation(false);
-      }
-    } else {
-      setUserLocation(null);
-    }
-  };
-
   const handleSearch = () => {
-    // Always use AI search since we've removed the toggle
     console.log('Search button clicked:', { searchTerm });
     onSearch(searchTerm, true);
   };
@@ -88,20 +42,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
           >
             ATRAST
           </Button>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <Switch 
-            id="location" 
-            checked={useLocation}
-            onCheckedChange={handleLocationToggle}
-          />
-          <div className="flex items-center space-x-1.5">
-            <MapPin className="h-4 w-4 text-muted-foreground" />
-            <label htmlFor="location" className="text-sm cursor-pointer">
-              Use my current location
-            </label>
-          </div>
         </div>
       </div>
     </div>
