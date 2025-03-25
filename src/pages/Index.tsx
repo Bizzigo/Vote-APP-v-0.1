@@ -17,10 +17,13 @@ const Index = () => {
   const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = (query: string, useAI: boolean) => {
+    console.log('Search initiated:', { query, useAI });
+    
     if (useAI) {
       // Use AI-powered search
       const results = aiSearchVendors(vendors, query);
       setFilteredVendors(results);
+      console.log('AI search results:', results);
     } else {
       // Use basic search
       const filtered = vendors.filter((vendor) => {
@@ -37,6 +40,7 @@ const Index = () => {
       // Sort by rating
       const sorted = [...filtered].sort((a, b) => b.rating - a.rating);
       setFilteredVendors(sorted);
+      console.log('Basic search results:', sorted);
     }
     
     setHasSearched(true);

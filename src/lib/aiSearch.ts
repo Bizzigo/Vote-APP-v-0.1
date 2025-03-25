@@ -1,80 +1,66 @@
 
 import { Vendor } from './types';
 
-// This would ideally connect to a real AI service
-// For demo purposes, we'll simulate AI-powered search with keyword extraction and relevance scoring
+/**
+ * A simple AI-powered search function that searches vendors based on query
+ * This is a mock implementation that simulates AI search capabilities
+ */
 export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
+  console.log('AI search activated for query:', query);
+  
   if (!query.trim()) {
-    return vendors.sort((a, b) => b.rating - a.rating);
+    return [...vendors].sort((a, b) => b.rating - a.rating);
   }
 
-  // Extract meaningful keywords from the search query
-  const keywords = extractKeywords(query);
-  console.log("AI extracted keywords:", keywords);
-
-  // Score vendors based on keyword matches and rating
+  // Convert search query to lowercase for case-insensitive matching
+  const searchTerms = query.toLowerCase().split(' ');
+  
+  // Score-based ranking (simple AI simulation)
   const scoredVendors = vendors.map(vendor => {
-    const keywordScore = calculateKeywordScore(vendor, keywords);
-    const ratingWeight = 0.4; // 40% weight to rating
-    const keywordWeight = 0.6; // 60% weight to keyword relevance
+    let score = 0;
     
-    // Combined score (normalized)
-    const combinedScore = (keywordScore * keywordWeight) + ((vendor.rating / 5) * ratingWeight);
-    
-    return {
-      vendor,
-      score: combinedScore
-    };
-  });
-
-  // Sort by score (descending) and return the vendors
-  return scoredVendors
-    .sort((a, b) => b.score - a.score)
-    .map(item => item.vendor);
-};
-
-// Simulate keyword extraction with a basic algorithm
-const extractKeywords = (query: string): string[] => {
-  // Remove common stop words
-  const stopWords = ['the', 'and', 'a', 'an', 'in', 'on', 'at', 'for', 'to', 'with', 'by', 'is', 'are'];
-  
-  // Split the query, filter out stop words, and convert to lowercase
-  return query
-    .toLowerCase()
-    .split(' ')
-    .filter(word => word.length > 2 && !stopWords.includes(word))
-    .map(word => word.trim());
-};
-
-// Calculate how relevant a vendor is to the keywords
-const calculateKeywordScore = (vendor: Vendor, keywords: string[]): number => {
-  if (keywords.length === 0) return 0;
-  
-  // Fields to search in
-  const fieldsToSearch = [
-    { name: 'name', weight: 3 },
-    { name: 'category', weight: 2.5 },
-    { name: 'description', weight: 1.5 },
-    { name: 'city', weight: 1 }
-  ];
-  
-  let totalScore = 0;
-  let matches = 0;
-
-  keywords.forEach(keyword => {
-    fieldsToSearch.forEach(field => {
-      // @ts-ignore - We know these fields exist
-      const value = (vendor[field.name] || '').toLowerCase();
+    // Base scoring - check for matches in different fields
+    searchTerms.forEach(term => {
+      // Direct matches in name (highest weight)
+      if (vendor.name.toLowerCase().includes(term)) {
+        score += 10;
+      }
       
-      if (value.includes(keyword)) {
-        // Add weighted score based on the field importance
-        totalScore += field.weight;
-        matches++;
+      // Category matches (high weight)
+      if (vendor.category.toLowerCase().includes(term)) {
+        score += 8;
+      }
+      
+      // City matches (medium weight)
+      if (vendor.city.toLowerCase().includes(term)) {
+        score += 5;
+      }
+      
+      // Description matches (lower weight but still important)
+      if (vendor.description.toLowerCase().includes(term)) {
+        score += 3;
       }
     });
+    
+    // Boost score based on rating (0-5 additional points)
+    score += vendor.rating;
+    
+    return { vendor, score };
   });
   
-  // Normalize score between 0 and 1
-  const maxPossibleScore = keywords.length * fieldsToSearch.reduce((sum, field) => sum + field.weight, 0);
-  return totalScore / maxPossibleScore;
+  // Sort by score (descending) and then by rating for equal scores
+  const sortedResults = scoredVendors
+    .filter(item => item.score > 0) // Only include results with matches
+    .sort((a, b) => {
+      // Primary sort by score
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      // Secondary sort by rating
+      return b.vendor.rating - a.vendor.rating;
+    })
+    .map(item => item.vendor);
+
+  console.log(`AI search found ${sortedResults.length} results`);
+  return sortedResults;
 };

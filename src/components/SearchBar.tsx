@@ -63,6 +63,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
         description: 'Optimizing for relevance and highest ratings'
       });
     }
+    console.log('Search button clicked:', { searchTerm, useAI });
     onSearch(searchTerm, useAI);
   };
 
