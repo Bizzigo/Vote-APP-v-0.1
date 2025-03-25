@@ -1,7 +1,10 @@
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Star, MessageSquare, Plus } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Service {
   name: string;
@@ -22,17 +25,49 @@ interface ShopItem {
   price: string;
 }
 
+interface Review {
+  id: number;
+  author: string;
+  date: string;
+  rating: number;
+  comment: string;
+}
+
 interface VendorServiceTabsProps {
   services: string[];
   jobVacancies: JobVacancy[];
   shopItems: ShopItem[];
+  reviews?: Review[];
 }
 
-const VendorServiceTabs: React.FC<VendorServiceTabsProps> = ({
+const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
   services,
   jobVacancies,
   shopItems,
-}) => {
+  reviews = [],
+}, ref) => {
+  // Generate star rating display
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Star key={`full-${i}`} className="h-4 w-4 fill-yellow-400 text-yellow-400" />);
+    }
+    
+    if (hasHalfStar) {
+      stars.push(<Star key="half" className="h-4 w-4 fill-yellow-400 text-yellow-400 opacity-50" />);
+    }
+    
+    const emptyStars = 5 - stars.length;
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(<Star key={`empty-${i}`} className="h-4 w-4 text-gray-300" />);
+    }
+    
+    return stars;
+  };
+
   return (
     <div className="space-y-6">
       {/* Keywords Card */}
@@ -69,6 +104,45 @@ const VendorServiceTabs: React.FC<VendorServiceTabsProps> = ({
               </Card>
             ))}
           </div>
+        </CardContent>
+      </Card>
+      
+      {/* Reviews Block */}
+      <Card id="reviews-section" ref={ref}>
+        <CardContent className="pt-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-medium">Reviews ({reviews.length})</h3>
+            <Button size="sm" className="gap-1">
+              <Plus size={16} />
+              Add Review
+            </Button>
+          </div>
+          
+          {reviews.length > 0 ? (
+            <ScrollArea className="h-[300px] rounded-md border p-4">
+              <div className="space-y-4">
+                {reviews.map(review => (
+                  <Card key={review.id}>
+                    <CardContent className="p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h4 className="font-medium">{review.author}</h4>
+                          <p className="text-xs text-muted-foreground">{review.date}</p>
+                        </div>
+                        <div className="flex items-center">{renderStars(review.rating)}</div>
+                      </div>
+                      <p className="text-sm">{review.comment}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </ScrollArea>
+          ) : (
+            <div className="text-center py-8 space-y-3 bg-muted/20 rounded-md">
+              <MessageSquare className="mx-auto h-8 w-8 text-muted-foreground/50" />
+              <p className="text-muted-foreground">No reviews yet. Be the first to add a review!</p>
+            </div>
+          )}
         </CardContent>
       </Card>
       
@@ -132,6 +206,8 @@ const VendorServiceTabs: React.FC<VendorServiceTabsProps> = ({
       </Card>
     </div>
   );
-};
+});
+
+VendorServiceTabs.displayName = 'VendorServiceTabs';
 
 export default VendorServiceTabs;

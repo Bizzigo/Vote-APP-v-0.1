@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, MessageSquare } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { useToast } from '@/hooks/use-toast';
 import { mockVendors } from '@/lib/mockData';
@@ -12,14 +12,24 @@ import VendorContactInfoCard from '@/components/vendor/VendorContactInfoCard';
 import VendorPaymentInfoCard from '@/components/vendor/VendorPaymentInfoCard';
 import VendorDescriptionCard from '@/components/vendor/VendorDescriptionCard';
 import VendorServiceTabs from '@/components/vendor/VendorServiceTabs';
+import { Badge } from '@/components/ui/badge';
+
+interface Review {
+  id: number;
+  author: string;
+  date: string;
+  rating: number;
+  comment: string;
+}
 
 const VendorProfile = () => {
   const params = useParams<{ id: string }>();
-  const id = params.id; // Get the actual ID parameter
+  const id = params.id;
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const { toast } = useToast();
+  const reviewsSectionRef = useRef<HTMLDivElement>(null);
   
   const [services] = useState<string[]>([
     'Web Development', 'Mobile Apps', 'Cloud Services', 'Consulting', 
@@ -37,6 +47,31 @@ const VendorProfile = () => {
     { id: 1, name: 'Premium Support Package', price: '€499', description: 'Priority technical support with 24/7 availability' },
     { id: 2, name: 'Website Audit', price: '€299', description: 'Comprehensive analysis of your website performance and SEO' },
     { id: 3, name: 'Custom Integration', price: '€1299', description: 'Custom API and third-party service integration' },
+  ]);
+
+  // Add sample reviews
+  const [reviews] = useState<Review[]>([
+    {
+      id: 1,
+      author: 'John Doe',
+      date: '15 May 2023',
+      rating: 4.5,
+      comment: 'Great service and professional team. Would recommend for any business looking for quality development work.'
+    },
+    {
+      id: 2,
+      author: 'Maria Garcia',
+      date: '3 April 2023',
+      rating: 5,
+      comment: 'Exceeded our expectations in every way. The project was delivered on time and the results are amazing.'
+    },
+    {
+      id: 3,
+      author: 'Alex Johnson',
+      date: '22 February 2023',
+      rating: 3.5,
+      comment: 'Good work overall, but communication could have been better at times. The final product met our requirements.'
+    }
   ]);
   
   const paymentMethods = React.useMemo(() => {
@@ -98,13 +133,27 @@ const VendorProfile = () => {
     fetchVendor();
   }, [id, toast]);
   
+  // Calculate average rating from reviews
+  const averageRating = React.useMemo(() => {
+    if (reviews.length === 0) return 0;
+    const total = reviews.reduce((sum, review) => sum + review.rating, 0);
+    return total / reviews.length;
+  }, [reviews]);
+  
   const registrationNumber = React.useMemo(() => 
     `LV${Math.floor(10000000 + Math.random() * 90000000)}`, []);
   const registrationDate = React.useMemo(() => 
     new Date(Date.now() - Math.floor(Math.random() * 5 * 365 * 24 * 60 * 60 * 1000))
       .toLocaleDateString('en-GB'), []);
-  const reviewCount = React.useMemo(() => Math.floor(Math.random() * 500) + 50, []);
+  const reviewCount = React.useMemo(() => reviews.length, [reviews]);
   const isOnline = React.useMemo(() => Math.random() > 0.5, []);
+
+  // Scroll to reviews section
+  const scrollToReviews = () => {
+    if (reviewsSectionRef.current) {
+      reviewsSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   if (loading) {
     return (
@@ -139,7 +188,7 @@ const VendorProfile = () => {
         </Link>
 
         <VendorHeader
-          vendor={vendor}
+          vendor={{...vendor, rating: averageRating || vendor.rating}}
           registrationNumber={registrationNumber}
           registrationDate={registrationDate}
           reviewCount={reviewCount}
@@ -155,11 +204,20 @@ const VendorProfile = () => {
 
         <VendorDescriptionCard vendor={vendor} />
 
+        <div className="flex items-center gap-1 my-6 cursor-pointer" onClick={scrollToReviews}>
+          <MessageSquare size={18} className="text-primary" />
+          <Badge className="bg-muted hover:bg-muted/80 text-foreground">
+            {reviews.length} Reviews
+          </Badge>
+        </div>
+
         <div className="mt-6 mb-6">
           <VendorServiceTabs
             services={services}
             jobVacancies={jobVacancies}
             shopItems={shopItems}
+            reviews={reviews}
+            ref={reviewsSectionRef}
           />
         </div>
 
