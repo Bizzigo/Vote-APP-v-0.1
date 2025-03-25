@@ -2,6 +2,7 @@
 import React from 'react';
 import { Vendor } from '@/lib/types';
 import { placeholderImage } from '@/lib/mockData';
+import { Star } from 'lucide-react';
 
 interface VendorCardProps {
   vendor: Vendor;
@@ -25,6 +26,10 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
           <div>
             <h3 className="font-medium text-lg">{vendor.name}</h3>
             <p className="text-sm text-muted-foreground">{vendor.city}</p>
+          </div>
+          <div className="flex items-center gap-1">
+            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+            <span className="font-medium">{vendor.rating.toFixed(1)}</span>
           </div>
         </div>
         <p className="mt-3 text-sm leading-relaxed">{vendor.description}</p>

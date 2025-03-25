@@ -17,6 +17,7 @@ export interface Vendor {
   city: string;
   category: string;
   description: string;
+  rating: number;
   location?: {
     lat: number;
     lng: number;

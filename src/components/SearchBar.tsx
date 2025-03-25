@@ -1,19 +1,22 @@
 
 import React, { useState } from 'react';
-import { Search, MapPin } from 'lucide-react';
+import { Search, MapPin, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 interface SearchBarProps {
   searchTerm: string;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  onSearch: (query: string, useAI: boolean) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSearch }) => {
   const [useLocation, setUseLocation] = useState(false);
+  const [useAI, setUseAI] = useState(true);
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
-  const { toast } = useToast();
+  const { toast: uiToast } = useToast();
 
   const handleLocationToggle = (checked: boolean) => {
     setUseLocation(checked);
@@ -26,14 +29,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm }) => {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             });
-            toast({
+            uiToast({
               title: "Location accessed",
               description: "Using your current location for search",
             });
           },
           (error) => {
             console.error("Error getting location:", error);
-            toast({
+            uiToast({
               title: "Location error",
               description: "Could not access your location",
               variant: "destructive",
@@ -42,7 +45,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm }) => {
           }
         );
       } else {
-        toast({
+        uiToast({
           title: "Location not supported",
           description: "Your browser doesn't support geolocation",
           variant: "destructive",
@@ -52,6 +55,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm }) => {
     } else {
       setUserLocation(null);
     }
+  };
+
+  const handleSearch = () => {
+    if (useAI) {
+      toast.success('Using AI to enhance your search results', {
+        description: 'Optimizing for relevance and highest ratings'
+      });
+    }
+    onSearch(searchTerm, useAI);
   };
 
   return (
@@ -68,33 +80,49 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm }) => {
               placeholder="Search vendors by name, category, or description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
             />
           </div>
           <Button 
             className="ml-0 bg-[#1877F2] hover:bg-[#166FE5] text-white px-4 py-3 h-auto rounded-none"
+            onClick={handleSearch}
           >
             ATRAST
           </Button>
         </div>
         
-        <div className="flex items-center space-x-2">
-          <Switch 
-            id="location" 
-            checked={useLocation}
-            onCheckedChange={handleLocationToggle}
-          />
-          <div className="flex items-center space-x-1.5">
-            <MapPin className="h-4 w-4 text-muted-foreground" />
-            <label htmlFor="location" className="text-sm cursor-pointer">
-              Use my current location
-            </label>
+        <div className="flex items-center space-x-2 justify-between">
+          <div className="flex items-center space-x-2">
+            <Switch 
+              id="location" 
+              checked={useLocation}
+              onCheckedChange={handleLocationToggle}
+            />
+            <div className="flex items-center space-x-1.5">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <label htmlFor="location" className="text-sm cursor-pointer">
+                Use my current location
+              </label>
+            </div>
           </div>
           
-          {userLocation && (
-            <span className="text-xs text-muted-foreground ml-auto">
-              Location active
-            </span>
-          )}
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="ai-search"
+              checked={useAI}
+              onCheckedChange={setUseAI}
+            />
+            <div className="flex items-center space-x-1.5">
+              <Sparkles className="h-4 w-4 text-amber-500" />
+              <label htmlFor="ai-search" className="text-sm cursor-pointer">
+                AI-powered search
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
