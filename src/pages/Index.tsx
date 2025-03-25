@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
 import VendorCard from '@/components/vendor/VendorCard';
@@ -9,12 +9,14 @@ import CategoryCloud from '@/components/CategoryCloud';
 import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
 import { aiSearchVendors } from '@/lib/aiSearch';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const { toast } = useToast();
 
   // Using useCallback to memoize the search function
   const handleSearch = useCallback((query: string, useAI: boolean) => {
@@ -33,6 +35,28 @@ const Index = () => {
     
     setHasSearched(true);
   }, [vendors]);
+
+  // Effect to reset page after 5 seconds when no results are found
+  useEffect(() => {
+    let timeoutId: number | undefined;
+    
+    if (hasSearched && filteredVendors.length === 0) {
+      toast({
+        title: "No vendors found",
+        description: "Returning to home page in 5 seconds...",
+        duration: 4000,
+      });
+      
+      timeoutId = window.setTimeout(() => {
+        setHasSearched(false);
+        setSearchTerm('');
+      }, 5000);
+    }
+    
+    return () => {
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [hasSearched, filteredVendors.length, toast]);
 
   return (
     <Layout>
