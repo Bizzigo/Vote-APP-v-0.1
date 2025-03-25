@@ -2,8 +2,9 @@
 import React from 'react';
 import { Vendor } from '@/lib/types';
 import { placeholderImage } from '@/lib/mockData';
-import { Star, Phone, MessageSquare, Globe, Mail } from 'lucide-react';
+import { Star, Phone, MessageSquare, Globe, Mail, MapPin } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { useLocation } from '@/hooks/useLocation';
 
 interface VendorCardProps {
   vendor: Vendor;
@@ -12,6 +13,30 @@ interface VendorCardProps {
 const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
   // Randomly determine if vendor is online (just for demo)
   const isOnline = React.useMemo(() => Math.random() > 0.5, [vendor.id]);
+  const { locationActive, userLocation } = useLocation();
+  
+  // Calculate distance if we have location data
+  const distance = React.useMemo(() => {
+    if (locationActive && userLocation && vendor.location) {
+      // Haversine formula to calculate distance between two points
+      const R = 6371; // Radius of the earth in km
+      const dLat = deg2rad(vendor.location.lat - userLocation.latitude);
+      const dLon = deg2rad(vendor.location.lng - userLocation.longitude);
+      const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(userLocation.latitude)) * Math.cos(deg2rad(vendor.location.lat)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2); 
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      const distance = R * c; // Distance in km
+      return distance.toFixed(1);
+    }
+    return null;
+  }, [locationActive, userLocation, vendor.location]);
+  
+  // Helper function for distance calculation
+  const deg2rad = (deg: number) => {
+    return deg * (Math.PI/180);
+  };
   
   return (
     <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm transition-all duration-400 hover:shadow-md hover:border-border/80 p-4 rounded-md">
@@ -49,12 +74,24 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             <h3 className="font-medium text-lg">{vendor.name}</h3>
           </div>
           
-          {/* Category and city */}
-          <div className="flex items-center space-x-2 mb-2">
-            <p className="text-sm text-muted-foreground">{vendor.city}</p>
+          {/* Category, city and distance */}
+          <div className="flex items-center flex-wrap gap-2 mb-2">
+            <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
+              <MapPin className="h-3 w-3 mr-1" />
+              {vendor.city}
+            </span>
             <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm">
               {vendor.category}
             </span>
+            {locationActive && distance && (
+              <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="m16.2 7.8-2.3 6.1-6.1 2.3 2.3-6.1z"></path>
+                </svg>
+                {distance} km
+              </span>
+            )}
           </div>
           
           {/* Contact icons */}
