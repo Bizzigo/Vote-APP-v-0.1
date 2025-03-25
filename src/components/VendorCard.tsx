@@ -43,7 +43,6 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             <span className="font-medium">{vendor.rating.toFixed(1)}</span>
           </div>
         </div>
-        <p className="mt-3 text-sm leading-relaxed">{vendor.description}</p>
       </div>
     </div>
   );
