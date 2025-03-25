@@ -60,10 +60,10 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="py-8 md:py-12">
+      <div className="bg-black text-white py-8 md:py-12 -mx-4 sm:-mx-6 md:-mx-8 px-4 sm:px-6 md:px-8 mb-8">
         <div className="text-center mb-10 max-w-3xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 animate-fade-in">
-            Vendor Directory
+            Atrod ideālos pakalpojumu sniedzējus
           </h1>
         </div>
         
@@ -72,7 +72,9 @@ const Index = () => {
           setSearchTerm={setSearchTerm} 
           onSearch={handleSearch}
         />
-        
+      </div>
+      
+      <div className="py-4">
         {!hasSearched && (
           <>
             <RecentVendors />
