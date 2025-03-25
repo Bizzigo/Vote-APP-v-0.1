@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
-import VendorCard from '@/components/VendorCard';
 import RecentVendors from '@/components/RecentVendors';
 import TopSearched from '@/components/TopSearched';
 import CategoryCloud from '@/components/CategoryCloud';
@@ -12,23 +11,6 @@ import { Vendor } from '@/lib/types';
 const Index = () => {
   const [vendors, setVendors] = useState<Vendor[]>(mockVendors);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredVendors, setFilteredVendors] = useState<Vendor[]>(vendors);
-
-  // Apply filters when search term or vendors change
-  useEffect(() => {
-    let filtered = vendors.filter((vendor) => {
-      const matchesSearch =
-        searchTerm === '' ||
-        vendor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        vendor.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        vendor.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        vendor.city.toLowerCase().includes(searchTerm.toLowerCase());
-
-      return matchesSearch;
-    });
-
-    setFilteredVendors(filtered);
-  }, [searchTerm, vendors]);
 
   return (
     <Layout>
@@ -49,26 +31,6 @@ const Index = () => {
         <TopSearched />
         
         <CategoryCloud />
-        
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-4">Search Results</h2>
-          
-          {filteredVendors.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">
-                No vendors found. Try adjusting your search.
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredVendors.map((vendor, index) => (
-                <div key={vendor.id} style={{ animationDelay: `${index * 50}ms` }}>
-                  <VendorCard vendor={vendor} />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
     </Layout>
   );
