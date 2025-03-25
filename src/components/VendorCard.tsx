@@ -38,6 +38,9 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
     return deg * (Math.PI/180);
   };
   
+  // Generate random number of reviews for demo purposes
+  const reviewCount = React.useMemo(() => Math.floor(Math.random() * 500) + 50, [vendor.id]);
+  
   return (
     <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm transition-all duration-400 hover:shadow-md hover:border-border/80 p-4 rounded-md">
       <div className="flex">
@@ -74,7 +77,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             <h3 className="font-medium text-lg">{vendor.name}</h3>
           </div>
           
-          {/* Category, city and distance */}
+          {/* Category, city, rating and distance in one row */}
           <div className="flex items-center flex-wrap gap-2 mb-2">
             <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
               <MapPin className="h-3 w-3 mr-1" />
@@ -82,6 +85,10 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             </span>
             <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm">
               {vendor.category}
+            </span>
+            <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
+              <Star className="h-3 w-3 mr-1 fill-yellow-400 text-yellow-400" />
+              {vendor.rating.toFixed(1)} / {reviewCount}
             </span>
             {locationActive && distance && (
               <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
