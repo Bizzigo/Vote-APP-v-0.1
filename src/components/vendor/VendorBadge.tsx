@@ -10,6 +10,7 @@ interface VendorBadgeProps {
   className?: string;
   href?: string;
   onClick?: () => void;
+  scrollToId?: string;
 }
 
 const VendorBadge: React.FC<VendorBadgeProps> = ({
@@ -18,13 +19,27 @@ const VendorBadge: React.FC<VendorBadgeProps> = ({
   variant = "secondary",
   className = "",
   href,
-  onClick
+  onClick,
+  scrollToId
 }) => {
+  const handleClick = () => {
+    if (scrollToId) {
+      const element = document.getElementById(scrollToId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    
+    if (onClick) {
+      onClick();
+    }
+  };
+
   const BadgeContent = () => (
     <Badge 
       variant={variant} 
-      className={`flex items-center gap-1 text-xs rounded-sm px-2 py-0.5 ${className}`}
-      onClick={onClick}
+      className={`flex items-center gap-1 text-xs rounded-sm px-2 py-0.5 ${className} ${(scrollToId || onClick) ? 'cursor-pointer' : ''}`}
+      onClick={handleClick}
     >
       {icon}
       {label}
