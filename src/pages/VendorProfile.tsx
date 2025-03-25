@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,12 +12,14 @@ import VendorInfoBadges from '@/components/vendor/VendorInfoBadges';
 import VendorPaymentMethods from '@/components/vendor/VendorPaymentMethods';
 import VendorContactMethods from '@/components/vendor/VendorContactMethods';
 import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const VendorProfile = () => {
   const { id } = useParams<{ id: string }>();
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const { toast } = useToast();
   
   // Mock data for demo purposes
   const [services] = useState<string[]>([
@@ -63,13 +65,43 @@ const VendorProfile = () => {
   
   // Load vendor data
   useEffect(() => {
-    if (id) {
+    const fetchVendor = () => {
+      setLoading(true);
+      
+      if (!id) {
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
+      
       // In a real app, this would be an API call
+      console.log("Fetching vendor with ID:", id);
+      console.log("Available vendors:", mockVendors);
+      
       const foundVendor = mockVendors.find(v => v.id === id);
-      setVendor(foundVendor || null);
+      
+      if (foundVendor) {
+        console.log("Found vendor:", foundVendor);
+        setVendor(foundVendor);
+        toast({
+          title: "Vendor loaded",
+          description: `Viewing ${foundVendor.name}`
+        });
+      } else {
+        console.log("Vendor not found");
+        setNotFound(true);
+        toast({
+          title: "Vendor not found",
+          description: "Could not find the requested vendor",
+          variant: "destructive"
+        });
+      }
+      
       setLoading(false);
-    }
-  }, [id]);
+    };
+    
+    fetchVendor();
+  }, [id, toast]);
   
   // Generate random registration number and date for demo
   const registrationNumber = React.useMemo(() => 
@@ -92,7 +124,7 @@ const VendorProfile = () => {
     );
   }
   
-  if (!vendor) {
+  if (notFound || !vendor) {
     return (
       <Layout>
         <div className="flex flex-col justify-center items-center h-[70vh] space-y-4">
