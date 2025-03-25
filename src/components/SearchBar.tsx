@@ -18,14 +18,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm }) => {
           </div>
           <input
             type="text"
-            className="block w-full bg-white border border-[#1877F2] border-1 pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:border-transparent transition-all duration-200"
+            className="block w-full bg-white border border-[#1877F2] border-1 pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:border-transparent transition-all duration-200 rounded-none"
             placeholder="Search candidates by name, district, or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <Button 
-          className="ml-2 bg-[#1877F2] hover:bg-[#166FE5] text-white px-4 py-3 h-auto"
+          className="ml-0 bg-[#1877F2] hover:bg-[#166FE5] text-white px-4 py-3 h-auto rounded-none"
         >
           ATRAST KANDIDĀTU
         </Button>
