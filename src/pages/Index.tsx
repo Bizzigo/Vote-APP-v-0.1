@@ -2,96 +2,72 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
-import DistrictFilter from '@/components/DistrictFilter';
-import CandidateCard from '@/components/CandidateCard';
-import { mockCandidates } from '@/lib/mockData';
-import { Candidate } from '@/lib/types';
+import VendorCard from '@/components/VendorCard';
+import RecentVendors from '@/components/RecentVendors';
+import TopSearched from '@/components/TopSearched';
+import CategoryCloud from '@/components/CategoryCloud';
+import { mockVendors } from '@/lib/mockData';
+import { Vendor } from '@/lib/types';
 
 const Index = () => {
-  const [candidates, setCandidates] = useState<Candidate[]>(mockCandidates);
+  const [vendors, setVendors] = useState<Vendor[]>(mockVendors);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDistricts, setSelectedDistricts] = useState<string[]>([
-    'North', 'South', 'East', 'West', 'Central'
-  ]);
-  const [filteredCandidates, setFilteredCandidates] = useState<Candidate[]>(candidates);
+  const [filteredVendors, setFilteredVendors] = useState<Vendor[]>(vendors);
 
-  // Apply filters when search term, districts, or candidates change
+  // Apply filters when search term or vendors change
   useEffect(() => {
-    let filtered = candidates.filter((candidate) => {
+    let filtered = vendors.filter((vendor) => {
       const matchesSearch =
         searchTerm === '' ||
-        candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        candidate.district.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        candidate.description.toLowerCase().includes(searchTerm.toLowerCase());
+        vendor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vendor.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vendor.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vendor.city.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesDistrict =
-        selectedDistricts.length === 0 || selectedDistricts.includes(candidate.district);
-
-      return matchesSearch && matchesDistrict;
+      return matchesSearch;
     });
 
-    // Group candidates by district and sort by votes (descending) within each district
-    const districtGroups: Record<string, Candidate[]> = {};
-    
-    // First group by district
-    filtered.forEach(candidate => {
-      if (!districtGroups[candidate.district]) {
-        districtGroups[candidate.district] = [];
-      }
-      districtGroups[candidate.district].push(candidate);
-    });
-    
-    // Sort each district group by votes (descending)
-    Object.keys(districtGroups).forEach(district => {
-      districtGroups[district].sort((a, b) => b.voteCount - a.voteCount);
-    });
-    
-    // Flatten the grouped and sorted candidates
-    filtered = Object.values(districtGroups).flat();
-
-    setFilteredCandidates(filtered);
-  }, [searchTerm, selectedDistricts, candidates]);
+    setFilteredVendors(filtered);
+  }, [searchTerm, vendors]);
 
   return (
     <Layout>
       <div className="py-8 md:py-12">
         <div className="text-center mb-10 max-w-3xl mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 animate-fade-in">
-            Election Candidates
+            Vendor Directory
           </h1>
           <p className="text-muted-foreground animate-fade-in animation-delay-150">
-            Browse and vote for your preferred candidate. Each user can cast one vote.
-            Filter by district or search for specific candidates.
+            Find the perfect vendors for your business needs. Search by name, category, or location.
           </p>
         </div>
         
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
-            <DistrictFilter
-              selectedDistricts={selectedDistricts}
-              setSelectedDistricts={setSelectedDistricts}
-            />
-          </div>
+        <RecentVendors />
+        
+        <TopSearched />
+        
+        <CategoryCloud />
+        
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold mb-4">Search Results</h2>
           
-          <div className="md:col-span-3">
-            {filteredCandidates.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground">
-                  No candidates found. Try adjusting your filters.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredCandidates.map((candidate, index) => (
-                  <div key={candidate.id} style={{ animationDelay: `${index * 50}ms` }}>
-                    <CandidateCard candidate={candidate} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          {filteredVendors.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">
+                No vendors found. Try adjusting your search.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredVendors.map((vendor, index) => (
+                <div key={vendor.id} style={{ animationDelay: `${index * 50}ms` }}>
+                  <VendorCard vendor={vendor} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </Layout>

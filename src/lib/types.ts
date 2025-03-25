@@ -10,19 +10,22 @@ export interface User {
   votedFor?: string;
 }
 
-export interface Candidate {
+export interface Vendor {
   id: string;
   name: string;
-  photo: string;
+  logo: string;
   city: string;
-  district: string;
+  category: string;
   description: string;
-  voteCount: number;
+  location?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export interface AuthContextType {
   user: User | null;
-  login: (email: string, role: Role) => void;
+  login: (email: string, provider: string) => void;
   logout: () => void;
   voteForCandidate: (candidateId: string) => void;
   isLoggedIn: boolean;
