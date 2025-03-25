@@ -89,7 +89,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
             type="text"
             className={`block w-full bg-white border border-yellow-400 pl-10 pr-4 py-3 
               focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent 
-              transition-all duration-200 rounded-none
+              transition-all duration-200 rounded-none text-[#666666]
               ${searchTerm ? 'border-2' : 'border-1'}`}
             placeholder="sāc meklēt, piemēram, homeopāts rīgā..."
             value={searchTerm}
