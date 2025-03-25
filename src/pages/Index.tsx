@@ -66,7 +66,10 @@ const Index = () => {
               <h2 className="text-2xl font-semibold">Search Results</h2>
               {filteredVendors.length > 0 && (
                 <button 
-                  onClick={() => setHasSearched(false)} 
+                  onClick={() => {
+                    setHasSearched(false);
+                    setSearchTerm('');
+                  }}
                   className="text-sm text-blue-600 hover:text-blue-800"
                 >
                   Back to Explore

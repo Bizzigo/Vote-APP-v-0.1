@@ -51,6 +51,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
           <Button 
             className="ml-0 bg-[#1877F2] hover:bg-[#166FE5] text-white px-4 py-2 h-auto rounded-none"
             onClick={handleSearch}
+            type="button"
           >
             ATRAST
           </Button>
