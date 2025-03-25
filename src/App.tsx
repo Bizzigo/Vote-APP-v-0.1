@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import VendorProfile from "./pages/VendorProfile";
+import UserProfile from "./pages/UserProfile";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => {
                   <Route path="/login" element={<Login />} />
                   <Route path="/admin" element={<Admin />} />
                   <Route path="/vendor/:id" element={<VendorProfile />} />
+                  <Route path="/profile" element={<UserProfile />} />
                   <Route path="/404" element={<NotFound />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

@@ -36,11 +36,7 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
       
       <VendorBadge
         label={category}
-      />
-      
-      <VendorBadge
-        icon={<Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />}
-        label={`${rating.toFixed(1)} / ${reviewCount}`}
+        scrollToId="reviews-section"
       />
       
       {hasLursoftProfile && (

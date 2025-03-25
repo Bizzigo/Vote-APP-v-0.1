@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { Menu, X, MapPin } from 'lucide-react';
+import { Menu, X, MapPin, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Navbar: React.FC = () => {
@@ -54,6 +54,7 @@ const Navbar: React.FC = () => {
   };
 
   const navLinks = [
+    ...(isLoggedIn ? [{ title: 'Profile', href: '/profile' }] : []),
     ...(isAdmin ? [{ title: 'Admin Panel', href: '/admin' }] : []),
   ];
 
@@ -103,9 +104,12 @@ const Navbar: React.FC = () => {
           
           {isLoggedIn ? (
             <div className="flex items-center gap-4">
-              <span className="text-sm">
-                Hello, <span className="font-medium">{user?.name}</span>
-              </span>
+              <Link to="/profile" className="flex items-center gap-2 text-sm">
+                <User size={16} />
+                <span>
+                  Hello, <span className="font-medium">{user?.name}</span>
+                </span>
+              </Link>
               <Button variant="outline" size="sm" onClick={logout}>
                 Log Out
               </Button>
@@ -165,9 +169,12 @@ const Navbar: React.FC = () => {
             
             {isLoggedIn ? (
               <div className="py-2 border-t border-border/60 mt-2">
-                <span className="block text-sm mb-2">
-                  Hello, <span className="font-medium">{user?.name}</span>
-                </span>
+                <Link to="/profile" className="flex items-center gap-2 mb-2" onClick={() => setMobileMenuOpen(false)}>
+                  <User size={16} />
+                  <span className="text-sm">
+                    Hello, <span className="font-medium">{user?.name}</span>
+                  </span>
+                </Link>
                 <Button variant="outline" size="sm" onClick={() => {
                   logout();
                   setMobileMenuOpen(false);
