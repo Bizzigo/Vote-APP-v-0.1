@@ -2,8 +2,8 @@
 import { Vendor } from './types';
 
 /**
- * A simple AI-powered search function that searches vendors based on query
- * This is a mock implementation that simulates AI search capabilities
+ * An AI-powered search function that searches vendors based on exact query matches
+ * This filters vendors to only include those with exact term matches
  */
 export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
   console.log('AI search activated for query:', query);
@@ -15,8 +15,27 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
   // Convert search query to lowercase for case-insensitive matching
   const searchTerms = query.toLowerCase().split(' ');
   
-  // Score-based ranking (simple AI simulation)
-  const scoredVendors = vendors.map(vendor => {
+  // Only include vendors that have exact term matches
+  const matchedVendors = vendors.filter(vendor => {
+    // Check if any search term exactly matches in the vendor fields
+    return searchTerms.some(term => {
+      // Create an array of all searchable fields
+      const vendorFields = [
+        vendor.name.toLowerCase(),
+        vendor.category.toLowerCase(),
+        vendor.city.toLowerCase()
+      ];
+      
+      // Check if any field contains the exact term
+      return vendorFields.some(field => {
+        const words = field.split(/\s+/);
+        return words.includes(term);
+      });
+    });
+  });
+  
+  // Score-based ranking for the matched vendors
+  const scoredVendors = matchedVendors.map(vendor => {
     let score = 0;
     
     // Base scoring - check for matches in different fields
@@ -36,11 +55,6 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
         score += 5;
       }
       
-      // Description matches (lower weight but still important)
-      if (vendor.description.toLowerCase().includes(term)) {
-        score += 3;
-      }
-      
       // Location information - if available
       if (vendor.location) {
         const locationString = `${vendor.location.lat},${vendor.location.lng}`;
@@ -48,13 +62,9 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
           score += 2;
         }
       }
-      
-      // Add any additional vendor fields that might be searchable
-      // For example, if vendors had tags, services, or other searchable attributes
-      // We would add them here with appropriate weights
     });
     
-    // Boost score based on rating (0-5 additional points)
+    // Boost score based on rating
     score += vendor.rating;
     
     return { vendor, score };
@@ -62,7 +72,6 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
   
   // Sort by score (descending) and then by rating for equal scores
   const sortedResults = scoredVendors
-    .filter(item => item.score > 0) // Only include results with matches
     .sort((a, b) => {
       // Primary sort by score
       if (b.score !== a.score) {
@@ -73,6 +82,6 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
     })
     .map(item => item.vendor);
 
-  console.log(`AI search found ${sortedResults.length} results`);
+  console.log(`AI search found ${sortedResults.length} exact match results`);
   return sortedResults;
 };
