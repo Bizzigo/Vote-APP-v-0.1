@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, MessageSquare } from 'lucide-react';
@@ -12,6 +11,7 @@ import VendorContactInfoCard from '@/components/vendor/VendorContactInfoCard';
 import VendorPaymentInfoCard from '@/components/vendor/VendorPaymentInfoCard';
 import VendorDescriptionCard from '@/components/vendor/VendorDescriptionCard';
 import VendorServiceTabs from '@/components/vendor/VendorServiceTabs';
+import VendorKeywordsCard from '@/components/vendor/VendorKeywordsCard';
 import { Badge } from '@/components/ui/badge';
 
 interface Review {
@@ -49,7 +49,6 @@ const VendorProfile = () => {
     { id: 3, name: 'Custom Integration', price: '€1299', description: 'Custom API and third-party service integration' },
   ]);
 
-  // Add sample reviews
   const [reviews] = useState<Review[]>([
     {
       id: 1,
@@ -133,7 +132,6 @@ const VendorProfile = () => {
     fetchVendor();
   }, [id, toast]);
   
-  // Calculate average rating from reviews
   const averageRating = React.useMemo(() => {
     if (reviews.length === 0) return 0;
     const total = reviews.reduce((sum, review) => sum + review.rating, 0);
@@ -148,7 +146,6 @@ const VendorProfile = () => {
   const reviewCount = React.useMemo(() => reviews.length, [reviews]);
   const isOnline = React.useMemo(() => Math.random() > 0.5, []);
 
-  // Scroll to reviews section
   const scrollToReviews = () => {
     if (reviewsSectionRef.current) {
       reviewsSectionRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -221,8 +218,11 @@ const VendorProfile = () => {
           />
         </div>
 
-        {/* Payment methods card moved to bottom */}
         <VendorPaymentInfoCard paymentMethods={paymentMethods} />
+        
+        <div className="mt-6">
+          <VendorKeywordsCard services={services} />
+        </div>
       </div>
     </Layout>
   );
