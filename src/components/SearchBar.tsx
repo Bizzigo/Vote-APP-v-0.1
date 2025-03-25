@@ -25,26 +25,21 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
   // Generate search suggestions based on input
   useEffect(() => {
     if (searchTerm.trim().length >= 2) {
-      // Get suggestions from vendor names, categories, and keywords
-      const nameMatches = mockVendors
-        .filter(vendor => vendor.name.toLowerCase().includes(searchTerm.toLowerCase()))
-        .map(vendor => vendor.name);
-      
-      const categoryMatches = mockVendors
-        .filter(vendor => vendor.category.toLowerCase().includes(searchTerm.toLowerCase()))
-        .map(vendor => vendor.category);
-      
+      // Only get suggestions from vendor keywords
       const keywordMatches = mockVendors
         .filter(vendor => vendor.keywords?.some(keyword => 
           keyword.toLowerCase().includes(searchTerm.toLowerCase())
         ))
-        .flatMap(vendor => vendor.keywords || []);
+        .flatMap(vendor => vendor.keywords || [])
+        .filter(keyword => 
+          keyword.toLowerCase().includes(searchTerm.toLowerCase())
+        );
       
-      // Combine all matches and remove duplicates
-      const allSuggestions = [...new Set([...nameMatches, ...categoryMatches, ...keywordMatches])];
+      // Remove duplicates
+      const uniqueKeywords = [...new Set(keywordMatches)];
       
       // Limit to top 5 most relevant suggestions
-      setSuggestions(allSuggestions.slice(0, 5));
+      setSuggestions(uniqueKeywords.slice(0, 5));
       setOpen(true);
     } else {
       setSuggestions([]);
@@ -108,7 +103,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
             <div className="absolute w-full mt-1 bg-white border border-gray-200 shadow-lg z-50">
               <Command className="rounded-lg border shadow-md">
                 <CommandList>
-                  <CommandGroup heading="Suggestions">
+                  <CommandGroup heading="Keywords">
                     {suggestions.map((suggestion) => (
                       <CommandItem
                         key={suggestion}
@@ -121,7 +116,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
                     ))}
                   </CommandGroup>
                 </CommandList>
-                <CommandEmpty>No results found</CommandEmpty>
+                <CommandEmpty>No keywords found</CommandEmpty>
               </Command>
             </div>
           )}
