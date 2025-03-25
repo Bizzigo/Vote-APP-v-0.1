@@ -1,10 +1,9 @@
 
 import React, { useState } from 'react';
-import { Search, MapPin, Sparkles } from 'lucide-react';
+import { Search, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { toast } from 'sonner';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -14,7 +13,6 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSearch }) => {
   const [useLocation, setUseLocation] = useState(false);
-  const [useAI, setUseAI] = useState(true);
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const { toast: uiToast } = useToast();
 
@@ -58,13 +56,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
   };
 
   const handleSearch = () => {
-    if (useAI) {
-      toast.success('Using AI to enhance your search results', {
-        description: 'Optimizing for relevance and highest ratings'
-      });
-    }
-    console.log('Search button clicked:', { searchTerm, useAI });
-    onSearch(searchTerm, useAI);
+    // Always use AI search since we've removed the toggle
+    console.log('Search button clicked:', { searchTerm });
+    onSearch(searchTerm, true);
   };
 
   return (
@@ -96,33 +90,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
           </Button>
         </div>
         
-        <div className="flex items-center space-x-2 justify-between">
-          <div className="flex items-center space-x-2">
-            <Switch 
-              id="location" 
-              checked={useLocation}
-              onCheckedChange={handleLocationToggle}
-            />
-            <div className="flex items-center space-x-1.5">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <label htmlFor="location" className="text-sm cursor-pointer">
-                Use my current location
-              </label>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="ai-search"
-              checked={useAI}
-              onCheckedChange={setUseAI}
-            />
-            <div className="flex items-center space-x-1.5">
-              <Sparkles className="h-4 w-4 text-amber-500" />
-              <label htmlFor="ai-search" className="text-sm cursor-pointer">
-                AI-powered search
-              </label>
-            </div>
+        <div className="flex items-center space-x-2">
+          <Switch 
+            id="location" 
+            checked={useLocation}
+            onCheckedChange={handleLocationToggle}
+          />
+          <div className="flex items-center space-x-1.5">
+            <MapPin className="h-4 w-4 text-muted-foreground" />
+            <label htmlFor="location" className="text-sm cursor-pointer">
+              Use my current location
+            </label>
           </div>
         </div>
       </div>

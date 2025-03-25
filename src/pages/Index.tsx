@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -17,31 +16,12 @@ const Index = () => {
   const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = (query: string, useAI: boolean) => {
-    console.log('Search initiated:', { query, useAI });
+    console.log('Search initiated:', { query });
     
-    if (useAI) {
-      // Use AI-powered search
-      const results = aiSearchVendors(vendors, query);
-      setFilteredVendors(results);
-      console.log('AI search results:', results);
-    } else {
-      // Use basic search
-      const filtered = vendors.filter((vendor) => {
-        const matchesSearch =
-          query === '' ||
-          vendor.name.toLowerCase().includes(query.toLowerCase()) ||
-          vendor.category.toLowerCase().includes(query.toLowerCase()) ||
-          vendor.description.toLowerCase().includes(query.toLowerCase()) ||
-          vendor.city.toLowerCase().includes(query.toLowerCase());
-
-        return matchesSearch;
-      });
-      
-      // Sort by rating
-      const sorted = [...filtered].sort((a, b) => b.rating - a.rating);
-      setFilteredVendors(sorted);
-      console.log('Basic search results:', sorted);
-    }
+    // Always use AI search
+    const results = aiSearchVendors(vendors, query);
+    setFilteredVendors(results);
+    console.log('AI search results:', results);
     
     setHasSearched(true);
   };
