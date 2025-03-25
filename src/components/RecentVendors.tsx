@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { mockVendors } from '@/lib/mockData';
-import { Phone, MessageSquare, Globe, Mail, WifiOff } from 'lucide-react';
+import { Phone, MessageSquare, Globe, Mail, Star } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 
@@ -26,7 +26,7 @@ const RecentVendors = () => {
             }`}
           >
             {/* Left side - Logo */}
-            <div className="relative">
+            <div className="relative flex flex-col items-center gap-2">
               <Avatar className="h-16 w-16 rounded-md">
                 <AvatarImage 
                   src={vendor.logo} 
@@ -36,36 +36,26 @@ const RecentVendors = () => {
                 <AvatarFallback className="rounded-md bg-secondary">{vendor.name.substring(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
               
-              {/* Online badge */}
-              <Badge 
-                variant={isOnline(vendor.id) ? "default" : "secondary"} 
-                className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 px-2 py-0.5 text-xs font-medium rounded-full ${isOnline(vendor.id) ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-300 hover:bg-gray-400'}`}
-              >
-                {isOnline(vendor.id) ? (
-                  <span className="flex items-center gap-1">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-white"></span>
-                    Online
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-1">
-                    <WifiOff className="h-3 w-3" />
-                    Offline
-                  </span>
-                )}
-              </Badge>
+              {/* Rating under logo */}
+              <div className="flex items-center gap-1">
+                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                <span className="text-sm font-medium">{vendor.rating.toFixed(1)}</span>
+              </div>
+              
+              {/* Online status - smaller and more subtle */}
+              <div className="text-xs flex items-center gap-1">
+                <span className={`inline-block h-2 w-2 rounded-full ${isOnline(vendor.id) ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+                <span className={`text-xs ${isOnline(vendor.id) ? 'text-green-600' : 'text-gray-500'}`}>
+                  {isOnline(vendor.id) ? 'Online' : 'Offline'}
+                </span>
+              </div>
             </div>
             
             {/* Right side - Content */}
             <div className="flex-1">
-              {/* Company name and rating */}
-              <div className="flex items-center justify-between mb-1">
+              {/* Company name */}
+              <div className="mb-1">
                 <h3 className="font-medium text-lg">{vendor.name}</h3>
-                <div className="flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 fill-yellow-400 text-yellow-400">
-                    <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
-                  </svg>
-                  <span className="font-medium">{vendor.rating.toFixed(1)}</span>
-                </div>
               </div>
               
               {/* Category and city */}

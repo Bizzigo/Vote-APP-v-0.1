@@ -16,8 +16,8 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
   return (
     <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm transition-all duration-400 hover:shadow-md hover:border-border/80 p-4 rounded-md">
       <div className="flex">
-        {/* Left side - Logo */}
-        <div className="mr-4">
+        {/* Left side - Logo and rating */}
+        <div className="mr-4 flex flex-col items-center gap-2">
           <Avatar className="h-16 w-16 rounded-md">
             <AvatarImage 
               src={vendor.logo || placeholderImage} 
@@ -26,17 +26,27 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             />
             <AvatarFallback className="rounded-md bg-secondary">{vendor.name.substring(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
+          
+          {/* Rating under logo */}
+          <div className="flex items-center gap-1">
+            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+            <span className="text-sm font-medium">{vendor.rating.toFixed(1)}</span>
+          </div>
+          
+          {/* Online status - smaller and more subtle */}
+          <div className="text-xs flex items-center gap-1">
+            <span className={`inline-block h-2 w-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+            <span className={`text-xs ${isOnline ? 'text-green-600' : 'text-gray-500'}`}>
+              {isOnline ? 'Online' : 'Offline'}
+            </span>
+          </div>
         </div>
         
         {/* Right side - Content */}
         <div className="flex-1">
-          {/* Company name and rating */}
-          <div className="flex items-center justify-between mb-1">
+          {/* Company name */}
+          <div className="mb-1">
             <h3 className="font-medium text-lg">{vendor.name}</h3>
-            <div className="flex items-center gap-1">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="font-medium">{vendor.rating.toFixed(1)}</span>
-            </div>
           </div>
           
           {/* Category and city */}
@@ -45,7 +55,6 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm">
               {vendor.category}
             </span>
-            <span className={`h-2 w-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
           </div>
           
           {/* Contact icons */}
