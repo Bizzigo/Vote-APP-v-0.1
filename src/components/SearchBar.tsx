@@ -38,7 +38,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
             <input
               type="text"
               className="block w-full bg-white border border-[#1877F2] border-1 pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:border-transparent transition-all duration-200 rounded-none"
-              placeholder="Search vendors by name, category, or description..."
+              placeholder="Search vendors by name, category, services, or keywords..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={(e) => {
@@ -56,6 +56,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
             ATRAST
           </Button>
         </div>
+        <p className="text-xs text-muted-foreground">
+          Try searching for specific services like "Web Development", "Mobile Apps", or "Cloud Services"
+        </p>
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ const VendorKeywordsCard: React.FC<VendorKeywordsCardProps> = ({ services }) => 
             <Badge 
               key={index} 
               variant="outline"
-              className="rounded-sm px-2 py-0.5 bg-gray-200 text-black hover:bg-gray-300"
+              className="rounded-sm px-2 py-0.5 bg-gray-200 text-black hover:bg-gray-300 cursor-pointer"
             >
               {service}
             </Badge>

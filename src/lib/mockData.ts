@@ -34,7 +34,8 @@ export const mockVendors: Vendor[] = [
     category: 'Technology',
     description: 'Providing cutting-edge software solutions for modern business challenges.',
     rating: 4.8,
-    location: { lat: 37.7749, lng: -122.4194 }
+    location: { lat: 37.7749, lng: -122.4194 },
+    keywords: ['Web Development', 'Mobile Apps', 'Cloud Services', 'Software Engineering', 'AI Solutions', 'IT Consulting']
   },
   {
     id: '2',
@@ -44,7 +45,8 @@ export const mockVendors: Vendor[] = [
     category: 'Finance',
     description: 'Financial services with a focus on technology and innovation.',
     rating: 4.5,
-    location: { lat: 40.7128, lng: -74.0060 }
+    location: { lat: 40.7128, lng: -74.0060 },
+    keywords: ['Investment Banking', 'Financial Planning', 'Wealth Management', 'FinTech', 'Risk Assessment', 'Trading']
   },
   {
     id: '3',
@@ -54,7 +56,8 @@ export const mockVendors: Vendor[] = [
     category: 'Healthcare',
     description: 'Digital health solutions that improve patient care and outcomes.',
     rating: 4.9,
-    location: { lat: 42.3601, lng: -71.0589 }
+    location: { lat: 42.3601, lng: -71.0589 },
+    keywords: ['Telehealth', 'Medical Software', 'Health Records', 'Patient Care', 'Healthcare IT', 'Wellness']
   },
   {
     id: '4',
@@ -64,7 +67,8 @@ export const mockVendors: Vendor[] = [
     category: 'Retail',
     description: 'Innovative retail solutions for the modern shopper experience.',
     rating: 4.2,
-    location: { lat: 41.8781, lng: -87.6298 }
+    location: { lat: 41.8781, lng: -87.6298 },
+    keywords: ['E-commerce', 'Inventory Management', 'POS Systems', 'Supply Chain', 'Retail Analytics', 'Shopping']
   },
   {
     id: '5',
@@ -74,7 +78,8 @@ export const mockVendors: Vendor[] = [
     category: 'Food',
     description: 'Farm-to-table food services with a commitment to sustainability.',
     rating: 4.7,
-    location: { lat: 30.2672, lng: -97.7431 }
+    location: { lat: 30.2672, lng: -97.7431 },
+    keywords: ['Catering', 'Farm-to-Table', 'Organic Food', 'Sustainability', 'Culinary Services', 'Event Catering']
   },
   {
     id: '6',
@@ -84,7 +89,8 @@ export const mockVendors: Vendor[] = [
     category: 'Education',
     description: 'Educational technology solutions that transform the learning experience.',
     rating: 4.4,
-    location: { lat: 47.6062, lng: -122.3321 }
+    location: { lat: 47.6062, lng: -122.3321 },
+    keywords: ['E-Learning', 'EdTech', 'Digital Classroom', 'Learning Management', 'Online Courses', 'Educational Content']
   },
   {
     id: '7',
@@ -94,7 +100,8 @@ export const mockVendors: Vendor[] = [
     category: 'Transportation',
     description: 'Next-generation transportation solutions for urban mobility.',
     rating: 4.1,
-    location: { lat: 39.7392, lng: -104.9903 }
+    location: { lat: 39.7392, lng: -104.9903 },
+    keywords: ['Ride Sharing', 'Logistics', 'Fleet Management', 'Transportation Apps', 'Delivery Services', 'Mobility']
   },
   {
     id: '8',
@@ -104,7 +111,8 @@ export const mockVendors: Vendor[] = [
     category: 'Energy',
     description: 'Renewable energy solutions for a sustainable future.',
     rating: 4.6,
-    location: { lat: 45.5051, lng: -122.6750 }
+    location: { lat: 45.5051, lng: -122.6750 },
+    keywords: ['Solar Power', 'Wind Energy', 'Green Solutions', 'Sustainability', 'Clean Energy', 'Renewable Resources']
   },
 ];
 

@@ -31,7 +31,7 @@ const VendorProfile = () => {
   const { toast } = useToast();
   const reviewsSectionRef = useRef<HTMLDivElement>(null);
   
-  const [services] = useState<string[]>([
+  const [services, setServices] = useState<string[]>([
     'Web Development', 'Mobile Apps', 'Cloud Services', 'Consulting', 
     'UI/UX Design', 'DevOps', 'Data Analytics', 'AI Solutions', 
     'IT Infrastructure', 'Cybersecurity'
@@ -112,6 +112,11 @@ const VendorProfile = () => {
       if (foundVendor) {
         console.log("Found vendor:", foundVendor);
         setVendor(foundVendor);
+        
+        if (foundVendor.keywords && foundVendor.keywords.length > 0) {
+          setServices(foundVendor.keywords);
+        }
+        
         toast({
           title: "Vendor loaded",
           description: `Viewing ${foundVendor.name}`

@@ -2,8 +2,8 @@
 import { Vendor } from './types';
 
 /**
- * An AI-powered search function that searches vendors based on exact query matches
- * This filters vendors to only include those with exact term matches
+ * An AI-powered search function that searches vendors based on query matches
+ * This filters vendors to include those with matches in name, category, city, and keywords
  */
 export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
   console.log('AI search activated for query:', query);
@@ -15,22 +15,25 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
   // Convert search query to lowercase for case-insensitive matching
   const searchTerms = query.toLowerCase().split(' ');
   
-  // Only include vendors that have exact term matches
+  // Include vendors that have matches in any searchable field
   const matchedVendors = vendors.filter(vendor => {
-    // Check if any search term exactly matches in the vendor fields
+    // Check if any search term matches in the vendor fields
     return searchTerms.some(term => {
       // Create an array of all searchable fields
       const vendorFields = [
         vendor.name.toLowerCase(),
         vendor.category.toLowerCase(),
-        vendor.city.toLowerCase()
+        vendor.city.toLowerCase(),
+        vendor.description.toLowerCase()
       ];
       
-      // Check if any field contains the exact term
-      return vendorFields.some(field => {
-        const words = field.split(/\s+/);
-        return words.includes(term);
-      });
+      // Add keywords to searchable fields if they exist
+      if (vendor.keywords && vendor.keywords.length > 0) {
+        vendorFields.push(...vendor.keywords.map(keyword => keyword.toLowerCase()));
+      }
+      
+      // Check if any field contains the term
+      return vendorFields.some(field => field.includes(term));
     });
   });
   
@@ -53,6 +56,20 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
       // City matches (medium weight)
       if (vendor.city.toLowerCase().includes(term)) {
         score += 5;
+      }
+      
+      // Description matches (low-medium weight)
+      if (vendor.description.toLowerCase().includes(term)) {
+        score += 4;
+      }
+      
+      // Keyword matches (high weight)
+      if (vendor.keywords && vendor.keywords.length > 0) {
+        vendor.keywords.forEach(keyword => {
+          if (keyword.toLowerCase().includes(term)) {
+            score += 7; // High importance for keyword matches
+          }
+        });
       }
       
       // Location information - if available
@@ -82,6 +99,6 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
     })
     .map(item => item.vendor);
 
-  console.log(`AI search found ${sortedResults.length} exact match results`);
+  console.log(`AI search found ${sortedResults.length} results with keyword matching`);
   return sortedResults;
 };

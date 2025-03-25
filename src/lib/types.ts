@@ -22,6 +22,7 @@ export interface Vendor {
     lat: number;
     lng: number;
   };
+  keywords?: string[]; // Added keywords field
 }
 
 export interface Candidate {
