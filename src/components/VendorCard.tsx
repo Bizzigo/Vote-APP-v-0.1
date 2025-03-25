@@ -2,9 +2,10 @@
 import React from 'react';
 import { Vendor } from '@/lib/types';
 import { placeholderImage } from '@/lib/mockData';
-import { Star, Phone, MessageSquare, Globe, Mail, MapPin, ExternalLink } from 'lucide-react';
+import { Star, Phone, MessageSquare, Globe, Mail, MapPin, ExternalLink, Briefcase, ShoppingBag, CreditCard } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useLocation } from '@/hooks/useLocation';
+import { Badge } from '@/components/ui/badge';
 
 interface VendorCardProps {
   vendor: Vendor;
@@ -24,6 +25,18 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
   const hasFacebook = React.useMemo(() => Math.random() > 0.3, [vendor.id]);
   const hasWebsite = React.useMemo(() => Math.random() > 0.2, [vendor.id]);
   const hasLursoftProfile = React.useMemo(() => Math.random() > 0.5, [vendor.id]);
+  
+  // Demo: Job vacancies, shop, and payment methods
+  const jobVacancies = React.useMemo(() => Math.random() > 0.6 ? Math.floor(Math.random() * 5) + 1 : 0, [vendor.id]);
+  const hasShop = React.useMemo(() => Math.random() > 0.5, [vendor.id]);
+  const paymentMethods = React.useMemo(() => {
+    return {
+      creditCard: Math.random() > 0.4,
+      bankTransfer: Math.random() > 0.3,
+      paypal: Math.random() > 0.5,
+      crypto: Math.random() > 0.7
+    };
+  }, [vendor.id]);
   
   // Calculate distance if we have location data
   const distance = React.useMemo(() => {
@@ -52,11 +65,11 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
   const reviewCount = React.useMemo(() => Math.floor(Math.random() * 500) + 50, [vendor.id]);
   
   return (
-    <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm transition-all duration-400 hover:shadow-md hover:border-border/80 p-4 rounded-md">
+    <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-primary/30 hover:translate-y-[-2px] p-4 rounded-md">
       <div className="flex items-center">
         {/* Left side - Logo with increased size and better alignment */}
         <div className="mr-6 flex flex-col items-center justify-center">
-          <Avatar className="h-20 w-20 rounded-md">
+          <Avatar className="h-24 w-24 rounded-md">
             <AvatarImage 
               src={vendor.logo || placeholderImage} 
               alt={vendor.name} 
@@ -73,39 +86,114 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             <h3 className="font-medium text-lg">{vendor.name}</h3>
           </div>
           
-          {/* Category, city, rating, online status, Lursoft badge and distance in one row */}
-          <div className="flex items-center flex-wrap gap-2 mb-3">
-            <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
-              <MapPin className="h-3 w-3 mr-1" />
+          {/* First row of badges */}
+          <div className="flex items-center flex-wrap gap-2 mb-2">
+            <Badge variant="secondary" className="flex items-center gap-1 text-xs">
+              <MapPin className="h-3 w-3" />
               {vendor.city}
-            </span>
-            <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm">
+            </Badge>
+            
+            <Badge variant="secondary" className="text-xs">
               {vendor.category}
-            </span>
-            <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
-              <Star className="h-3 w-3 mr-1 fill-yellow-400 text-yellow-400" />
+            </Badge>
+            
+            <Badge variant="secondary" className="flex items-center gap-1 text-xs">
+              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
               {vendor.rating.toFixed(1)} / {reviewCount}
-            </span>
-            <span className={`text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center ${isOnline ? 'text-green-600' : 'text-gray-500'}`}>
-              <span className={`inline-block h-2 w-2 rounded-full mr-1 ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
-              {isOnline ? 'Online' : 'Offline'}
-            </span>
+            </Badge>
+            
             {hasLursoftProfile && (
-              <a href="https://www.lursoft.lv" target="_blank" rel="noopener noreferrer" className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center text-blue-600 hover:bg-secondary/80">
-                <ExternalLink className="h-3 w-3 mr-1" />
-                LURSOFT
+              <a href="https://www.lursoft.lv" target="_blank" rel="noopener noreferrer">
+                <Badge variant="secondary" className="flex items-center gap-1 text-xs text-blue-600 hover:bg-blue-50">
+                  <ExternalLink className="h-3 w-3" />
+                  LURSOFT
+                </Badge>
               </a>
             )}
+            
+            <Badge 
+              variant="secondary" 
+              className={`flex items-center gap-1 text-xs ${isOnline ? 'text-green-600' : 'text-gray-500'}`}
+            >
+              <span className={`inline-block h-2 w-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+              {isOnline ? 'Online' : 'Offline'}
+            </Badge>
+          </div>
+          
+          {/* Second row of badges */}
+          <div className="flex items-center flex-wrap gap-2 mb-3">
+            {jobVacancies > 0 && (
+              <a href="#vacancies" className="hover:opacity-80">
+                <Badge variant="secondary" className="flex items-center gap-1 text-xs text-purple-600">
+                  <Briefcase className="h-3 w-3" />
+                  Vakances: {jobVacancies}
+                </Badge>
+              </a>
+            )}
+            
+            {hasShop && (
+              <a href="#shop" className="hover:opacity-80">
+                <Badge variant="secondary" className="flex items-center gap-1 text-xs text-green-600">
+                  <ShoppingBag className="h-3 w-3" />
+                  Veikals
+                </Badge>
+              </a>
+            )}
+            
             {locationActive && distance && (
-              <span className="text-xs px-2 py-0.5 bg-secondary rounded-sm flex items-center">
+              <Badge variant="secondary" className="flex items-center gap-1 text-xs">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
                   <circle cx="12" cy="12" r="10"></circle>
                   <path d="m16.2 7.8-2.3 6.1-6.1 2.3 2.3-6.1z"></path>
                 </svg>
                 {distance} km
-              </span>
+              </Badge>
             )}
           </div>
+          
+          {/* Payment methods */}
+          {(paymentMethods.creditCard || paymentMethods.bankTransfer || paymentMethods.paypal || paymentMethods.crypto) && (
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <span className="text-xs text-muted-foreground">Maksājumi:</span>
+              {paymentMethods.creditCard && (
+                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200">
+                  <CreditCard className="h-3 w-3" />
+                  Kartes
+                </Badge>
+              )}
+              {paymentMethods.bankTransfer && (
+                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="20" height="14" x="2" y="5" rx="2" />
+                    <line x1="2" x2="22" y1="10" y2="10" />
+                  </svg>
+                  Banka
+                </Badge>
+              )}
+              {paymentMethods.paypal && (
+                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+                    <path d="M8.93 13.4A1.99 1.99 0 0 1 11 15v1a2 2 0 0 1-2 2H2" />
+                    <path d="M14 16.2V21" />
+                    <path d="M14 7V2" />
+                    <path d="M20 11V7a5 5 0 0 0-4-4.9" />
+                    <path d="M20 11h-6a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h4a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-8" />
+                  </svg>
+                  PayPal
+                </Badge>
+              )}
+              {paymentMethods.crypto && (
+                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M8 14l3.5-3.5 1 1L16 8" />
+                  </svg>
+                  Kriptovalūta
+                </Badge>
+              )}
+            </div>
+          )}
           
           {/* Contact icons - only show if vendor has the contact method */}
           <div className="flex flex-wrap items-center gap-2 mt-3">
