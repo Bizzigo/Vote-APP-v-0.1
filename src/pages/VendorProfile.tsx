@@ -10,7 +10,6 @@ import VendorHeader from '@/components/vendor/VendorHeader';
 import VendorContactInfoCard from '@/components/vendor/VendorContactInfoCard';
 import VendorPaymentInfoCard from '@/components/vendor/VendorPaymentInfoCard';
 import VendorDescriptionCard from '@/components/vendor/VendorDescriptionCard';
-import VendorServicesCard from '@/components/vendor/VendorServicesCard';
 import VendorServiceTabs from '@/components/vendor/VendorServiceTabs';
 
 const VendorProfile = () => {
@@ -155,8 +154,6 @@ const VendorProfile = () => {
         </div>
 
         <VendorDescriptionCard vendor={vendor} />
-
-        <VendorServicesCard services={services} />
 
         <VendorServiceTabs
           services={services}
