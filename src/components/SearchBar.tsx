@@ -1,6 +1,15 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Search } from 'lucide-react';
+import { 
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from '@/components/ui/command';
+import { mockVendors } from '@/lib/mockData';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -9,6 +18,40 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSearch }) => {
+  const [open, setOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Generate search suggestions based on input
+  useEffect(() => {
+    if (searchTerm.trim().length >= 2) {
+      // Get suggestions from vendor names, categories, and keywords
+      const nameMatches = mockVendors
+        .filter(vendor => vendor.name.toLowerCase().includes(searchTerm.toLowerCase()))
+        .map(vendor => vendor.name);
+      
+      const categoryMatches = mockVendors
+        .filter(vendor => vendor.category.toLowerCase().includes(searchTerm.toLowerCase()))
+        .map(vendor => vendor.category);
+      
+      const keywordMatches = mockVendors
+        .filter(vendor => vendor.keywords?.some(keyword => 
+          keyword.toLowerCase().includes(searchTerm.toLowerCase())
+        ))
+        .flatMap(vendor => vendor.keywords || []);
+      
+      // Combine all matches and remove duplicates
+      const allSuggestions = [...new Set([...nameMatches, ...categoryMatches, ...keywordMatches])];
+      
+      // Limit to top 5 most relevant suggestions
+      setSuggestions(allSuggestions.slice(0, 5));
+      setOpen(true);
+    } else {
+      setSuggestions([]);
+      setOpen(false);
+    }
+  }, [searchTerm]);
+
   // Effect for instant search when searchTerm has 4 or more characters
   useEffect(() => {
     if (searchTerm.trim().length >= 4) {
@@ -24,6 +67,18 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       onSearch(searchTerm, true);
+      setOpen(false);
+    }
+  };
+
+  const handleSelectSuggestion = (suggestion: string) => {
+    setSearchTerm(suggestion);
+    onSearch(suggestion, true);
+    setOpen(false);
+    
+    // Refocus the input after selection
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
   };
 
@@ -31,10 +86,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
     <div className="relative max-w-lg w-full mx-auto mb-8">
       <div className="flex flex-col space-y-2">
         <div className="relative flex-grow">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
             <Search className="h-5 w-5 text-muted-foreground" />
           </div>
           <input
+            ref={inputRef}
             type="text"
             className={`block w-full bg-white border border-[#1877F2] pl-10 pr-4 py-3 
               focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:border-transparent 
@@ -44,7 +100,31 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleKeyDown}
+            onFocus={() => searchTerm.trim().length >= 2 && setOpen(true)}
+            onBlur={() => setTimeout(() => setOpen(false), 200)}
           />
+          
+          {open && suggestions.length > 0 && (
+            <div className="absolute w-full mt-1 bg-white border border-gray-200 shadow-lg z-50">
+              <Command className="rounded-lg border shadow-md">
+                <CommandList>
+                  <CommandGroup heading="Suggestions">
+                    {suggestions.map((suggestion) => (
+                      <CommandItem
+                        key={suggestion}
+                        onSelect={() => handleSelectSuggestion(suggestion)}
+                        className="cursor-pointer hover:bg-slate-100"
+                      >
+                        <Search className="mr-2 h-4 w-4" />
+                        <span>{suggestion}</span>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+                <CommandEmpty>No results found</CommandEmpty>
+              </Command>
+            </div>
+          )}
         </div>
       </div>
     </div>
