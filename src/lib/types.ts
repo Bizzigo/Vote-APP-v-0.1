@@ -23,6 +23,16 @@ export interface Vendor {
   };
 }
 
+export interface Candidate {
+  id: string;
+  name: string;
+  photo: string;
+  city: string;
+  district: string;
+  description: string;
+  voteCount: number;
+}
+
 export interface AuthContextType {
   user: User | null;
   login: (email: string, provider: string) => void;

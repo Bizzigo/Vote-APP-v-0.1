@@ -1,5 +1,5 @@
 
-import { Vendor, User } from './types';
+import { Vendor, User, Candidate } from './types';
 
 // Placeholder image for vendors without a logo
 export const placeholderImage = 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=1000&auto=format&fit=crop';
@@ -15,6 +15,14 @@ export const categories = [
   'Energy',
   'Entertainment',
   'Construction',
+];
+
+export const districts = [
+  'North',
+  'South',
+  'East',
+  'West',
+  'Central'
 ];
 
 export const mockVendors: Vendor[] = [
@@ -107,3 +115,51 @@ export const mockVisitorUser: User = {
   role: 'visitor',
   hasVoted: false,
 };
+
+export const mockCandidates: Candidate[] = [
+  {
+    id: '1',
+    name: 'John Smith',
+    photo: placeholderImage,
+    city: 'New York',
+    district: 'North',
+    description: 'Experienced leader with a focus on community development.',
+    voteCount: 42
+  },
+  {
+    id: '2',
+    name: 'Sarah Johnson',
+    photo: placeholderImage,
+    city: 'Chicago',
+    district: 'South',
+    description: 'Dedicated to improving local infrastructure and services.',
+    voteCount: 38
+  },
+  {
+    id: '3',
+    name: 'Michael Brown',
+    photo: placeholderImage,
+    city: 'Los Angeles',
+    district: 'West',
+    description: 'Committed to sustainable urban development and green initiatives.',
+    voteCount: 29
+  },
+  {
+    id: '4',
+    name: 'Emily Davis',
+    photo: placeholderImage,
+    city: 'Boston',
+    district: 'East',
+    description: 'Advocate for education reform and youth programs.',
+    voteCount: 35
+  },
+  {
+    id: '5',
+    name: 'Robert Wilson',
+    photo: placeholderImage,
+    city: 'Denver',
+    district: 'Central',
+    description: 'Working to bring economic opportunities to the community.',
+    voteCount: 31
+  }
+];
