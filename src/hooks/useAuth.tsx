@@ -1,10 +1,12 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, AuthContextType, Role } from '@/lib/types';
+import { User, AuthContextType } from '@/lib/types';
 import { mockVisitorUser, mockAdminUser } from '@/lib/mockData';
 import { useToast } from "@/hooks/use-toast";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const SUPERADMIN_EMAIL = 'girts.kizenbahs@gmail.com';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -18,8 +20,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = (email: string, role: Role) => {
-    const newUser = role === 'admin' ? mockAdminUser : mockVisitorUser;
+  const login = (email: string, provider: string) => {
+    // Check if the user is the superadmin
+    const isSuperAdmin = email.toLowerCase() === SUPERADMIN_EMAIL.toLowerCase();
+    const newUser = isSuperAdmin ? { 
+      ...mockAdminUser, 
+      email: SUPERADMIN_EMAIL, 
+      name: 'Super Admin',
+    } : mockVisitorUser;
     
     // In a real app, this would be an API call
     setUser(newUser);

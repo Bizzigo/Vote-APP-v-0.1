@@ -1,16 +1,13 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
-import { Role } from '@/lib/types';
 
 const Login = () => {
   const { login, isLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [selectedRole, setSelectedRole] = useState<Role>('visitor');
 
   // Redirect if already logged in
   React.useEffect(() => {
@@ -19,15 +16,10 @@ const Login = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    login(email, selectedRole);
-    navigate('/');
-  };
-
   const handleSocialLogin = (provider: string) => {
     // In a real app, this would initiate OAuth flow
-    login('user@example.com', 'visitor');
+    // For now, we just simulate a login
+    login(`user@example.com`, provider);
     navigate('/');
   };
 
@@ -81,63 +73,8 @@ const Login = () => {
             </Button>
           </div>
 
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border/60"></div>
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
-            </div>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Email Address</label>
-              <input
-                type="email"
-                className="w-full bg-transparent border border-border/60 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Role</label>
-              <div className="flex space-x-4">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    checked={selectedRole === 'visitor'}
-                    onChange={() => setSelectedRole('visitor')}
-                    className="form-radio"
-                  />
-                  <span>Visitor</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    checked={selectedRole === 'admin'}
-                    onChange={() => setSelectedRole('admin')}
-                    className="form-radio"
-                  />
-                  <span>Admin</span>
-                </label>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Choose Admin to access the admin panel and manage candidates
-              </p>
-            </div>
-
-            <Button type="submit" className="w-full">
-              Sign In
-            </Button>
-          </form>
-
           <p className="text-center text-xs text-muted-foreground mt-6">
             This is a demo app. No real authentication is implemented.
-            <br />Choose any role to proceed.
           </p>
         </div>
       </div>
