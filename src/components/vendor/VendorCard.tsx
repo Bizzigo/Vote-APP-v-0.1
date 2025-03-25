@@ -7,6 +7,7 @@ import { useLocation } from '@/hooks/useLocation';
 import VendorInfoBadges from './VendorInfoBadges';
 import VendorPaymentMethods from './VendorPaymentMethods';
 import VendorContactMethods from './VendorContactMethods';
+import { Link } from 'react-router-dom';
 
 interface VendorCardProps {
   vendor: Vendor;
@@ -70,21 +71,27 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
       <div className="flex items-center">
         {/* Left side - Logo with increased size and better alignment */}
         <div className="mr-6 flex flex-col items-center justify-center">
-          <Avatar className="h-24 w-24 rounded-md">
-            <AvatarImage 
-              src={vendor.logo || placeholderImage} 
-              alt={vendor.name} 
-              className="object-cover"
-            />
-            <AvatarFallback className="rounded-md bg-secondary">{vendor.name.substring(0, 2).toUpperCase()}</AvatarFallback>
-          </Avatar>
+          <Link to={`/vendor/${vendor.id}`}>
+            <Avatar className="h-24 w-24 rounded-md">
+              <AvatarImage 
+                src={vendor.logo || placeholderImage} 
+                alt={vendor.name} 
+                className="object-cover"
+              />
+              <AvatarFallback className="rounded-md bg-secondary">{vendor.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+            </Avatar>
+          </Link>
         </div>
         
         {/* Right side - Content */}
         <div className="flex-1">
           {/* Company name */}
           <div className="mb-2">
-            <h3 className="font-medium text-lg">{vendor.name}</h3>
+            <h3 className="font-medium text-lg">
+              <Link to={`/vendor/${vendor.id}`} className="hover:text-primary hover:underline transition-colors">
+                {vendor.name}
+              </Link>
+            </h3>
           </div>
           
           {/* Vendor Info Badges */}

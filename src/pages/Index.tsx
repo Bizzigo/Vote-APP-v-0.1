@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
-import VendorCard from '@/components/VendorCard';
+import VendorCard from '@/components/vendor/VendorCard';
 import RecentVendors from '@/components/RecentVendors';
 import TopSearched from '@/components/TopSearched';
 import CategoryCloud from '@/components/CategoryCloud';
