@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, MessageSquare } from 'lucide-react';
@@ -70,6 +71,41 @@ const VendorProfile = () => {
       date: '22 February 2023',
       rating: 3.5,
       comment: 'Good work overall, but communication could have been better at times. The final product met our requirements.'
+    },
+    {
+      id: 4,
+      author: 'Sarah Williams',
+      date: '10 January 2023',
+      rating: 4.8,
+      comment: 'Very responsive team that understood our requirements quickly. The solution they delivered was perfect for our needs.'
+    },
+    {
+      id: 5,
+      author: 'David Chen',
+      date: '29 December 2022',
+      rating: 4.2,
+      comment: 'Solid work and met all our requirements. Would use their services again for future projects.'
+    },
+    {
+      id: 6,
+      author: 'Emma Thompson',
+      date: '15 November 2022',
+      rating: 5,
+      comment: 'Absolutely fantastic service from start to finish. The team went above and beyond to ensure our satisfaction.'
+    },
+    {
+      id: 7,
+      author: 'Michael Brown',
+      date: '23 October 2022',
+      rating: 3.8,
+      comment: 'Good technical skills but project timeline was slightly delayed. End product works well for our needs.'
+    },
+    {
+      id: 8,
+      author: 'Jessica Lee',
+      date: '5 September 2022',
+      rating: 4.7,
+      comment: 'Very professional team with great attention to detail. They were responsive to all our feedback during development.'
     }
   ]);
   

@@ -6,6 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Star, MessageSquare, Plus, X } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious 
+} from '@/components/ui/pagination';
 
 interface Service {
   name: string;
@@ -41,6 +49,8 @@ interface VendorServiceTabsProps {
   reviews?: Review[];
 }
 
+const REVIEWS_PER_PAGE = 5;
+
 const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
   services,
   jobVacancies,
@@ -48,6 +58,26 @@ const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
   reviews = [],
 }, ref) => {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [reviewPage, setReviewPage] = useState(1);
+  
+  // Calculate pagination values
+  const totalReviews = reviews.length;
+  const totalPages = Math.ceil(totalReviews / REVIEWS_PER_PAGE);
+  const startIndex = (reviewPage - 1) * REVIEWS_PER_PAGE;
+  const displayedReviews = reviews.slice(startIndex, startIndex + REVIEWS_PER_PAGE);
+  
+  // Handle page changes
+  const handlePrevPage = () => {
+    if (reviewPage > 1) {
+      setReviewPage(reviewPage - 1);
+    }
+  };
+  
+  const handleNextPage = () => {
+    if (reviewPage < totalPages) {
+      setReviewPage(reviewPage + 1);
+    }
+  };
   
   // Generate star rating display
   const renderStars = (rating: number, clickable = false, review?: Review) => {
@@ -122,26 +152,62 @@ const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
           </div>
           
           {reviews.length > 0 ? (
-            <ScrollArea className="h-[300px] rounded-md border p-4">
-              <div className="space-y-4">
-                {reviews.map(review => (
-                  <Card key={review.id}>
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h4 className="font-medium">{review.author}</h4>
-                          <p className="text-xs text-muted-foreground">{review.date}</p>
+            <div>
+              <ScrollArea className="h-[300px] rounded-md border p-4">
+                <div className="space-y-4">
+                  {displayedReviews.map(review => (
+                    <Card key={review.id}>
+                      <CardContent className="p-4">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <h4 className="font-medium">{review.author}</h4>
+                            <p className="text-xs text-muted-foreground">{review.date}</p>
+                          </div>
+                          <div className="flex items-center cursor-pointer" onClick={() => setSelectedReview(review)}>
+                            {renderStars(review.rating, true, review)}
+                          </div>
                         </div>
-                        <div className="flex items-center cursor-pointer" onClick={() => setSelectedReview(review)}>
-                          {renderStars(review.rating, true, review)}
-                        </div>
-                      </div>
-                      <p className="text-sm">{review.comment}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </ScrollArea>
+                        <p className="text-sm">{review.comment}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </ScrollArea>
+              
+              {totalPages > 1 && (
+                <div className="mt-4">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={handlePrevPage} 
+                          className={reviewPage <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer hover:bg-gray-200"}
+                        />
+                      </PaginationItem>
+                      
+                      {Array.from({ length: totalPages }).map((_, index) => (
+                        <PaginationItem key={index}>
+                          <PaginationLink
+                            isActive={reviewPage === index + 1}
+                            onClick={() => setReviewPage(index + 1)}
+                            className="rounded-sm hover:bg-gray-200"
+                          >
+                            {index + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={handleNextPage} 
+                          className={reviewPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer hover:bg-gray-200"}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
+            </div>
           ) : (
             <div className="text-center py-8 space-y-3 bg-muted/20 rounded-md">
               <MessageSquare className="mx-auto h-8 w-8 text-muted-foreground/50" />
