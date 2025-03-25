@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -65,9 +64,6 @@ const Index = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 animate-fade-in">
             Vendor Directory
           </h1>
-          <p className="text-muted-foreground animate-fade-in animation-delay-150">
-            Find the perfect vendors for your business needs. Search by name, category, or location.
-          </p>
         </div>
         
         <SearchBar 

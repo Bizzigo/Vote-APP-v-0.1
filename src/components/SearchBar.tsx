@@ -1,7 +1,6 @@
 
 import React, { useEffect } from 'react';
 import { Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -10,11 +9,6 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSearch }) => {
-  const handleSearch = () => {
-    console.log('Search button clicked:', { searchTerm });
-    onSearch(searchTerm, true);
-  };
-
   // Effect for instant search when searchTerm has 4 or more characters
   useEffect(() => {
     if (searchTerm.trim().length >= 4) {
@@ -27,38 +21,31 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
     }
   }, [searchTerm, onSearch]);
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onSearch(searchTerm, true);
+    }
+  };
+
   return (
     <div className="relative max-w-lg w-full mx-auto mb-8">
       <div className="flex flex-col space-y-2">
-        <div className="flex">
-          <div className="relative flex-grow">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-muted-foreground" />
-            </div>
-            <input
-              type="text"
-              className="block w-full bg-white border border-[#1877F2] border-1 pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:border-transparent transition-all duration-200 rounded-none"
-              placeholder="Search vendors by name, category, services, or keywords..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSearch();
-                }
-              }}
-            />
+        <div className="relative flex-grow">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-muted-foreground" />
           </div>
-          <Button 
-            className="ml-0 bg-[#1877F2] hover:bg-[#166FE5] text-white px-4 py-2 h-auto rounded-none"
-            onClick={handleSearch}
-            type="button"
-          >
-            ATRAST
-          </Button>
+          <input
+            type="text"
+            className={`block w-full bg-white border border-[#1877F2] pl-10 pr-4 py-3 
+              focus:outline-none focus:ring-2 focus:ring-[#1877F2] focus:border-transparent 
+              transition-all duration-200 rounded-none
+              ${searchTerm ? 'border-2' : 'border-1'}`}
+            placeholder="Search vendors by name, category, services, or keywords..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
         </div>
-        <p className="text-xs text-muted-foreground">
-          Try searching for specific services like "Web Development", "Mobile Apps", or "Cloud Services"
-        </p>
       </div>
     </div>
   );

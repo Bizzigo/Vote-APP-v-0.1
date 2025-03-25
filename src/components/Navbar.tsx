@@ -65,10 +65,10 @@ const Navbar: React.FC = () => {
           <Link to="/" className="flex items-center gap-2">
             <div className="relative h-8 w-8 overflow-hidden bg-accent rounded-sm">
               <div className="absolute inset-0 flex items-center justify-center text-accent-foreground font-semibold">
-                VP
+                BZ
               </div>
             </div>
-            <span className="text-lg font-medium">Voting Portal</span>
+            <span className="text-lg font-medium">Bizzigo</span>
           </Link>
         </div>
 
