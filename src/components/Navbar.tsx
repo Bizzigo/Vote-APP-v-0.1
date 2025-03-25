@@ -5,7 +5,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Menu, X, MapPin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import PreviewLink from './PreviewLink';
 
 const Navbar: React.FC = () => {
   const { isLoggedIn, isAdmin, user, logout } = useAuth();
@@ -87,9 +86,6 @@ const Navbar: React.FC = () => {
               {link.title}
             </Link>
           ))}
-          <PreviewLink variant="outline" size="sm">
-            Preview
-          </PreviewLink>
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
@@ -165,12 +161,6 @@ const Navbar: React.FC = () => {
                   {locationActive ? 'Location active' : 'Use my location'}
                 </span>
               </button>
-            </div>
-            
-            <div className="py-2">
-              <PreviewLink variant="outline" size="sm">
-                Open Preview
-              </PreviewLink>
             </div>
             
             {isLoggedIn ? (
