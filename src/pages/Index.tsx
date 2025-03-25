@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
 import VendorCard from '@/components/VendorCard';
@@ -16,8 +16,15 @@ const Index = () => {
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const handleSearch = (query: string, useAI: boolean) => {
+  // Using useCallback to memoize the search function
+  const handleSearch = useCallback((query: string, useAI: boolean) => {
     console.log('Search initiated:', { query });
+    
+    if (query.trim() === '') {
+      setFilteredVendors([]);
+      setHasSearched(false);
+      return;
+    }
     
     // Always use AI search
     const results = aiSearchVendors(vendors, query);
@@ -25,7 +32,7 @@ const Index = () => {
     console.log('AI search results:', results);
     
     setHasSearched(true);
-  };
+  }, [vendors]);
 
   return (
     <Layout>

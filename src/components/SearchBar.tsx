@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -14,6 +14,18 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
     console.log('Search button clicked:', { searchTerm });
     onSearch(searchTerm, true);
   };
+
+  // Effect for instant search when searchTerm has 4 or more characters
+  useEffect(() => {
+    if (searchTerm.trim().length >= 4) {
+      const debounceTimer = setTimeout(() => {
+        console.log('Instant search triggered:', { searchTerm });
+        onSearch(searchTerm, true);
+      }, 300); // 300ms debounce to prevent too many searches while typing
+
+      return () => clearTimeout(debounceTimer);
+    }
+  }, [searchTerm, onSearch]);
 
   return (
     <div className="relative max-w-lg w-full mx-auto mb-8">
