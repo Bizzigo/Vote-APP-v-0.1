@@ -57,7 +57,7 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
           icon={<Briefcase className="h-3 w-3" />}
           label={`Vakances: ${jobVacancies}`}
           className="text-purple-600"
-          href="#vacancies"
+          scrollToId="job-offers-section"
         />
       )}
       
@@ -66,7 +66,7 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
           icon={<ShoppingBag className="h-3 w-3" />}
           label="Veikals"
           className="text-green-600"
-          href="#shop"
+          scrollToId="shop-section"
         />
       )}
       

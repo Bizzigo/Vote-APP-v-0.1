@@ -195,7 +195,7 @@ const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
       </Dialog>
       
       {/* Jobs Block */}
-      <Card>
+      <Card id="job-offers-section">
         <CardContent className="pt-6">
           <h3 className="text-lg font-medium mb-4">Job Offers ({jobVacancies.length})</h3>
           {jobVacancies.length > 0 ? (
@@ -223,7 +223,7 @@ const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
       </Card>
       
       {/* Shop Block */}
-      <Card>
+      <Card id="shop-section">
         <CardContent className="pt-6">
           <h3 className="text-lg font-medium mb-4">Shop ({shopItems.length})</h3>
           {shopItems.length > 0 ? (
