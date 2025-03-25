@@ -1,10 +1,11 @@
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Star, MessageSquare, Plus } from 'lucide-react';
+import { Star, MessageSquare, Plus, X } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 
 interface Service {
   name: string;
@@ -46,23 +47,43 @@ const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
   shopItems,
   reviews = [],
 }, ref) => {
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  
   // Generate star rating display
-  const renderStars = (rating: number) => {
+  const renderStars = (rating: number, clickable = false, review?: Review) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
     
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<Star key={`full-${i}`} className="h-4 w-4 fill-yellow-400 text-yellow-400" />);
+      stars.push(
+        <Star 
+          key={`full-${i}`} 
+          className={`h-4 w-4 fill-yellow-400 text-yellow-400 ${clickable ? 'cursor-pointer' : ''}`}
+          onClick={clickable && review ? () => setSelectedReview(review) : undefined}
+        />
+      );
     }
     
     if (hasHalfStar) {
-      stars.push(<Star key="half" className="h-4 w-4 fill-yellow-400 text-yellow-400 opacity-50" />);
+      stars.push(
+        <Star 
+          key="half" 
+          className={`h-4 w-4 fill-yellow-400 text-yellow-400 opacity-50 ${clickable ? 'cursor-pointer' : ''}`}
+          onClick={clickable && review ? () => setSelectedReview(review) : undefined}
+        />
+      );
     }
     
     const emptyStars = 5 - stars.length;
     for (let i = 0; i < emptyStars; i++) {
-      stars.push(<Star key={`empty-${i}`} className="h-4 w-4 text-gray-300" />);
+      stars.push(
+        <Star 
+          key={`empty-${i}`} 
+          className={`h-4 w-4 text-gray-300 ${clickable ? 'cursor-pointer' : ''}`}
+          onClick={clickable && review ? () => setSelectedReview(review) : undefined}
+        />
+      );
     }
     
     return stars;
@@ -111,7 +132,9 @@ const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
                           <h4 className="font-medium">{review.author}</h4>
                           <p className="text-xs text-muted-foreground">{review.date}</p>
                         </div>
-                        <div className="flex items-center">{renderStars(review.rating)}</div>
+                        <div className="flex items-center cursor-pointer" onClick={() => setSelectedReview(review)}>
+                          {renderStars(review.rating, true, review)}
+                        </div>
                       </div>
                       <p className="text-sm">{review.comment}</p>
                     </CardContent>
@@ -127,6 +150,49 @@ const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
           )}
         </CardContent>
       </Card>
+      
+      {/* Reviews Detail Dialog */}
+      <Dialog open={!!selectedReview} onOpenChange={(open) => !open && setSelectedReview(null)}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="flex justify-between items-center">
+              <span>Review Details</span>
+              <DialogClose asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+                  <X className="h-4 w-4" />
+                </Button>
+              </DialogClose>
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedReview && (
+            <div className="space-y-4 pt-2">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-medium text-lg">{selectedReview.author}</h3>
+                  <p className="text-sm text-muted-foreground">{selectedReview.date}</p>
+                </div>
+                <div className="flex">
+                  {renderStars(selectedReview.rating)}
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="font-medium mb-2">Comment:</h4>
+                <p className="text-base">{selectedReview.comment}</p>
+              </div>
+              
+              {/* You could add more details here like photos, seller response, etc. */}
+              <div className="border-t pt-4 mt-4">
+                <h4 className="font-medium mb-2">Vendor Response:</h4>
+                <p className="text-sm italic text-muted-foreground">
+                  Thank you for your feedback! We appreciate your business and are always looking to improve our services.
+                </p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
       
       {/* Jobs Block */}
       <Card>

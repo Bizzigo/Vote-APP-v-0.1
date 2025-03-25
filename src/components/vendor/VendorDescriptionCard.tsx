@@ -11,7 +11,7 @@ const VendorDescriptionCard: React.FC<VendorDescriptionCardProps> = ({ vendor })
   return (
     <Card className="mb-8">
       <CardContent className="pt-6">
-        <h3 className="text-lg font-medium mb-4">About {vendor.name}</h3>
+        <h3 className="text-lg font-medium mb-4">About Us</h3>
         <p className="text-muted-foreground">
           {vendor.description || 
             `${vendor.name} is a leading provider in the ${vendor.category} sector, 

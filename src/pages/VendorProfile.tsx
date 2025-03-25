@@ -148,7 +148,10 @@ const VendorProfile = () => {
 
   const scrollToReviews = () => {
     if (reviewsSectionRef.current) {
-      reviewsSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+      reviewsSectionRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
   };
 
@@ -193,6 +196,7 @@ const VendorProfile = () => {
           jobVacancies={jobVacancies.length}
           hasShop={shopItems.length > 0}
           isOnline={isOnline}
+          onRatingClick={scrollToReviews}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">

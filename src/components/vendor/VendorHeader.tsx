@@ -3,6 +3,7 @@ import React from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import VendorInfoBadges from '@/components/vendor/VendorInfoBadges';
+import { Star } from 'lucide-react';
 import { Vendor } from '@/lib/types';
 import { placeholderImage } from '@/lib/mockData';
 
@@ -15,6 +16,7 @@ interface VendorHeaderProps {
   jobVacancies: number;
   hasShop: boolean;
   isOnline: boolean;
+  onRatingClick: () => void;
 }
 
 const VendorHeader: React.FC<VendorHeaderProps> = ({
@@ -25,7 +27,8 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
   hasLursoftProfile,
   jobVacancies,
   hasShop,
-  isOnline
+  isOnline,
+  onRatingClick
 }) => {
   return (
     <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm p-6 rounded-md mb-8">
@@ -65,6 +68,22 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
               isOnline={isOnline}
               distance={null}
             />
+          </div>
+          
+          {/* Clickable rating area */}
+          <div 
+            className="flex items-center gap-2 mt-1 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={onRatingClick}
+          >
+            <div className="flex">
+              {[1, 2, 3, 4, 5].map((_, index) => (
+                <Star 
+                  key={index} 
+                  className={`h-4 w-4 ${index < Math.floor(vendor.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                />
+              ))}
+            </div>
+            <span className="text-sm text-blue-600 underline">{vendor.rating.toFixed(1)} out of 5.0 ({reviewCount} reviews)</span>
           </div>
         </div>
       </div>
