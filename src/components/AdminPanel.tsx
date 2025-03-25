@@ -18,6 +18,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ vendors, setVendors }) => {
     city: '',
     category: '',
     description: '',
+    rating: 0,
   });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -26,7 +27,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ vendors, setVendors }) => {
     const { name, value } = e.target;
     setNewVendor({
       ...newVendor,
-      [name]: value,
+      [name]: name === 'rating' ? parseFloat(value) : value,
     });
   };
 
@@ -57,6 +58,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ vendors, setVendors }) => {
         city: newVendor.city || '',
         category: newVendor.category || '',
         description: newVendor.description || '',
+        rating: newVendor.rating || 0,
       };
       setVendors([...vendors, vendor]);
       toast.success('New vendor added successfully!');
@@ -69,6 +71,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ vendors, setVendors }) => {
       city: '',
       category: '',
       description: '',
+      rating: 0,
     });
     setEditingId(null);
     setIsFormVisible(false);
@@ -155,6 +158,20 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ vendors, setVendors }) => {
                   <option value="Construction">Construction</option>
                 </select>
               </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Rating *</label>
+                <input
+                  type="number"
+                  name="rating"
+                  value={newVendor.rating || 0}
+                  onChange={handleChange}
+                  min="0"
+                  max="5"
+                  step="0.1"
+                  className="w-full bg-transparent border border-border/60 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+                  required
+                />
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Description</label>
@@ -179,6 +196,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ vendors, setVendors }) => {
               <th className="border-b border-border/60 py-3 px-4 text-left">Name</th>
               <th className="border-b border-border/60 py-3 px-4 text-left">Category</th>
               <th className="border-b border-border/60 py-3 px-4 text-left">City</th>
+              <th className="border-b border-border/60 py-3 px-4 text-left">Rating</th>
               <th className="border-b border-border/60 py-3 px-4 text-center">Actions</th>
             </tr>
           </thead>
@@ -199,6 +217,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ vendors, setVendors }) => {
                 </td>
                 <td className="py-3 px-4">{vendor.category}</td>
                 <td className="py-3 px-4">{vendor.city}</td>
+                <td className="py-3 px-4">{vendor.rating.toFixed(1)}</td>
                 <td className="py-3 px-4">
                   <div className="flex justify-center space-x-2">
                     <Button variant="outline" size="sm" onClick={() => handleEdit(vendor)}>
