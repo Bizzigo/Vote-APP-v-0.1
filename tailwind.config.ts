@@ -92,10 +92,6 @@ export default {
           "from": { width: "0" },
           "to": { width: "100%" },
         },
-        "blink": {
-          "from, to": { borderColor: "transparent" },
-          "50%": { borderColor: "#FACC15" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -105,7 +101,7 @@ export default {
         "scale-in": "scale-in 0.2s ease-out",
         "slide-in": "slide-in 0.2s ease-out",
         "pulse-slow": "pulse-slow 3s infinite ease-in-out",
-        "typing": "typing 3.5s steps(40, end), blink 0.75s step-end infinite",
+        "typing-no-blink": "typing 3.5s steps(40, end)",
       },
       transitionDuration: {
         '400': '400ms',

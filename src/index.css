@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -97,17 +98,11 @@
   to { width: 100% }
 }
 
-@keyframes blink {
-  from, to { border-color: transparent }
-  50% { border-color: #FACC15 }
-}
-
 @layer components {
-  .animate-typing {
-    animation: typing 2.5s steps(40) forwards, blink 0.8s step-end infinite alternate;
+  .animate-typing-no-blink {
+    animation: typing 2.5s steps(40) forwards;
     white-space: nowrap;
     overflow: hidden;
     max-width: 100%;
-    border-right: 3px solid #FACC15;
   }
 }
