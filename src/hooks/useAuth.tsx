@@ -1,8 +1,7 @@
-
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { AuthContextType, User } from '@/lib/types';
-import { mockAdminUser, mockVisitorUser } from '@/lib/mockData';
-import { toast } from 'sonner';
+import React, { createContext, useContext, useState } from 'react';
+import { User, AuthContextType, Role } from '@/lib/types';
+import { mockVisitorUser, mockAdminUser } from '@/lib/mockData';
+import { toast } from "@/components/ui/use-toast";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

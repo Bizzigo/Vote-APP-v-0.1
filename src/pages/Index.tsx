@@ -30,7 +30,7 @@ const Index = () => {
       return matchesSearch && matchesDistrict;
     });
 
-    // Group candidates by district and sort by votes (ascending) within each district
+    // Group candidates by district and sort by votes (descending) within each district
     const districtGroups: Record<string, Candidate[]> = {};
     
     // First group by district
@@ -41,9 +41,9 @@ const Index = () => {
       districtGroups[candidate.district].push(candidate);
     });
     
-    // Sort each district group by votes (ascending)
+    // Sort each district group by votes (descending)
     Object.keys(districtGroups).forEach(district => {
-      districtGroups[district].sort((a, b) => a.voteCount - b.voteCount);
+      districtGroups[district].sort((a, b) => b.voteCount - a.voteCount);
     });
     
     // Flatten the grouped and sorted candidates
