@@ -70,7 +70,7 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
             />
           </div>
           
-          {/* Clickable rating area */}
+          {/* Clickable rating area - removed the rating text but kept the stars */}
           <div 
             className="flex items-center gap-2 mt-1 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={onRatingClick}
@@ -83,7 +83,6 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
                 />
               ))}
             </div>
-            <span className="text-sm text-blue-600 underline">{vendor.rating.toFixed(1)} out of 5.0 ({reviewCount} reviews)</span>
           </div>
         </div>
       </div>
