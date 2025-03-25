@@ -2,7 +2,7 @@
 import React from 'react';
 import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
-import VendorCard from '@/components/VendorCard';
+import VendorCard from '@/components/vendor/VendorCard';
 
 const RecentVendors = () => {
   // Show 5 vendors

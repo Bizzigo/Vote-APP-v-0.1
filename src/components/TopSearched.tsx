@@ -2,7 +2,7 @@
 import React from 'react';
 import { Vendor } from '@/lib/types';
 import { mockVendors } from '@/lib/mockData';
-import VendorCard from '@/components/VendorCard';
+import VendorCard from '@/components/vendor/VendorCard';
 
 const TopSearched = () => {
   // In a real app, this would be based on actual search data
