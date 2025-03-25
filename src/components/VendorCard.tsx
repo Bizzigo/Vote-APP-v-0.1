@@ -89,23 +89,23 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
           
           {/* All badges in one line with consistent styling */}
           <div className="flex items-center flex-wrap gap-2 mb-3">
-            <Badge variant="secondary" className="flex items-center gap-1 text-xs">
+            <Badge variant="secondary" className="flex items-center gap-1 text-xs rounded-sm px-2 py-0.5">
               <MapPin className="h-3 w-3" />
               {vendor.city}
             </Badge>
             
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="secondary" className="text-xs rounded-sm px-2 py-0.5">
               {vendor.category}
             </Badge>
             
-            <Badge variant="secondary" className="flex items-center gap-1 text-xs">
+            <Badge variant="secondary" className="flex items-center gap-1 text-xs rounded-sm px-2 py-0.5">
               <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
               {vendor.rating.toFixed(1)} / {reviewCount}
             </Badge>
             
             {hasLursoftProfile && (
               <a href="https://www.lursoft.lv" target="_blank" rel="noopener noreferrer">
-                <Badge variant="secondary" className="flex items-center gap-1 text-xs text-blue-600 hover:bg-blue-50">
+                <Badge variant="secondary" className="flex items-center gap-1 text-xs text-blue-600 hover:bg-blue-50 rounded-sm px-2 py-0.5">
                   <ExternalLink className="h-3 w-3" />
                   LURSOFT
                 </Badge>
@@ -114,7 +114,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             
             {jobVacancies > 0 && (
               <a href="#vacancies" className="hover:opacity-80">
-                <Badge variant="secondary" className="flex items-center gap-1 text-xs text-purple-600">
+                <Badge variant="secondary" className="flex items-center gap-1 text-xs text-purple-600 rounded-sm px-2 py-0.5">
                   <Briefcase className="h-3 w-3" />
                   Vakances: {jobVacancies}
                 </Badge>
@@ -123,7 +123,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             
             {hasShop && (
               <a href="#shop" className="hover:opacity-80">
-                <Badge variant="secondary" className="flex items-center gap-1 text-xs text-green-600">
+                <Badge variant="secondary" className="flex items-center gap-1 text-xs text-green-600 rounded-sm px-2 py-0.5">
                   <ShoppingBag className="h-3 w-3" />
                   Veikals
                 </Badge>
@@ -135,7 +135,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
                 <TooltipTrigger asChild>
                   <Badge 
                     variant="secondary" 
-                    className={`flex items-center gap-1 text-xs ${isOnline ? 'text-green-600' : 'text-gray-500'}`}
+                    className={`flex items-center gap-1 text-xs rounded-sm px-2 py-0.5 ${isOnline ? 'text-green-600' : 'text-gray-500'}`}
                   >
                     <span className={`inline-block h-2 w-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>
                     {isOnline ? 'Online' : 'Offline'}
@@ -148,7 +148,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             </TooltipProvider>
             
             {locationActive && distance && (
-              <Badge variant="secondary" className="flex items-center gap-1 text-xs">
+              <Badge variant="secondary" className="flex items-center gap-1 text-xs rounded-sm px-2 py-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
                   <circle cx="12" cy="12" r="10"></circle>
                   <path d="m16.2 7.8-2.3 6.1-6.1 2.3 2.3-6.1z"></path>
@@ -162,13 +162,13 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
           {(paymentMethods.creditCard || paymentMethods.bankTransfer || paymentMethods.paypal || paymentMethods.crypto) && (
             <div className="flex flex-wrap items-center gap-2 mb-3">
               {paymentMethods.creditCard && (
-                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200">
+                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200 rounded-sm px-2 py-0.5">
                   <CreditCard className="h-3 w-3" />
                   Kartes
                 </Badge>
               )}
               {paymentMethods.bankTransfer && (
-                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200">
+                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200 rounded-sm px-2 py-0.5">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect width="20" height="14" x="2" y="5" rx="2" />
                     <line x1="2" x2="22" y1="10" y2="10" />
@@ -177,7 +177,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
                 </Badge>
               )}
               {paymentMethods.paypal && (
-                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200">
+                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200 rounded-sm px-2 py-0.5">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M7 11V7a5 5 0 0 1 9.9-1" />
                     <path d="M8.93 13.4A1.99 1.99 0 0 1 11 15v1a2 2 0 0 1-2 2H2" />
@@ -190,7 +190,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
                 </Badge>
               )}
               {paymentMethods.crypto && (
-                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200">
+                <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200 rounded-sm px-2 py-0.5">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" />
                     <path d="M8 14l3.5-3.5 1 1L16 8" />
