@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MessageSquare } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { useToast } from '@/hooks/use-toast';
 import { mockVendors } from '@/lib/mockData';
@@ -13,6 +13,7 @@ import VendorDescriptionCard from '@/components/vendor/VendorDescriptionCard';
 import VendorServiceTabs from '@/components/vendor/VendorServiceTabs';
 import VendorKeywordsCard from '@/components/vendor/VendorKeywordsCard';
 import { Badge } from '@/components/ui/badge';
+import { MessageSquare } from 'lucide-react';
 
 interface Review {
   id: number;
@@ -248,13 +249,6 @@ const VendorProfile = () => {
         </div>
 
         <VendorDescriptionCard vendor={vendor} />
-
-        <div className="flex items-center gap-1 my-6 cursor-pointer" onClick={scrollToReviews}>
-          <MessageSquare size={18} className="text-primary" />
-          <Badge className="bg-muted hover:bg-muted/80 text-foreground">
-            {reviews.length} Reviews
-          </Badge>
-        </div>
 
         <div className="mt-6 mb-6">
           <VendorServiceTabs
