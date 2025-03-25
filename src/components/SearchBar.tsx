@@ -10,6 +10,7 @@ import {
   CommandList
 } from '@/components/ui/command';
 import { mockVendors } from '@/lib/mockData';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -21,6 +22,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
   const [open, setOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
 
   // Generate search suggestions based on input
   useEffect(() => {
@@ -78,7 +80,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
   };
 
   return (
-    <div className="relative max-w-lg w-full mx-auto mb-6">
+    <div className="relative w-full mx-auto mb-6 px-0 sm:max-w-lg">
       <div className="flex flex-col space-y-2">
         <div className="relative flex-grow">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">

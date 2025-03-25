@@ -60,7 +60,7 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="bg-black text-white py-7 md:py-10 w-full -mx-4 sm:-mx-6 md:-mx-8 px-4 sm:px-6 md:px-8 mb-6 relative left-0 right-0 box-border">
+      <div className="bg-black text-white py-7 md:py-10 w-full mx-0 px-4 sm:px-6 md:px-8 mb-6 left-0 right-0 box-border">
         <div className="text-center mb-3 max-w-3xl mx-auto">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 mx-auto inline-block text-yellow-400">
             Ideālo pakalpojumu sniedzēju katalogs
@@ -77,7 +77,7 @@ const Index = () => {
         />
       </div>
       
-      <div className="py-4">
+      <div className="py-4 px-4 sm:px-6 md:px-8 w-full max-w-full">
         {!hasSearched && (
           <>
             <RecentVendors />
