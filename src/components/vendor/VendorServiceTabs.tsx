@@ -1,10 +1,8 @@
-
 import React, { forwardRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Star, MessageSquare, Plus, X } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { 
   Pagination, 
@@ -153,26 +151,24 @@ const VendorServiceTabs = forwardRef<HTMLDivElement, VendorServiceTabsProps>(({
           
           {reviews.length > 0 ? (
             <div>
-              <ScrollArea className="h-[300px] rounded-md border p-4">
-                <div className="space-y-4">
-                  {displayedReviews.map(review => (
-                    <Card key={review.id}>
-                      <CardContent className="p-4">
-                        <div className="flex justify-between items-start mb-2">
-                          <div>
-                            <h4 className="font-medium">{review.author}</h4>
-                            <p className="text-xs text-muted-foreground">{review.date}</p>
-                          </div>
-                          <div className="flex items-center cursor-pointer" onClick={() => setSelectedReview(review)}>
-                            {renderStars(review.rating, true, review)}
-                          </div>
+              <div className="space-y-4">
+                {displayedReviews.map(review => (
+                  <Card key={review.id}>
+                    <CardContent className="p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h4 className="font-medium">{review.author}</h4>
+                          <p className="text-xs text-muted-foreground">{review.date}</p>
                         </div>
-                        <p className="text-sm">{review.comment}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </ScrollArea>
+                        <div className="flex items-center cursor-pointer" onClick={() => setSelectedReview(review)}>
+                          {renderStars(review.rating, true, review)}
+                        </div>
+                      </div>
+                      <p className="text-sm">{review.comment}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
               
               {totalPages > 1 && (
                 <div className="mt-4">

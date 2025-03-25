@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, MessageSquare } from 'lucide-react';
@@ -107,7 +106,11 @@ const VendorProfile = () => {
       rating: 4.7,
       comment: 'Very professional team with great attention to detail. They were responsive to all our feedback during development.'
     }
-  ]);
+  ].sort((a, b) => {
+    const dateA = new Date(a.date.split(' ').reverse().join(' '));
+    const dateB = new Date(b.date.split(' ').reverse().join(' '));
+    return dateB.getTime() - dateA.getTime();
+  }));
   
   const paymentMethods = React.useMemo(() => {
     return {
