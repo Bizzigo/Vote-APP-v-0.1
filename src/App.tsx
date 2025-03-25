@@ -21,12 +21,12 @@ const App = () => {
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <AuthProvider>
-            <LocationProvider>
-              <Toaster />
-              <Sonner position="top-right" />
-              <BrowserRouter>
+        <BrowserRouter>
+          <TooltipProvider>
+            <AuthProvider>
+              <LocationProvider>
+                <Toaster />
+                <Sonner position="top-right" />
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/login" element={<Login />} />
@@ -35,10 +35,10 @@ const App = () => {
                   <Route path="/404" element={<NotFound />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </BrowserRouter>
-            </LocationProvider>
-          </AuthProvider>
-        </TooltipProvider>
+              </LocationProvider>
+            </AuthProvider>
+          </TooltipProvider>
+        </BrowserRouter>
       </QueryClientProvider>
     </React.StrictMode>
   );
