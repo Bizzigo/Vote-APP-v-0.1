@@ -1,12 +1,14 @@
-import React, { createContext, useContext, useState } from 'react';
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, AuthContextType, Role } from '@/lib/types';
 import { mockVisitorUser, mockAdminUser } from '@/lib/mockData';
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check for saved user in localStorage
@@ -22,20 +24,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // In a real app, this would be an API call
     setUser(newUser);
     localStorage.setItem('votingAppUser', JSON.stringify(newUser));
-    toast.success(`Welcome back, ${newUser.name}!`);
+    toast({
+      title: "Welcome back!",
+      description: `Welcome back, ${newUser.name}!`,
+    });
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('votingAppUser');
-    toast.success('You have been logged out.');
+    toast({
+      title: "Logged out",
+      description: "You have been logged out.",
+    });
   };
 
   const voteForCandidate = (candidateId: string) => {
     if (!user) return;
     
     if (user.hasVoted) {
-      toast.error('You have already voted!');
+      toast({
+        title: "Vote failed",
+        description: "You have already voted!",
+        variant: "destructive",
+      });
       return;
     }
     
@@ -48,7 +60,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     setUser(updatedUser);
     localStorage.setItem('votingAppUser', JSON.stringify(updatedUser));
-    toast.success('Your vote has been recorded!');
+    toast({
+      title: "Vote recorded",
+      description: "Your vote has been recorded!",
+    });
     
     // In a real app, this would also update the candidate's vote count via API
   };
