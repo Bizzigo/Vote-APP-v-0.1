@@ -87,8 +87,8 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
             <h3 className="font-medium text-lg">{vendor.name}</h3>
           </div>
           
-          {/* First row of badges */}
-          <div className="flex items-center flex-wrap gap-2 mb-2">
+          {/* All badges in one line with consistent styling */}
+          <div className="flex items-center flex-wrap gap-2 mb-3">
             <Badge variant="secondary" className="flex items-center gap-1 text-xs">
               <MapPin className="h-3 w-3" />
               {vendor.city}
@@ -111,10 +111,7 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
                 </Badge>
               </a>
             )}
-          </div>
-          
-          {/* Second row of badges - Moved Vakances and Veikals before Online status */}
-          <div className="flex items-center flex-wrap gap-2 mb-3">
+            
             {jobVacancies > 0 && (
               <a href="#vacancies" className="hover:opacity-80">
                 <Badge variant="secondary" className="flex items-center gap-1 text-xs text-purple-600">
@@ -164,7 +161,6 @@ const VendorCard: React.FC<VendorCardProps> = ({ vendor }) => {
           {/* Payment methods */}
           {(paymentMethods.creditCard || paymentMethods.bankTransfer || paymentMethods.paypal || paymentMethods.crypto) && (
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className="text-xs text-muted-foreground">Maksājumi:</span>
               {paymentMethods.creditCard && (
                 <Badge variant="outline" className="flex items-center gap-1 text-xs border-gray-200">
                   <CreditCard className="h-3 w-3" />
