@@ -20,6 +20,8 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Cookies from "./pages/Cookies";
 import AuthCallback from "./pages/AuthCallback";
+import Vendors from "./pages/Vendors";
+import VendorDashboard from "./pages/VendorDashboard";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -56,6 +58,8 @@ const App = () => {
                       <Route path="/signup" element={<AuthPage />} />
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/vendor/:vendorSlug" element={<VendorProfile />} />
+                      <Route path="/vendors" element={<Vendors />} />
+                      <Route path="/vendor-dashboard" element={<VendorDashboard />} />
                       <Route path="/profile" element={<UserProfile />} />
                       <Route path="/terms" element={<Terms />} />
                       <Route path="/privacy" element={<Privacy />} />

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { mockVendors } from '@/lib/mockData';
 import Layout from '@/components/Layout';
@@ -18,16 +17,17 @@ const Vendors = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   
-  // Filter vendors based on search, category, and district
+  // Filter vendors based on search and category
+  // Note: Since 'district' doesn't exist on Vendor type, we only filter by category
   const filteredVendors = mockVendors.filter(vendor => {
     const matchesSearch = searchQuery === '' || 
       vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       vendor.description?.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesCategory = !selectedCategory || vendor.category === selectedCategory;
-    const matchesDistrict = !selectedDistrict || vendor.district === selectedDistrict;
+    // We're not filtering by district since it's not part of the Vendor type
     
-    return matchesSearch && matchesCategory && matchesDistrict;
+    return matchesSearch && matchesCategory;
   });
 
   // Handle category selection
@@ -35,7 +35,7 @@ const Vendors = () => {
     setSelectedCategory(category === selectedCategory ? null : category);
   };
 
-  // Handle district selection
+  // Handle district selection - we keep this for the UI
   const handleDistrictSelect = (district: string) => {
     setSelectedDistrict(district === selectedDistrict ? null : district);
   };
@@ -91,7 +91,7 @@ const Vendors = () => {
                     vendor={vendor}
                     isGridView={viewMode === 'grid'}
                     showActions={true}
-                    distance={vendor.distance ? `${vendor.distance} km` : null}
+                    distance={vendor.distanceKm ? `${vendor.distanceKm} km` : null}
                   />
                 ))
               ) : (
