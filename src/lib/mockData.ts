@@ -1,3 +1,4 @@
+
 import { Vendor, User, Candidate } from './types';
 
 // Placeholder image for vendors without a logo
@@ -123,6 +124,17 @@ export const mockVendors: Vendor[] = [
     rating: 4.7,
     location: { lat: 56.9496, lng: 24.1052 }, // Coordinates for Rīga
     keywords: ['homeopāts', 'alternative medicine', 'holistic health', 'natural remedies', 'wellness']
+  },
+  {
+    id: '10',
+    name: 'Tukuma Pica & Burgeri',
+    logo: 'https://images.unsplash.com/photo-1571066811602-716837d681de?q=80&w=1000&auto=format&fit=crop',
+    city: 'Tukums',
+    category: 'Food',
+    description: 'Authentic pizza and gourmet burgers made with locally-sourced ingredients.',
+    rating: 4.6,
+    location: { lat: 56.9677, lng: 23.1552 }, // Coordinates for Tukums
+    keywords: ['Pizza', 'Burgers', 'Fast Food', 'Restaurant', 'Latvian Cuisine', 'Local Ingredients']
   }
 ];
 
