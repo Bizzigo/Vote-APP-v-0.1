@@ -42,7 +42,7 @@ const App = () => {
                     position="bottom-center" 
                     toastOptions={{
                       classNames: {
-                        toast: "animate-[slide-in-from-bottom_0.2s_ease-out,fade-in_0.2s_ease-out]",
+                        toast: "animate-in fade-in-80 slide-in-from-bottom-full slide-out-to-bottom-full duration-300",
                         title: "font-semibold text-lg",
                         description: "text-sm text-muted-foreground"
                       },

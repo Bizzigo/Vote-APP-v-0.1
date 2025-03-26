@@ -6,9 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 const Cookies = () => {
   return (
     <Layout>
-      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <Card>
-          <CardHeader>
+      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
+        <Card className="max-w-4xl w-full">
+          <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">Cookie Policy</CardTitle>
             <CardDescription>Last updated: {new Date().toLocaleDateString()}</CardDescription>
           </CardHeader>
