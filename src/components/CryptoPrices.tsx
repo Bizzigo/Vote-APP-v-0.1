@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Bitcoin, Loader2 } from 'lucide-react';
 
 interface CryptoData {
@@ -72,54 +71,47 @@ const CryptoPrices: React.FC = () => {
 
   return (
     <Card className="p-4 w-full">
-      <div className="flex flex-col space-y-2">
-        <div className="flex items-center justify-between">
-          <h3 className="font-medium">Crypto Prices</h3>
-          <Badge variant="outline" className="flex items-center">
-            <Bitcoin className="h-4 w-4 mr-1" />
-            <span>Crypto</span>
-          </Badge>
+      {loading && (
+        <div className="flex justify-center py-2">
+          <Loader2 className="h-5 w-5 animate-spin text-primary" />
         </div>
-
-        {loading && (
-          <div className="flex justify-center py-4">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
-          </div>
-        )}
-        
-        {error && (
-          <div className="text-sm text-destructive text-center py-2">
-            {error}
-          </div>
-        )}
-        
-        {cryptoData && !loading && (
-          <div className="grid grid-cols-2 gap-2 mt-2">
-            <div className="text-center">
-              <div className="text-xl font-bold">
+      )}
+      
+      {error && (
+        <div className="text-sm text-destructive text-center py-1">
+          {error}
+        </div>
+      )}
+      
+      {cryptoData && !loading && (
+        <div className="flex flex-col space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <Bitcoin className="h-5 w-5" />
+              <span className="font-medium">BTC</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold">
                 {cryptoData.bitcoin ? formatPrice(cryptoData.bitcoin.usd) : '-'}
-              </div>
-              <div className="text-xs text-muted-foreground">Bitcoin (BTC)</div>
-              {cryptoData.bitcoin && (
-                <div className="text-sm">
-                  {formatChange(cryptoData.bitcoin.usd_24h_change)}
-                </div>
-              )}
-            </div>
-            <div className="text-center">
-              <div className="text-xl font-bold">
-                {cryptoData.ripple ? formatPrice(cryptoData.ripple.usd) : '-'}
-              </div>
-              <div className="text-xs text-muted-foreground">Ripple (XRP)</div>
-              {cryptoData.ripple && (
-                <div className="text-sm">
-                  {formatChange(cryptoData.ripple.usd_24h_change)}
-                </div>
-              )}
+              </span>
+              {cryptoData.bitcoin && formatChange(cryptoData.bitcoin.usd_24h_change)}
             </div>
           </div>
-        )}
-      </div>
+          
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <Bitcoin className="h-5 w-5" />
+              <span className="font-medium">XRP</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold">
+                {cryptoData.ripple ? formatPrice(cryptoData.ripple.usd) : '-'}
+              </span>
+              {cryptoData.ripple && formatChange(cryptoData.ripple.usd_24h_change)}
+            </div>
+          </div>
+        </div>
+      )}
     </Card>
   );
 };

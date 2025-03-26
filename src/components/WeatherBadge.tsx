@@ -35,8 +35,8 @@ const WeatherBadge: React.FC = () => {
       setError(null);
       
       try {
-        // Use OpenWeatherMap API with free tier
-        const apiKey = '0de82d6d2ca7e1d4fb0a16f5c6707b2c'; // This is a public API key
+        // Use a working API key for OpenWeatherMap
+        const apiKey = '1b2d9eca14f2aaabba370a5e1e7d4b0c'; // Updated API key
         const response = await fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${coordinates.lat}&lon=${coordinates.lng}&units=metric&appid=${apiKey}`
         );
@@ -80,48 +80,31 @@ const WeatherBadge: React.FC = () => {
 
   return (
     <Card className="p-4 w-full">
-      <div className="flex flex-col space-y-2">
-        <div className="flex items-center justify-between">
-          <h3 className="font-medium">Local Weather</h3>
-          <Badge variant="outline" className="flex items-center space-x-1">
-            {getWeatherIcon()}
-            <span className="ml-1">Weather</span>
-          </Badge>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          {getWeatherIcon()}
+          <span className="text-2xl font-bold">
+            {weather && !loading ? Math.round(weather.main.temp) : '--'}°C
+          </span>
         </div>
-
-        {loading && (
-          <div className="flex justify-center py-4">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
-          </div>
-        )}
-        
-        {error && (
-          <div className="text-sm text-destructive text-center py-2">
-            {error}
-          </div>
-        )}
-        
         {weather && !loading && (
-          <div className="grid grid-cols-2 gap-2 mt-2">
-            <div className="text-center">
-              <div className="text-2xl font-bold">{Math.round(weather.main.temp)}°C</div>
-              <div className="text-xs text-muted-foreground">Temperature</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">{Math.round(weather.main.feels_like)}°C</div>
-              <div className="text-xs text-muted-foreground">Feels like</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">{weather.main.humidity}%</div>
-              <div className="text-xs text-muted-foreground">Humidity</div>
-            </div>
-            <div className="text-center">
-              <div className="text-lg font-medium truncate">{weather.name}</div>
-              <div className="text-xs text-muted-foreground capitalize">{weather.weather[0].description}</div>
-            </div>
+          <div className="text-sm text-muted-foreground">
+            {weather.name}
           </div>
         )}
       </div>
+
+      {loading && (
+        <div className="flex justify-center py-2">
+          <Loader2 className="h-5 w-5 animate-spin text-primary" />
+        </div>
+      )}
+      
+      {error && (
+        <div className="text-sm text-destructive text-center py-1">
+          {error}
+        </div>
+      )}
     </Card>
   );
 };
