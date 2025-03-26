@@ -9,7 +9,156 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      candidates: {
+        Row: {
+          city: string | null
+          created_at: string | null
+          description: string | null
+          district: string | null
+          id: string
+          name: string
+          photo: string | null
+          updated_at: string | null
+          vote_count: number | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          district?: string | null
+          id?: string
+          name: string
+          photo?: string | null
+          updated_at?: string | null
+          vote_count?: number | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          district?: string | null
+          id?: string
+          name?: string
+          photo?: string | null
+          updated_at?: string | null
+          vote_count?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          has_voted: boolean | null
+          id: string
+          name: string | null
+          profile_completed: boolean | null
+          provider: string | null
+          role: string | null
+          subscription_plan: string | null
+          subscription_status: string | null
+          updated_at: string | null
+          voted_for: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          has_voted?: boolean | null
+          id: string
+          name?: string | null
+          profile_completed?: boolean | null
+          provider?: string | null
+          role?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
+          updated_at?: string | null
+          voted_for?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          has_voted?: boolean | null
+          id?: string
+          name?: string | null
+          profile_completed?: boolean | null
+          provider?: string | null
+          role?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
+          updated_at?: string | null
+          voted_for?: string | null
+        }
+        Relationships: []
+      }
+      vendors: {
+        Row: {
+          category: string | null
+          city: string | null
+          created_at: string | null
+          description: string | null
+          email: string | null
+          facebook: string | null
+          id: string
+          instagram: string | null
+          keywords: string[] | null
+          lat: number | null
+          linkedin: string | null
+          lng: number | null
+          logo: string | null
+          name: string
+          phone: string | null
+          rating: number | null
+          twitter: string | null
+          updated_at: string | null
+          user_id: string | null
+          website: string | null
+        }
+        Insert: {
+          category?: string | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          facebook?: string | null
+          id?: string
+          instagram?: string | null
+          keywords?: string[] | null
+          lat?: number | null
+          linkedin?: string | null
+          lng?: number | null
+          logo?: string | null
+          name: string
+          phone?: string | null
+          rating?: number | null
+          twitter?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          website?: string | null
+        }
+        Update: {
+          category?: string | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          facebook?: string | null
+          id?: string
+          instagram?: string | null
+          keywords?: string[] | null
+          lat?: number | null
+          linkedin?: string | null
+          lng?: number | null
+          logo?: string | null
+          name?: string
+          phone?: string | null
+          rating?: number | null
+          twitter?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

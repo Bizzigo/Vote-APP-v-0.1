@@ -18,6 +18,7 @@ import UserProfile from "./pages/UserProfile";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Cookies from "./pages/Cookies";
+import AuthCallback from "./pages/AuthCallback";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => {
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/cookies" element={<Cookies />} />
+                  <Route path="/auth/callback" element={<AuthCallback />} />
                   <Route path="/404" element={<NotFound />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
