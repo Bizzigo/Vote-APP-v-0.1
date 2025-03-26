@@ -51,7 +51,7 @@ const Index = () => {
       {!hasSearched ? <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
           <div className="text-center mb-12 max-w-3xl mx-auto">
             
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto mt-3 animate-fade-in">Te ir uzticami un profesionāli pakalpojumu sniedzēji. JĀ!</p>
+            <p className="text-muted-foreground max-w-xl mt-3 animate-fade-in text-lg mx-0 my-0">Te ir uzticami un profesionāli pakalpojumu sniedzēji. JĀ!</p>
           </div>
           
           <div className="w-full max-w-xl mx-auto px-4 relative">
