@@ -88,6 +88,11 @@ const Index = () => {
     };
   }, [hasSearched, filteredVendors.length, toast, t]);
 
+  // Make sure we scroll to top when the page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Layout>
       {!hasSearched ? (

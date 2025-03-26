@@ -80,7 +80,7 @@ const SearchBar = ({
     <div className={`relative w-full ${mainPage ? 'mx-auto' : ''} ${className}`}>
       <form onSubmit={handleSearch} className="w-full">
         <div className="relative flex items-center">
-          <div className="absolute left-4 text-blue-500">
+          <div className="absolute left-4 text-blue-500 z-10">
             <Search size={20} />
           </div>
           <Input

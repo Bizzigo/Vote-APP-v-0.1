@@ -12,6 +12,11 @@ const Vendors = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   
+  // Scroll to top when the page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   const { data: vendors = [], isLoading, error } = useQuery({
     queryKey: ['vendors'],
     queryFn: async () => {
