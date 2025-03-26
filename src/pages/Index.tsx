@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -122,7 +123,10 @@ const Index = () => {
                   className="animate-fade-in" 
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <VendorCard vendor={vendor} />
+                  <VendorCard 
+                    vendor={vendor} 
+                    showContactMethods={true}
+                  />
                 </div>
               ))}
             </div>

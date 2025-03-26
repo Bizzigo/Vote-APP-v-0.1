@@ -9,7 +9,7 @@ const TopSearched = () => {
   const topSearched = mockVendors.slice(5, 10);
   
   return (
-    <div className="my-8">
+    <div className="py-8">
       <h2 className="text-2xl font-semibold mb-4">Top Searched Vendors</h2>
       <div className="flex flex-col space-y-4">
         {topSearched.map((vendor: Vendor, index) => (
@@ -18,7 +18,10 @@ const TopSearched = () => {
             className="animate-fade-in" 
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <VendorCard vendor={vendor} />
+            <VendorCard 
+              vendor={vendor} 
+              showContactMethods={true}
+            />
           </div>
         ))}
       </div>

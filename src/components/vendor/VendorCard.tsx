@@ -5,6 +5,7 @@ import { Vendor } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import VendorInfoBadges from '@/components/vendor/VendorInfoBadges';
+import VendorContactMethods from '@/components/vendor/VendorContactMethods';
 import { ArrowRight } from 'lucide-react';
 import { placeholderImage } from '@/lib/mockData';
 
@@ -12,14 +13,27 @@ interface VendorCardProps {
   vendor: Vendor;
   distance?: string | null;
   isDirty?: boolean;
+  showContactMethods?: boolean;
 }
 
 const VendorCard: React.FC<VendorCardProps> = ({ 
   vendor, 
   distance = null,
-  isDirty = false
+  isDirty = false,
+  showContactMethods = false
 }) => {
   const vendorNameSlug = vendor.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  
+  // Define contact methods - in a real app this would come from the vendor data
+  const contactMethodsAvailable = {
+    hasPhone: Math.random() > 0.3,
+    hasWhatsapp: Math.random() > 0.4,
+    hasTelegram: Math.random() > 0.5,
+    hasInstagram: Math.random() > 0.4,
+    hasFacebook: Math.random() > 0.3,
+    hasWebsite: Math.random() > 0.2,
+    hasLursoftProfile: Math.random() > 0.5,
+  };
   
   return (
     <Card className={`overflow-hidden transition-all duration-200 ${isDirty ? 'border-primary/50' : ''}`}>
@@ -63,6 +77,20 @@ const VendorCard: React.FC<VendorCardProps> = ({
                 <ArrowRight size={20} />
               </span>
             </div>
+            
+            {showContactMethods && (
+              <div className="mt-3 pt-3 border-t">
+                <VendorContactMethods
+                  vendorId={vendor.id}
+                  hasPhone={contactMethodsAvailable.hasPhone}
+                  hasWhatsapp={contactMethodsAvailable.hasWhatsapp}
+                  hasTelegram={contactMethodsAvailable.hasTelegram}
+                  hasInstagram={contactMethodsAvailable.hasInstagram}
+                  hasFacebook={contactMethodsAvailable.hasFacebook}
+                  hasWebsite={contactMethodsAvailable.hasWebsite}
+                />
+              </div>
+            )}
           </div>
         </Link>
       </CardContent>
