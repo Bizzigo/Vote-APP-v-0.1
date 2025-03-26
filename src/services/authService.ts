@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { User } from '@/lib/types';
@@ -102,7 +103,15 @@ export const completeProfile = async (user: User | null, profileData: any) => {
     // Prepare data for the profiles table update
     const profileUpdate = {
       name: profileData.name,
-      profile_completed: true
+      profile_completed: true,
+      // Added fields from form
+      phone: profileData.phone,
+      // Include fields even if empty to ensure they're saved
+      website: profileData.website || null,
+      facebook: profileData.facebook || null,
+      instagram: profileData.instagram || null,
+      twitter: profileData.twitter || null,
+      linkedin: profileData.linkedin || null
     };
     
     // Update profile in Supabase

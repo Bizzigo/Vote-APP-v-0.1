@@ -1,5 +1,5 @@
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -33,7 +33,6 @@ const formSchema = z.object({
 
 const UserProfile = () => {
   const { user, completeProfile } = useAuth();
-  const navigate = useNavigate();
   const [isSubmitting, setSubmitting] = useState(false);
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -69,10 +68,12 @@ const UserProfile = () => {
         keywords: data.keywords ? data.keywords : "",
       };
       
+      // Call the completeProfile function which updates the profile in Supabase
       await completeProfile(formattedData);
       
       toast.success("Your profile has been updated successfully!");
-      navigate('/');
+      // Remove navigation after saving profile - stay on the profile page
+      // navigate('/'); <- Removed this line
     } catch (error) {
       console.error('Error submitting form:', error);
       toast.error("Failed to update profile", {

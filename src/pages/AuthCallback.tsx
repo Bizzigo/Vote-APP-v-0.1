@@ -51,7 +51,8 @@ const AuthCallback = () => {
           if (profile && !profile.profile_completed) {
             navigate('/profile');
           } else {
-            navigate('/'); // Go to home if profile is completed
+            // Removed redirection to homepage - direct to profile page instead
+            navigate('/profile');
           }
         } else {
           console.error('No session established after authentication');
