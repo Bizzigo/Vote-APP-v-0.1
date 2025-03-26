@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Search, X } from 'lucide-react';
 
@@ -17,6 +17,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   className = '' 
 }) => {
   const [placeholder, setPlaceholder] = useState('Search for service providers...');
+  const searchTimeoutRef = useRef<number | null>(null);
   
   // Placeholder text rotation for better UX
   useEffect(() => {
@@ -37,9 +38,22 @@ const SearchBar: React.FC<SearchBarProps> = ({
     return () => clearInterval(intervalId);
   }, []);
   
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        window.clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+  
   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (searchTimeoutRef.current) {
+      window.clearTimeout(searchTimeoutRef.current);
+      searchTimeoutRef.current = null;
+    }
     onSearch(searchTerm, true);
   };
   
@@ -49,25 +63,34 @@ const SearchBar: React.FC<SearchBarProps> = ({
     onSearch('', true);
   };
 
-  // Handle key press for instant search
+  // Handle key press for instant search on Enter
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      if (searchTimeoutRef.current) {
+        window.clearTimeout(searchTimeoutRef.current);
+        searchTimeoutRef.current = null;
+      }
       onSearch(searchTerm, true);
     }
   };
 
-  // Handle input change with immediate search after short delay
+  // Handle input change with debounced search
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
     
+    // Clear any existing timeout
+    if (searchTimeoutRef.current) {
+      window.clearTimeout(searchTimeoutRef.current);
+      searchTimeoutRef.current = null;
+    }
+    
     // Trigger search after a short delay if value length > 2
     if (value.length > 2) {
-      const timeoutId = setTimeout(() => {
+      searchTimeoutRef.current = window.setTimeout(() => {
         onSearch(value, true);
-      }, 300);
-      
-      return () => clearTimeout(timeoutId);
+        searchTimeoutRef.current = null;
+      }, 500);
     } else if (value.length === 0) {
       // Clear search results when input is empty
       onSearch('', true);

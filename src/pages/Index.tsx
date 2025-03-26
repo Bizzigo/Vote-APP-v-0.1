@@ -45,9 +45,8 @@ const Index = () => {
     
     // Use AI search on the vendors array
     const results = aiSearchVendors(vendors, query);
-    setFilteredVendors(results);
     console.log('AI search results:', results.length, 'vendors found');
-    
+    setFilteredVendors(results);
     setHasSearched(true);
   }, [vendors]);
 
