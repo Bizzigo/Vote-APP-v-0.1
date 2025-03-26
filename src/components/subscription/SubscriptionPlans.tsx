@@ -14,29 +14,18 @@ export const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
 }) => {
   const plans = [
     {
-      id: 'freelancer',
-      name: 'Freelancer',
-      price: '$19',
-      description: 'The essentials to provide your best work for clients.',
-      features: [
-        '5 products',
-        'Up to 1,000 subscribers',
-        'Basic analytics',
-        '48-hour support response time',
-      ],
-      popular: false,
-    },
-    {
       id: 'startup',
       name: 'Startup',
       price: '$29',
       description: 'A plan that scales with your rapidly growing business.',
       features: [
-        '25 products',
-        'Up to 10,000 subscribers',
-        'Advanced analytics',
-        '24-hour support response time',
-        'Marketing automations',
+        'Full contact block features',
+        'Unlimited categories',
+        'Unlimited keywords',
+        'Job offers',
+        'Review system',
+        'Basic analytics',
+        '24-hour support',
       ],
       popular: true,
     },
@@ -46,12 +35,13 @@ export const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
       price: '$59',
       description: 'Dedicated support and infrastructure for your company.',
       features: [
-        'Unlimited products',
-        'Unlimited subscribers',
+        'Everything in Startup plan',
+        'Own shop',
+        'Unlimited classifieds',
+        'Priority support',
         'Advanced analytics',
-        '1-hour, dedicated support response time',
-        'Marketing automations',
-        'Custom reporting tools',
+        'Custom integrations',
+        'Dedicated account manager',
       ],
       popular: false,
     },
@@ -59,34 +49,7 @@ export const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
 
   return (
     <div>
-      <div className="flex justify-center mb-8">
-        <div className="inline-flex items-center p-1 rounded-lg bg-card border border-border/30">
-          <button
-            className={cn(
-              "px-6 py-2 rounded-md text-sm font-medium transition-colors",
-              {
-                "bg-primary text-primary-foreground": true,
-                "bg-transparent text-muted-foreground": false
-              }
-            )}
-          >
-            Monthly
-          </button>
-          <button
-            className={cn(
-              "px-6 py-2 rounded-md text-sm font-medium transition-colors",
-              {
-                "bg-primary text-primary-foreground": false,
-                "bg-transparent text-muted-foreground": true
-              }
-            )}
-          >
-            Annually
-          </button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {plans.map((plan) => (
           <div 
             key={plan.id} 

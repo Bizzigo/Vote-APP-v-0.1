@@ -1,6 +1,5 @@
-
 export type Role = 'admin' | 'visitor';
-export type SubscriptionPlan = 'hobby' | 'freelancer' | 'startup' | 'enterprise';
+export type SubscriptionPlan = 'startup' | 'enterprise';
 
 export interface User {
   id: string;
