@@ -30,27 +30,27 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
   onRatingClick
 }) => {
   return (
-    <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm p-6 rounded-md mb-8">
+    <div className="w-full bg-white animate-scale-in border border-border/40 shadow-sm p-6 rounded-lg mb-8">
       <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
         {/* Vendor logo */}
-        <Avatar className="h-32 w-32 rounded-md">
+        <Avatar className="h-32 w-32 rounded-lg border border-border/40 shadow-sm">
           <AvatarImage 
             src={vendor.logo || placeholderImage} 
             alt={vendor.name} 
             className="object-cover"
           />
-          <AvatarFallback className="rounded-md bg-secondary text-2xl">{vendor.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+          <AvatarFallback className="rounded-lg bg-secondary text-2xl">{vendor.name.substring(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
         
         {/* Vendor info */}
         <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-bold">{vendor.name}</h1>
+          <h1 className="text-3xl font-bold text-foreground">{vendor.name}</h1>
           
           <div className="flex flex-wrap gap-2 items-center">
-            <Badge variant="outline" className="rounded-sm px-2 py-0.5 bg-secondary/50 whitespace-nowrap">
+            <Badge variant="outline" className="rounded-md px-2 py-0.5 bg-secondary/50 whitespace-nowrap">
               Reg. Nr: {registrationNumber}
             </Badge>
-            <Badge variant="outline" className="rounded-sm px-2 py-0.5 bg-secondary/50 whitespace-nowrap">
+            <Badge variant="outline" className="rounded-md px-2 py-0.5 bg-secondary/50 whitespace-nowrap">
               Since: {registrationDate}
             </Badge>
           </div>

@@ -7,40 +7,40 @@
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
     
-    --card: 217 33% 17%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
     
-    --popover: 217 33% 17%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
     
-    --primary: 217 91% 60%;
+    --primary: 221 83% 53%;
     --primary-foreground: 210 40% 98%;
     
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222 47% 11%;
     
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 47%;
     
-    --accent: 217 91% 60%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 221 83% 53%;
+    --accent-foreground: 222 47% 11%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 224 76% 48%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221 83% 53%;
 
-    --sidebar: 222 47% 11%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-accent: 217 33% 17%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-ring: 224 76% 48%;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-accent: 210 40% 96.1%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-ring: 221 83% 53%;
     
     --radius: 0.5rem;
   }
@@ -70,7 +70,7 @@
   }
   
   .glass {
-    @apply bg-black/30 backdrop-blur-md border border-white/10 shadow-sm;
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-sm;
   }
   
   .glass-dark {
@@ -100,7 +100,11 @@
   }
   
   .hero-gradient {
-    background: linear-gradient(to bottom right, #0f172a, #1e293b);
+    background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-md hover:border-primary/20;
   }
 }
 
@@ -115,5 +119,21 @@
     white-space: nowrap;
     overflow: hidden;
     max-width: 100%;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors;
+  }
+  
+  .section-title {
+    @apply text-2xl font-semibold mb-6 text-foreground;
+  }
+  
+  .card-modern {
+    @apply bg-card border border-border/40 shadow-sm rounded-lg p-6 card-hover;
   }
 }

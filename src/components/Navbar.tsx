@@ -59,11 +59,11 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-lg font-medium">Bizzigo</span>
+            <span className="text-lg font-semibold text-primary">Bizzigo</span>
           </Link>
         </div>
 
@@ -73,9 +73,9 @@ const Navbar: React.FC = () => {
             <Link
               key={link.href}
               to={link.href}
-              className={`text-sm transition-colors hover:text-accent ${
+              className={`text-sm transition-colors hover:text-primary ${
                 location.pathname === link.href
-                  ? 'text-accent font-medium'
+                  ? 'text-primary font-medium'
                   : 'text-muted-foreground'
               }`}
             >
@@ -87,12 +87,12 @@ const Navbar: React.FC = () => {
         <div className="hidden md:flex items-center gap-4">
           <button
             onClick={toggleLocation}
-            className="flex items-center justify-center h-8 w-8 rounded-full transition-colors"
+            className="flex items-center justify-center h-8 w-8 rounded-full transition-colors hover:bg-secondary"
             aria-label="Toggle location"
           >
             <MapPin 
               className={`h-5 w-5 transition-colors ${
-                locationActive ? 'text-green-500 fill-green-500' : 'text-gray-400'
+                locationActive ? 'text-primary fill-primary/20' : 'text-muted-foreground'
               }`} 
             />
           </button>
@@ -109,7 +109,7 @@ const Navbar: React.FC = () => {
           {isLoggedIn ? (
             <div className="flex items-center gap-4">
               <Link to="/profile" className="flex items-center gap-2 text-sm">
-                <User size={16} />
+                <User size={16} className="text-primary" />
                 <span>
                   Hello, <span className="font-medium">{user?.name}</span>
                 </span>
@@ -131,7 +131,7 @@ const Navbar: React.FC = () => {
           onClick={toggleMobileMenu}
           aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
         >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {mobileMenuOpen ? <X size={24} className="text-primary" /> : <Menu size={24} className="text-primary" />}
         </button>
       </div>
 
@@ -145,7 +145,7 @@ const Navbar: React.FC = () => {
                 to={link.href}
                 className={`block py-2 text-base ${
                   location.pathname === link.href
-                    ? 'text-accent font-medium'
+                    ? 'text-primary font-medium'
                     : 'text-muted-foreground'
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
@@ -162,7 +162,7 @@ const Navbar: React.FC = () => {
               >
                 <MapPin 
                   className={`h-5 w-5 ${
-                    locationActive ? 'text-green-500 fill-green-500' : 'text-gray-400'
+                    locationActive ? 'text-primary fill-primary/20' : 'text-muted-foreground'
                   }`} 
                 />
                 <span className="text-sm">
@@ -174,16 +174,16 @@ const Navbar: React.FC = () => {
             {!isLoggedIn && (
               <div className="py-2">
                 <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
-                  <PlusCircle className="h-4 w-4" />
+                  <PlusCircle className="h-4 w-4 text-primary" />
                   <span>Sign Up</span>
                 </Link>
               </div>
             )}
             
             {isLoggedIn ? (
-              <div className="py-2 border-t border-border/60 mt-2">
+              <div className="py-2 border-t border-border mt-2">
                 <Link to="/profile" className="flex items-center gap-2 mb-2" onClick={() => setMobileMenuOpen(false)}>
-                  <User size={16} />
+                  <User size={16} className="text-primary" />
                   <span className="text-sm">
                     Hello, <span className="font-medium">{user?.name}</span>
                   </span>
@@ -196,7 +196,7 @@ const Navbar: React.FC = () => {
                 </Button>
               </div>
             ) : (
-              <div className="py-2 border-t border-border/60 mt-2">
+              <div className="py-2 border-t border-border mt-2">
                 <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
                   <Button size="sm">Log In</Button>
                 </Link>

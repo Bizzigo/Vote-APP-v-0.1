@@ -6,11 +6,11 @@ import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-card text-card-foreground border-t border-border mt-16">
+    <footer className="bg-white text-foreground border-t border-border mt-16">
       <div className="container mx-auto py-12 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="font-semibold text-lg mb-4">Bizzigo</h3>
+            <h3 className="font-semibold text-lg mb-4 text-primary">Bizzigo</h3>
             <p className="text-muted-foreground text-sm mb-4">
               The most comprehensive platform for finding trusted service providers in Latvia.
             </p>

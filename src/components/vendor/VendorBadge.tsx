@@ -38,17 +38,17 @@ const VendorBadge: React.FC<VendorBadgeProps> = ({
   const BadgeContent = () => (
     <Badge 
       variant={variant} 
-      className={`flex items-center gap-1 text-xs rounded-sm px-2 py-0.5 whitespace-nowrap ${className} ${(scrollToId || onClick) ? 'cursor-pointer' : ''}`}
+      className={`flex items-center gap-1 text-xs rounded-md px-2 py-1 whitespace-nowrap transition-colors ${className} ${(scrollToId || onClick) ? 'cursor-pointer hover:bg-primary/10' : ''}`}
       onClick={handleClick}
     >
       {icon}
-      {label}
+      <span className="font-medium">{label}</span>
     </Badge>
   );
 
   if (href) {
     return (
-      <a href={href} className="hover:opacity-80" target={href.startsWith('http') ? "_blank" : undefined} rel={href.startsWith('http') ? "noopener noreferrer" : undefined}>
+      <a href={href} className="hover:opacity-90 transition-opacity" target={href.startsWith('http') ? "_blank" : undefined} rel={href.startsWith('http') ? "noopener noreferrer" : undefined}>
         <BadgeContent />
       </a>
     );
