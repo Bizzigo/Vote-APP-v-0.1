@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useNavigate, Link, useSearchParams, useLocation } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -19,7 +18,6 @@ const AuthPage = () => {
   const location = useLocation();
   const defaultTab = location.pathname === '/signup' ? 'signup' : 'login';
   
-  // Check for error parameter in URL
   useEffect(() => {
     const errorType = searchParams.get('error');
     if (errorType === 'auth') {
@@ -29,10 +27,8 @@ const AuthPage = () => {
     }
   }, [searchParams]);
 
-  // Redirect if already logged in
   useEffect(() => {
     if (isLoggedIn) {
-      // If profile is not completed, redirect to profile page
       if (user && !user.profileCompleted) {
         navigate('/profile');
       } else {
@@ -227,6 +223,10 @@ const AuthPage = () => {
                 {t("and")}{" "}
                 <Link to="/privacy" className="underline hover:text-primary">
                   {t("privacyPolicy")}
+                </Link>{" "}
+                {t("and")}{" "}
+                <Link to="/pricing" className="underline hover:text-primary">
+                  {t("pricing")}
                 </Link>
               </p>
             </CardFooter>

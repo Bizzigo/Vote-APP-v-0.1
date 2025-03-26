@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'lv';
@@ -139,6 +140,10 @@ export const translations: Translations = {
   "privacyPolicy": {
     en: "Privacy Policy",
     lv: "Privātuma Politikai"
+  },
+  "pricing": {
+    en: "Pricing",
+    lv: "Cenas"
   },
   "createVendorAccount": {
     en: "Create Your Vendor Account",

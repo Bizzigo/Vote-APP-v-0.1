@@ -20,11 +20,14 @@ const Navbar: React.FC = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
   
+  const isDark = theme === 'dark';
+  const iconClassName = `${isDark && isLoggedIn ? 'text-foreground/90' : 'text-foreground'} transition-colors`;
+  
   return <header className="sticky top-0 z-40 w-full bg-white/80 dark:bg-foreground/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2 text-foreground hover:text-primary/80 transition-colors">
-            <Home size={20} strokeWidth={1.5} className="text-foreground" />
+            <Home size={20} strokeWidth={1.5} className={iconClassName} />
           </Link>
         </div>
 
@@ -37,24 +40,23 @@ const Navbar: React.FC = () => {
               className="text-foreground hover:text-primary transition-colors flex items-center" 
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             >
-              {theme === 'dark' ? <Sun size={20} strokeWidth={1.5} className="text-foreground" /> : <Moon size={20} strokeWidth={1.5} className="text-foreground" />}
+              {theme === 'dark' ? <Sun size={20} strokeWidth={1.5} className={iconClassName} /> : <Moon size={20} strokeWidth={1.5} className={iconClassName} />}
             </button>
             
             {isLoggedIn ? (
               <>
                 <Link to="/profile" className="text-foreground hover:text-primary transition-colors flex items-center gap-1">
-                  <User size={20} strokeWidth={1.5} className="text-foreground" />
+                  <User size={20} strokeWidth={1.5} className={iconClassName} />
                   <span>{t("profile")}</span>
                 </Link>
                 <button onClick={logout} className="text-foreground hover:text-primary transition-colors flex items-center gap-1">
-                  <LogOut size={20} strokeWidth={1.5} className="text-foreground" />
+                  <LogOut size={20} strokeWidth={1.5} className={iconClassName} />
                   <span>{t("logout")}</span>
                 </button>
               </>
             ) : (
               <Link to="/login" className="text-foreground hover:text-primary transition-colors flex items-center gap-1">
-                <LogIn size={20} strokeWidth={1.5} className="text-foreground" />
-                <span>{t("login")}</span>
+                <LogIn size={20} strokeWidth={1.5} className={iconClassName} />
               </Link>
             )}
           </div>
@@ -62,7 +64,7 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Menu Button */}
         <button className="md:hidden flex items-center" onClick={toggleMobileMenu} aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}>
-          {mobileMenuOpen ? <X size={24} className="text-foreground" /> : <Menu size={24} className="text-foreground" />}
+          {mobileMenuOpen ? <X size={24} className={iconClassName} /> : <Menu size={24} className={iconClassName} />}
         </button>
       </div>
 
@@ -76,12 +78,12 @@ const Navbar: React.FC = () => {
               >
                 {theme === 'dark' ? (
                   <>
-                    <Sun size={18} strokeWidth={1.5} className="text-foreground" />
+                    <Sun size={18} strokeWidth={1.5} className={iconClassName} />
                     <span>{t("lightMode")}</span>
                   </>
                 ) : (
                   <>
-                    <Moon size={18} strokeWidth={1.5} className="text-foreground" />
+                    <Moon size={18} strokeWidth={1.5} className={iconClassName} />
                     <span>{t("darkMode")}</span>
                   </>
                 )}
@@ -99,20 +101,20 @@ const Navbar: React.FC = () => {
             {isLoggedIn ? (
               <>
                 <Link to="/profile" className="flex items-center gap-2 py-2 text-base text-foreground" onClick={() => setMobileMenuOpen(false)}>
-                  <User size={18} strokeWidth={1.5} className="text-foreground" />
+                  <User size={18} strokeWidth={1.5} className={iconClassName} />
                   <span>{t("profile")}</span>
                 </Link>
                 <button onClick={() => {
                   logout();
                   setMobileMenuOpen(false);
                 }} className="flex items-center gap-2 py-2 text-base text-foreground w-full text-left">
-                  <LogOut size={18} strokeWidth={1.5} className="text-foreground" />
+                  <LogOut size={18} strokeWidth={1.5} className={iconClassName} />
                   <span>{t("logout")}</span>
                 </button>
               </>
             ) : (
               <Link to="/login" className="flex items-center gap-2 py-2 text-base text-foreground" onClick={() => setMobileMenuOpen(false)}>
-                <LogIn size={18} strokeWidth={1.5} className="text-foreground" />
+                <LogIn size={18} strokeWidth={1.5} className={iconClassName} />
                 <span>{t("login")}</span>
               </Link>
             )}

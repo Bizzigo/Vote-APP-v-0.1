@@ -68,8 +68,8 @@ const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({ className = "" }) =
           />
         </div>
         <div className="text-sm text-foreground/80">
-          <span ref={countRef} className="font-semibold">{count.toLocaleString()}</span>{' '}
-          <span className="uppercase">{t("registeredUsers")}</span>
+          <span ref={countRef} className="font-semibold">+{count.toLocaleString()}</span>{' '}
+          <span>{t("registeredUsers")}</span>
         </div>
       </div>
     </div>
