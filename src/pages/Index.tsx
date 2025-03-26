@@ -5,12 +5,26 @@ import SearchBar from '@/components/SearchBar';
 import VendorCard from '@/components/vendor/VendorCard';
 import RecentVendors from '@/components/RecentVendors';
 import TopSearched from '@/components/TopSearched';
-import CategoryCloud from '@/components/CategoryCloud';
 import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
 import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle2, Clock, TrendingUp } from 'lucide-react';
+import { CheckCircle2, Clock, TrendingUp, BadgeCheck, Briefcase, Building, Coffee, Construction, Hammer, Laptop, ServerCog, Shirt, Truck, Wrench } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
+
+const categories = [
+  { name: 'IT Services', count: 247, icon: Laptop, slug: 'it-services' },
+  { name: 'Construction', count: 184, icon: Construction, slug: 'construction' },
+  { name: 'Manufacturing', count: 156, icon: Wrench, slug: 'manufacturing' },
+  { name: 'Retail', count: 132, icon: Shirt, slug: 'retail' },
+  { name: 'Transportation', count: 117, icon: Truck, slug: 'transportation' },
+  { name: 'Business Services', count: 104, icon: Briefcase, slug: 'business-services' },
+  { name: 'Food & Beverage', count: 93, icon: Coffee, slug: 'food-beverage' },
+  { name: 'Technical Services', count: 86, icon: ServerCog, slug: 'technical-services' },
+  { name: 'Craftsmanship', count: 74, icon: Hammer, slug: 'craftsmanship' },
+  { name: 'Corporate Services', count: 68, icon: Building, slug: 'corporate-services' },
+];
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -63,6 +77,14 @@ const Index = () => {
     <Layout>
       <div className="relative py-16 px-4 sm:px-6 md:px-8 mb-12 rounded-xl bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/10">
         <div className="text-center mb-8 max-w-3xl mx-auto">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="relative h-8 w-8 overflow-hidden text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+                <path d="M12.378 1.602a.75.75 0 0 0-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03ZM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 0 0 .372-.648V7.93ZM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 0 0 .372.648l8.628 5.033Z" />
+              </svg>
+            </div>
+            <span className="text-2xl font-medium text-primary">Bizzigo</span>
+          </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 mx-auto">
             Ideālo pakalpojumu sniedzēju katalogs
           </h1>
@@ -77,6 +99,30 @@ const Index = () => {
             setSearchTerm={setSearchTerm} 
             onSearch={handleSearch}
           />
+        </div>
+      </div>
+      
+      {/* Categories Grid */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-6">Popular Categories</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {categories.map((category) => (
+            <Link 
+              key={category.slug}
+              to={`/category/${category.slug}`}
+              className="flex items-center justify-between p-4 bg-card rounded-lg border shadow-sm hover:shadow-md transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="bg-primary/10 p-2 rounded-full">
+                  <category.icon className="h-5 w-5 text-primary" />
+                </div>
+                <span>{category.name}</span>
+              </div>
+              <Badge variant="outline" className="text-xs font-normal bg-background/50">
+                {category.count}
+              </Badge>
+            </Link>
+          ))}
         </div>
       </div>
       
@@ -123,7 +169,6 @@ const Index = () => {
             
             <RecentVendors />
             <TopSearched />
-            <CategoryCloud />
           </>
         )}
         

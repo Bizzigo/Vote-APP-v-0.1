@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Search, X } from 'lucide-react';
 
 interface SearchBarProps {
@@ -50,6 +49,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
     setSearchTerm('');
   };
 
+  // Handle key press for instant search
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onSearch(searchTerm, aiSearchToggle);
+    }
+  };
+
   return (
     <form 
       onSubmit={handleSubmit} 
@@ -60,8 +66,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
           type="search"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="w-full pl-10 pr-12 h-12 text-base border border-input shadow-sm rounded-l-lg rounded-r-none focus-visible:ring-primary"
+          className="w-full pl-10 pr-12 h-12 text-base border border-input shadow-sm rounded-lg focus-visible:ring-primary"
         />
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         
@@ -76,13 +83,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
           </button>
         )}
       </div>
-      
-      <Button 
-        type="submit"
-        className="h-12 px-6 rounded-r-lg rounded-l-none"
-      >
-        Search
-      </Button>
     </form>
   );
 };
