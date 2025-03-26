@@ -13,7 +13,11 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
   }
 
   // Convert search query to lowercase for case-insensitive matching
-  const searchTerms = query.toLowerCase().split(' ');
+  const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 0);
+  
+  if (searchTerms.length === 0) {
+    return [];
+  }
   
   // Include vendors that have matches in any searchable field
   const matchedVendors = vendors.filter(vendor => {

@@ -63,11 +63,6 @@ const Navbar: React.FC = () => {
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
-            <div className="relative h-8 w-8 overflow-hidden bg-accent rounded-sm">
-              <div className="absolute inset-0 flex items-center justify-center text-accent-foreground font-semibold">
-                BZ
-              </div>
-            </div>
             <span className="text-lg font-medium">Bizzigo</span>
           </Link>
         </div>

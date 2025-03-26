@@ -9,7 +9,8 @@ import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
 import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle2, Clock, TrendingUp, BadgeCheck, Briefcase, Building, Coffee, Construction, Hammer, Laptop, ServerCog, Shirt, Truck, Wrench } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { BadgeCheck, Briefcase, Building, Coffee, Construction, Hammer, Laptop, ServerCog, Shirt, Truck, Wrench, PlusCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 
@@ -43,7 +44,7 @@ const Index = () => {
       return;
     }
     
-    // Always use AI search
+    // Use AI search on the vendors array
     const results = aiSearchVendors(vendors, query);
     setFilteredVendors(results);
     console.log('AI search results:', results);
@@ -75,42 +76,46 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="relative py-16 px-4 sm:px-6 md:px-8 mb-12 rounded-xl bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/10">
-        <div className="text-center mb-8 max-w-3xl mx-auto">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="relative h-8 w-8 overflow-hidden text-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
-                <path d="M12.378 1.602a.75.75 0 0 0-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03ZM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 0 0 .372-.648V7.93ZM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 0 0 .372.648l8.628 5.033Z" />
-              </svg>
+      {/* Hero Section - Full width with no horizontal borders */}
+      <div className="w-full hero-gradient py-16">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8">
+          <div className="text-center mb-8 max-w-3xl mx-auto">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 mx-auto text-white">
+              Ideālo pakalpojumu sniedzēju katalogs
+            </h1>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto mt-3 animate-fade-in">
+              Vienkāršākais veids, kā atrast uzticamus un kvalificētus pakalpojumu sniedzējus Latvijā
+            </p>
+            <div className="mt-8 flex justify-center gap-4">
+              <Button size="lg" className="px-6 rounded-md">
+                Izpētīt katalogs
+              </Button>
+              <Button variant="outline" size="lg" className="px-6 rounded-md">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Pievienot uzņēmumu
+              </Button>
             </div>
-            <span className="text-2xl font-medium text-primary">Bizzigo</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 mx-auto">
-            Ideālo pakalpojumu sniedzēju katalogs
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto mt-3 animate-fade-in">
-            Vienkāršākais veids, kā atrast uzticamus un kvalificētus pakalpojumu sniedzējus Latvijā
-          </p>
-        </div>
-        
-        <div className="max-w-3xl mx-auto">
-          <SearchBar 
-            searchTerm={searchTerm} 
-            setSearchTerm={setSearchTerm} 
-            onSearch={handleSearch}
-          />
+          
+          <div className="max-w-3xl mx-auto mt-8">
+            <SearchBar 
+              searchTerm={searchTerm} 
+              setSearchTerm={setSearchTerm} 
+              onSearch={handleSearch}
+            />
+          </div>
         </div>
       </div>
       
-      {/* Categories Grid */}
-      <div className="mb-12">
+      {/* Categories Grid - Moved below the search bar */}
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-12">
         <h2 className="text-2xl font-bold mb-6">Popular Categories</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {categories.map((category) => (
             <Link 
               key={category.slug}
               to={`/category/${category.slug}`}
-              className="flex items-center justify-between p-4 bg-card rounded-lg border shadow-sm hover:shadow-md transition-all"
+              className="flex items-center justify-between p-4 bg-card rounded-lg border border-border hover:border-accent/50 transition-all"
             >
               <div className="flex items-center gap-3">
                 <div className="bg-primary/10 p-2 rounded-full">
@@ -118,7 +123,7 @@ const Index = () => {
                 </div>
                 <span>{category.name}</span>
               </div>
-              <Badge variant="outline" className="text-xs font-normal bg-background/50">
+              <Badge variant="outline" className="text-xs font-normal">
                 {category.count}
               </Badge>
             </Link>
@@ -126,47 +131,9 @@ const Index = () => {
         </div>
       </div>
       
-      <div className="py-8 w-full max-w-full">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8 w-full max-w-full">
         {!hasSearched && (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-card border rounded-lg p-6 shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-primary/10 p-2 rounded-full">
-                    <CheckCircle2 className="h-5 w-5 text-primary" />
-                  </div>
-                  <h2 className="font-medium text-lg">Verified Providers</h2>
-                </div>
-                <p className="text-muted-foreground text-sm">
-                  All service providers in our directory are vetted and verified for quality and reliability.
-                </p>
-              </div>
-              
-              <div className="bg-card border rounded-lg p-6 shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-primary/10 p-2 rounded-full">
-                    <TrendingUp className="h-5 w-5 text-primary" />
-                  </div>
-                  <h2 className="font-medium text-lg">Top Rated</h2>
-                </div>
-                <p className="text-muted-foreground text-sm">
-                  Discover service providers with high satisfaction ratings from real customers.
-                </p>
-              </div>
-              
-              <div className="bg-card border rounded-lg p-6 shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-primary/10 p-2 rounded-full">
-                    <Clock className="h-5 w-5 text-primary" />
-                  </div>
-                  <h2 className="font-medium text-lg">Quick Response</h2>
-                </div>
-                <p className="text-muted-foreground text-sm">
-                  Our service providers are committed to responding to your inquiries within 24 hours.
-                </p>
-              </div>
-            </div>
-            
+          <>            
             <RecentVendors />
             <TopSearched />
           </>
