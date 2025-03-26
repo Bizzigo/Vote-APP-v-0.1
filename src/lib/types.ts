@@ -1,3 +1,4 @@
+
 export type Role = 'admin' | 'visitor';
 export type SubscriptionPlan = 'startup' | 'enterprise';
 
@@ -26,7 +27,7 @@ export interface Vendor {
     lat: number;
     lng: number;
   };
-  keywords?: string[]; // Added keywords field
+  keywords?: string[]; 
   phone?: string;
   email?: string;
   website?: string;
@@ -36,6 +37,7 @@ export interface Vendor {
     twitter?: string;
     linkedin?: string;
   };
+  distanceKm?: number; // Added this property to fix the type error
 }
 
 export interface Candidate {
