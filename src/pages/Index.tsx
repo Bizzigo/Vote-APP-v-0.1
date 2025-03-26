@@ -60,24 +60,26 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="bg-black text-white py-7 md:py-10 w-full mx-0 px-4 sm:px-6 md:px-8 mb-6 left-0 right-0 box-border">
-        <div className="text-center mb-3 max-w-3xl mx-auto">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 mx-auto inline-block text-yellow-400">
+      <div className="bg-[#0F172A] text-white py-16 w-full px-4 sm:px-6 md:px-8 mb-6 left-0 right-0 box-border border-b border-[#1E293B]">
+        <div className="text-center mb-8 max-w-3xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-4 mx-auto bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
             Ideālo pakalpojumu sniedzēju katalogs
           </h1>
-          <p className="text-xs sm:text-sm text-gray-300 max-w-xl mx-auto mt-1 animate-fade-in">
+          <p className="text-sm sm:text-base text-gray-400 max-w-xl mx-auto mt-3 animate-fade-in">
             Vienkāršākais veids, kā atrast uzticamus un kvalificētus pakalpojumu sniedzējus Latvijā
           </p>
         </div>
         
-        <SearchBar 
-          searchTerm={searchTerm} 
-          setSearchTerm={setSearchTerm} 
-          onSearch={handleSearch}
-        />
+        <div className="max-w-xl mx-auto">
+          <SearchBar 
+            searchTerm={searchTerm} 
+            setSearchTerm={setSearchTerm} 
+            onSearch={handleSearch}
+          />
+        </div>
       </div>
       
-      <div className="py-4 px-4 sm:px-6 md:px-8 w-full max-w-full">
+      <div className="py-8 px-4 sm:px-6 md:px-8 w-full max-w-full">
         {!hasSearched && (
           <>
             <RecentVendors />
@@ -88,15 +90,15 @@ const Index = () => {
         
         {hasSearched && (
           <div className="mt-8">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold">Search Results</h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-white">Search Results</h2>
               {filteredVendors.length > 0 && (
                 <button 
                   onClick={() => {
                     setHasSearched(false);
                     setSearchTerm('');
                   }}
-                  className="text-sm text-blue-600 hover:text-blue-800"
+                  className="text-sm text-indigo-400 hover:text-indigo-300"
                 >
                   Back to Explore
                 </button>
@@ -105,7 +107,7 @@ const Index = () => {
             
             {filteredVendors.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-muted-foreground">
+                <p className="text-gray-400">
                   No vendors found. Try adjusting your search.
                 </p>
               </div>

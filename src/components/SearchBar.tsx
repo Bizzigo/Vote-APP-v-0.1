@@ -1,8 +1,8 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Command } from 'lucide-react';
 import { 
-  Command,
+  Command as CommandPrimitive,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -80,19 +80,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
   };
 
   return (
-    <div className="relative w-full mx-auto mb-6 px-0 sm:max-w-lg">
-      <div className="flex flex-col space-y-2">
-        <div className="relative flex-grow">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-            <Search className="h-5 w-5 text-muted-foreground" />
+    <div className="relative w-full mx-auto">
+      <div className="flex items-center group">
+        <div className="relative flex-grow rounded-lg overflow-hidden shadow-lg focus-within:ring-2 focus-within:ring-indigo-400 focus-within:ring-opacity-50">
+          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none z-10">
+            <Search className="h-5 w-5 text-gray-400" />
+          </div>
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none z-10">
+            <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border bg-[#1E293B] px-1.5 font-mono text-xs text-gray-400">
+              <span className="text-xs">⌘</span>K
+            </kbd>
           </div>
           <input
             ref={inputRef}
             type="text"
-            className={`block w-full bg-white border border-yellow-400 pl-10 pr-4 py-3 
-              focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent 
-              transition-all duration-200 rounded-none text-[#666666]
-              ${searchTerm ? 'border-2' : 'border-1'}`}
+            className="block w-full bg-[#1E293B] pl-12 pr-12 py-4 
+              focus:outline-none border-none
+              transition-all duration-200 rounded-lg text-white placeholder:text-gray-400
+              text-base"
             placeholder="sāc meklēt, piemēram, homeopāts rīgā..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -100,30 +105,30 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, setSearchTerm, onSear
             onFocus={() => searchTerm.trim().length >= 2 && setOpen(true)}
             onBlur={() => setTimeout(() => setOpen(false), 200)}
           />
-          
-          {open && suggestions.length > 0 && (
-            <div className="absolute w-full mt-1 bg-white border border-gray-200 shadow-lg z-50">
-              <Command className="rounded-lg border shadow-md">
-                <CommandList>
-                  <CommandGroup heading="Keywords">
-                    {suggestions.map((suggestion) => (
-                      <CommandItem
-                        key={suggestion}
-                        onSelect={() => handleSelectSuggestion(suggestion)}
-                        className="cursor-pointer hover:bg-slate-100"
-                      >
-                        <Search className="mr-2 h-4 w-4" />
-                        <span>{suggestion}</span>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-                <CommandEmpty>No keywords found</CommandEmpty>
-              </Command>
-            </div>
-          )}
         </div>
       </div>
+      
+      {open && suggestions.length > 0 && (
+        <div className="absolute w-full mt-2 bg-[#1E293B] border border-[#2D3A54] rounded-lg shadow-xl z-50">
+          <CommandPrimitive className="rounded-lg">
+            <CommandList>
+              <CommandGroup heading="Keywords">
+                {suggestions.map((suggestion) => (
+                  <CommandItem
+                    key={suggestion}
+                    onSelect={() => handleSelectSuggestion(suggestion)}
+                    className="cursor-pointer hover:bg-[#2D3A54] text-gray-200"
+                  >
+                    <Search className="mr-2 h-4 w-4 text-indigo-400" />
+                    <span>{suggestion}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+            <CommandEmpty className="py-4 text-center text-gray-400">No keywords found</CommandEmpty>
+          </CommandPrimitive>
+        </div>
+      )}
     </div>
   );
 };
