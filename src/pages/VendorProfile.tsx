@@ -239,6 +239,15 @@ const VendorProfile = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex justify-center w-full mb-8">
+          <SearchBar 
+            searchTerm={searchTerm} 
+            setSearchTerm={setSearchTerm} 
+            onSearch={handleSearch} 
+            className="w-full max-w-xl" 
+          />
+        </div>
+
         <VendorHeader
           vendor={{...vendor, rating: averageRating || vendor.rating}}
           registrationNumber={registrationNumber}
@@ -250,15 +259,6 @@ const VendorProfile = () => {
           isOnline={isOnline}
           onRatingClick={scrollToReviews}
         />
-
-        <div className="flex justify-center w-full my-8">
-          <SearchBar 
-            searchTerm={searchTerm} 
-            setSearchTerm={setSearchTerm} 
-            onSearch={handleSearch} 
-            className="w-full max-w-xl" 
-          />
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div className="md:col-span-2">
