@@ -44,7 +44,7 @@ const AuthCallback = () => {
           console.log('Retrieved profile:', profile);
           
           toast.success("Login successful", {
-            description: profile?.profile_completed 
+            description: profile && profile.profile_completed 
               ? "Welcome back!" 
               : "Welcome! Please complete your profile."
           });
