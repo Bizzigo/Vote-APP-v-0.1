@@ -1,55 +1,52 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { categories } from '@/lib/mockData';
 import { cn } from '@/lib/utils';
-import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
+import { aiSearchVendors } from '@/lib/aiSearch';
+import { useLocationContext } from '@/providers/LocationProvider';
+import { useToast } from '@/hooks/use-toast';
 
-// Define category icons mapping - you can replace these with appropriate icons
-const categoryIcons: { [key: string]: string } = {
-  'Technology': '💻',
-  'Finance': '💰',
-  'Healthcare': '🩺',
-  'Retail': '🛍️',
-  'Food': '🍔',
-  'Education': '📚',
-  'Transportation': '🚚',
-  'Energy': '⚡',
-  'Entertainment': '🎬',
-  'Construction': '🏗️',
-};
-
-const CategoryGrid = () => {
+const CategoryGrid = ({ 
+  onCategorySelect 
+}: { 
+  onCategorySelect?: (category: string) => void 
+}) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { isActive, coordinates, calculateDistance } = useLocationContext();
+  
+  const handleCategoryClick = (category: string) => {
+    if (onCategorySelect) {
+      onCategorySelect(category);
+    } else {
+      // If no handler provided, navigate to category page
+      navigate(`/search?category=${encodeURIComponent(category.toLowerCase())}`);
+    }
+    
+    toast({
+      title: `Searching ${category}`,
+      description: "Finding the best local providers...",
+      duration: 2000,
+    });
+  };
+  
   return (
     <div className="w-full max-w-5xl mx-auto">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+      <div className="flex flex-wrap gap-2 justify-center">
         {categories.map((category) => (
-          <HoverCard key={category} openDelay={200} closeDelay={100}>
-            <HoverCardTrigger asChild>
-              <Link
-                to={`/category/${category.toLowerCase()}`}
-                className={cn(
-                  "h-24 flex flex-col items-center justify-center p-4 rounded-xl",
-                  "bg-white border border-gray-200 shadow-sm transition-all duration-300",
-                  "hover:shadow-md hover:border-primary/30 hover:bg-primary/5",
-                  "group"
-                )}
-              >
-                <div className="text-2xl mb-2">{categoryIcons[category] || '🔍'}</div>
-                <span className="text-sm font-medium group-hover:text-primary transition-colors">
-                  {category}
-                </span>
-              </Link>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-64 p-4">
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold">{category}</h4>
-                <p className="text-xs text-muted-foreground">
-                  Browse local {category.toLowerCase()} providers and services in your area.
-                </p>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
+          <button
+            key={category}
+            onClick={() => handleCategoryClick(category)}
+            className={cn(
+              "px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
+              "bg-background border border-input shadow-sm hover:shadow",
+              "hover:bg-primary/5 hover:border-primary/50 hover:text-primary",
+              "focus:outline-none focus:ring-2 focus:ring-primary/30"
+            )}
+          >
+            {category}
+          </button>
         ))}
       </div>
     </div>

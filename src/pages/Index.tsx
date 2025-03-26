@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -66,6 +67,41 @@ const Index = () => {
     setHasSearched(true);
   }, [vendors, coordinates, calculateDistance]);
 
+  const handleCategorySelect = useCallback((category: string) => {
+    setSearchTerm(category);
+    
+    // Get vendors in this category, sorted by rating
+    let results = vendors
+      .filter(vendor => vendor.category === category)
+      .sort((a, b) => b.rating - a.rating);
+    
+    // If location is active, calculate distances and sort by proximity
+    if (isActive && coordinates) {
+      results = results.map(vendor => {
+        if (vendor.location) {
+          const distanceKm = calculateDistance(coordinates.lat, coordinates.lng, vendor.location.lat, vendor.location.lng);
+          return {
+            ...vendor,
+            distanceKm
+          };
+        }
+        return vendor;
+      });
+      
+      // Sort by a combination of rating and distance
+      results.sort((a, b) => {
+        // Higher rating is better, lower distance is better
+        // Create a combined score where rating has more weight than distance
+        const scoreA = (a.rating * 2) - (a.distanceKm || 0) / 10;
+        const scoreB = (b.rating * 2) - (b.distanceKm || 0) / 10;
+        return scoreB - scoreA;
+      });
+    }
+    
+    setFilteredVendors(results);
+    setHasSearched(true);
+  }, [vendors, isActive, coordinates, calculateDistance]);
+
   useEffect(() => {
     let timeoutId: number | undefined;
     if (hasSearched && filteredVendors.length === 0) {
@@ -97,7 +133,7 @@ const Index = () => {
             
             <div className="mt-10 mb-8 w-full">
               <h2 className="text-lg font-medium text-center mb-5">Popular Categories</h2>
-              <CategoryGrid />
+              <CategoryGrid onCategorySelect={handleCategorySelect} />
             </div>
           </div>
         </div> : <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8">
