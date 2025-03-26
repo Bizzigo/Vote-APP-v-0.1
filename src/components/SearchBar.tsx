@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -128,7 +129,7 @@ const SearchBar = ({
             value={term}
             onChange={handleInputChange}
             onFocus={() => setShowSuggestions(true)}
-            className="h-12 text-base rounded-3xl border border-blue-500 pl-12 pr-12 focus-visible:ring-blue-200 focus-visible:border-blue-500 shadow-sm hover:shadow-md transition-shadow hover:border-2 focus-visible:border-2"
+            className="h-12 text-base rounded-3xl border border-blue-500 pl-12 pr-12 focus-visible:ring-blue-200 focus-visible:border-blue-500 shadow-sm hover:shadow-md transition-all hover:border-blue-500 hover:border-2 focus-visible:border-2"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
