@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Role } from '@/lib/types';
@@ -142,9 +141,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     completeProfile
   };
 
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{loading ? (
+    <div className="flex justify-center items-center h-screen">
+      <div className="text-center">
+        <div className="mb-4 w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin mx-auto"></div>
+        <p className="text-xl font-medium">Loading...</p>
+      </div>
+    </div>
+  ) : children}</AuthContext.Provider>;
 };

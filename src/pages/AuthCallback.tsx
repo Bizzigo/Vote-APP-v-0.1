@@ -10,13 +10,11 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Handle the hash fragment if present (which contains tokens)
+        // Check if we have a hash fragment with tokens (happens with OAuth providers)
         if (window.location.hash) {
-          const hashParams = new URLSearchParams(window.location.hash.substring(1));
-          if (hashParams.has('access_token')) {
-            console.log('Found access token in URL hash, processing auth...');
-            // The session will be automatically handled by Supabase client
-          }
+          console.log('Found hash fragment, extracting tokens');
+          // The session will be automatically set by Supabase's internal handlers
+          // We don't need to manually extract and set tokens
         }
         
         // Get the current session
