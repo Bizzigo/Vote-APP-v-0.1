@@ -26,6 +26,7 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     try {
+      console.log('Initiating Google login...');
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -34,16 +35,16 @@ const Login = () => {
       });
 
       if (error) {
+        console.error("Google login error:", error);
         toast.error("Login failed", {
-          description: error.message || "There was a problem with the login process",
+          description: error.message || "There was a problem with the Google login process",
         });
-        console.error("Login error:", error);
       }
     } catch (error) {
+      console.error("Unexpected login error:", error);
       toast.error("Login failed", {
-        description: "There was a problem with the login process. Please try again.",
+        description: "There was an unexpected problem with the login process. Please try again.",
       });
-      console.error("Login error:", error);
     }
   };
 

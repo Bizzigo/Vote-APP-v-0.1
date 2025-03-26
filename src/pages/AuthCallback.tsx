@@ -2,41 +2,66 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const AuthCallback = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
     const handleAuthCallback = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      
-      if (error) {
-        console.error('Error during auth callback:', error);
-        navigate('/login?error=auth');
-        return;
-      }
-      
-      if (data?.session) {
-        // Check if profile is completed
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('profile_completed')
-          .eq('id', data.session.user.id)
-          .maybeSingle();
-          
-        if (profileError) {
-          console.error('Error fetching profile:', profileError);
-          navigate('/');
+      try {
+        // Get the current session
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error during auth callback:', error);
+          toast.error("Authentication failed", {
+            description: error.message || "There was a problem during the authentication process"
+          });
+          navigate('/login?error=auth');
           return;
         }
         
-        // Redirect based on profile completion status
-        if (profile && !profile.profile_completed) {
-          navigate('/profile');
+        if (data?.session) {
+          console.log('Auth successful, session established');
+          
+          // Check if profile is completed
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('profile_completed')
+            .eq('id', data.session.user.id)
+            .maybeSingle();
+            
+          if (profileError) {
+            console.error('Error fetching profile:', profileError);
+            toast.error("Could not retrieve your profile", {
+              description: "We'll redirect you to the home page"
+            });
+            navigate('/');
+            return;
+          }
+          
+          // Redirect based on profile completion status
+          if (profile && !profile.profile_completed) {
+            navigate('/profile');
+          } else {
+            toast.success("Login successful", {
+              description: "Welcome back!"
+            });
+            navigate('/');
+          }
         } else {
-          navigate('/');
+          console.error('No session established after authentication');
+          toast.error("Authentication failed", {
+            description: "No session was established"
+          });
+          navigate('/login');
         }
-      } else {
+      } catch (error) {
+        console.error('Unexpected error in auth callback:', error);
+        toast.error("Authentication error", {
+          description: "An unexpected error occurred"
+        });
         navigate('/login');
       }
     };
@@ -46,7 +71,11 @@ const AuthCallback = () => {
   
   return (
     <div className="flex justify-center items-center h-screen">
-      <p className="text-xl">Completing login...</p>
+      <div className="text-center">
+        <div className="mb-4 w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin mx-auto"></div>
+        <p className="text-xl font-medium">Completing login...</p>
+        <p className="text-muted-foreground">Please wait while we set up your session</p>
+      </div>
     </div>
   );
 };
