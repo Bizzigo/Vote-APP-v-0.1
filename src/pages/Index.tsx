@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -33,7 +32,6 @@ const Index = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const { toast } = useToast();
 
-  // Using useCallback to memoize the search function
   const handleSearch = useCallback((query: string, useAI: boolean) => {
     console.log('Search initiated:', { query });
     
@@ -43,14 +41,12 @@ const Index = () => {
       return;
     }
     
-    // Use AI search on the vendors array
     const results = aiSearchVendors(vendors, query);
     console.log('AI search results:', results.length, 'vendors found');
     setFilteredVendors(results);
     setHasSearched(true);
   }, [vendors]);
 
-  // Effect to reset page after 5 seconds when no results are found
   useEffect(() => {
     let timeoutId: number | undefined;
     
@@ -74,7 +70,6 @@ const Index = () => {
 
   return (
     <Layout>
-      {/* Hero Section - Full width with no horizontal borders */}
       <div className="w-full hero-gradient py-16">
         <div className="container mx-auto px-4 sm:px-6 md:px-8">
           <div className="text-center mb-8 max-w-3xl mx-auto">
@@ -96,7 +91,6 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Search Results Section - Moved above categories */}
       {hasSearched && (
         <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8">
           <div className="flex justify-between items-center mb-6">
@@ -136,7 +130,6 @@ const Index = () => {
         </div>
       )}
       
-      {/* Categories Grid - Below search results */}
       <div className="container mx-auto px-4 sm:px-6 md:px-8 py-12">
         <h2 className="text-2xl font-bold mb-6">Popular Categories</h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -160,7 +153,7 @@ const Index = () => {
         </div>
       </div>
       
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8 w-full max-w-full">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
         {!hasSearched && (
           <>            
             <RecentVendors />

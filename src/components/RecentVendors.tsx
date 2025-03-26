@@ -9,7 +9,7 @@ const RecentVendors = () => {
   const recentVendors = mockVendors.slice(0, 5);
   
   return (
-    <div className="my-8">
+    <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8">
       <h2 className="text-2xl font-semibold mb-4">Recently Added Vendors</h2>
       <div className="flex flex-col space-y-4">
         {recentVendors.map((vendor: Vendor, index) => (
