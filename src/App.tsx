@@ -10,6 +10,7 @@ import React from "react";
 
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import VendorProfile from "./pages/VendorProfile";
@@ -31,6 +32,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
                   <Route path="/admin" element={<Admin />} />
                   <Route path="/vendor/:id" element={<VendorProfile />} />
                   <Route path="/profile" element={<UserProfile />} />

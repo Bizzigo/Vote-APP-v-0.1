@@ -61,12 +61,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
     const value = e.target.value;
     setSearchTerm(value);
     
+    // Trigger search after a short delay if value length > 2
     if (value.length > 2) {
-      // Trigger search after short delay
       const timeoutId = setTimeout(() => {
         onSearch(value, true);
-      }, 500);
+      }, 300);
+      
       return () => clearTimeout(timeoutId);
+    } else if (value.length === 0) {
+      // Clear search results when input is empty
+      onSearch('', true);
     }
   };
 
@@ -83,6 +87,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           className="w-full pl-10 pr-12 h-12 text-base border border-input shadow-sm rounded-lg focus-visible:ring-primary"
+          autoComplete="off"
         />
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         

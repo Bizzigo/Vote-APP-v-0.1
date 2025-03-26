@@ -11,7 +11,7 @@ import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import { PlusCircle, Briefcase, Building, Coffee, Construction, Hammer, Laptop, ServerCog, Shirt, Truck, Wrench } from 'lucide-react';
+import { Briefcase, Building, Coffee, Construction, Hammer, Laptop, ServerCog, Shirt, Truck, Wrench } from 'lucide-react';
 
 const categories = [
   { name: 'IT Services', count: 247, icon: Laptop, slug: 'it-services' },
@@ -85,12 +85,6 @@ const Index = () => {
             <p className="text-muted-foreground text-lg max-w-xl mx-auto mt-3 animate-fade-in">
               Vienkāršākais veids, kā atrast uzticamus un kvalificētus pakalpojumu sniedzējus Latvijā
             </p>
-            <div className="mt-8">
-              <Link to="/signup" className="inline-block">
-                <PlusCircle className="mr-2 h-4 w-4 inline-block" />
-                Pievienot uzņēmumu
-              </Link>
-            </div>
           </div>
           
           <div className="max-w-3xl mx-auto mt-8">
