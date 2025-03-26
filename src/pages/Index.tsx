@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -67,21 +66,13 @@ const Index = () => {
   }, [vendors, coordinates, calculateDistance]);
 
   useEffect(() => {
-    let timeoutId: number | undefined;
     if (hasSearched && filteredVendors.length === 0) {
       toast({
         title: t("noVendorsFoundTitle"),
-        description: t("returningToHome"),
+        description: t("noVendorsFound"),
         duration: 2000
       });
-      timeoutId = window.setTimeout(() => {
-        setHasSearched(false);
-        setSearchTerm('');
-      }, 5000); // Increased timeout to give users time to see the Mistral response
     }
-    return () => {
-      if (timeoutId) window.clearTimeout(timeoutId);
-    };
   }, [hasSearched, filteredVendors.length, toast, t]);
 
   useEffect(() => {
