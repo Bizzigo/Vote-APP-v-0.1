@@ -1,13 +1,13 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
 import VendorCard from '@/components/vendor/VendorCard';
 import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
-import { aiSearchVendors, generateSearchSuggestions } from '@/lib/aiSearch';
+import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
 import { useLocationContext } from '@/providers/LocationProvider';
+import { useLanguage } from '@/providers/LanguageProvider';
 import CategoryGrid from '@/components/CategoryGrid';
 
 const Index = () => {
@@ -15,14 +15,9 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
-  const {
-    toast
-  } = useToast();
-  const {
-    isActive,
-    coordinates,
-    calculateDistance
-  } = useLocationContext();
+  const { toast } = useToast();
+  const { isActive, coordinates, calculateDistance } = useLocationContext();
+  const { t } = useLanguage();
 
   const handleSearch = useCallback((query: string, useLocation: boolean, distanceKm?: number) => {
     console.log('Search initiated:', {
@@ -77,8 +72,8 @@ const Index = () => {
     let timeoutId: number | undefined;
     if (hasSearched && filteredVendors.length === 0) {
       toast({
-        title: "No vendors found",
-        description: "Returning to home page in 3 seconds...",
+        title: t("noVendorsFoundTitle"),
+        description: t("returningToHome"),
         duration: 2000
       });
       timeoutId = window.setTimeout(() => {
@@ -89,15 +84,15 @@ const Index = () => {
     return () => {
       if (timeoutId) window.clearTimeout(timeoutId);
     };
-  }, [hasSearched, filteredVendors.length, toast]);
+  }, [hasSearched, filteredVendors.length, toast, t]);
 
   return (
     <Layout>
       {!hasSearched ? (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
-          <div className="text-center mb-6 max-w-3xl mx-auto">
-            <p className="text-muted-foreground max-w-xl mt-3 animate-fade-in text-lg mx-0 my-0 mb-4">
-              Te ir uzticami un profesionāli pakalpojumu sniedzēji. JĀ, atrodi savu!
+          <div className="text-center mb-2 max-w-3xl mx-auto">
+            <p className="text-muted-foreground max-w-xl mt-0 mb-3 animate-fade-in text-lg mx-auto">
+              {t("heroText")}
             </p>
           </div>
           
@@ -126,13 +121,13 @@ const Index = () => {
           </div>
           
           <div className="mb-6">
-            <h2 className="text-2xl font-bold">Search Results</h2>
+            <h2 className="text-2xl font-bold">{t("searchResults")}</h2>
           </div>
           
           {filteredVendors.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground">
-                No vendors found. Try adjusting your search.
+                {t("noVendorsFound")}
               </p>
             </div>
           ) : (
@@ -146,7 +141,7 @@ const Index = () => {
                   <VendorCard 
                     vendor={vendor} 
                     showContactMethods={true} 
-                    distance={vendor.distanceKm ? `${vendor.distanceKm.toFixed(1)} km` : null} 
+                    distance={vendor.distanceKm ? `${vendor.distanceKm.toFixed(1)} ${t("km")}` : null} 
                   />
                 </div>
               ))}

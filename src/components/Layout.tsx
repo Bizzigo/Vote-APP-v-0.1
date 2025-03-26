@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import { useLocation } from 'react-router-dom';
 import Breadcrumbs from './Breadcrumbs';
-import BackgroundAnimation from './BackgroundAnimation';
+import MovingCircles from './MovingCircles';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-background text-foreground overflow-x-hidden">
-      <BackgroundAnimation />
+      <MovingCircles />
       <Navbar />
       <main className="flex-1 w-full">
         {!isHomePage && (

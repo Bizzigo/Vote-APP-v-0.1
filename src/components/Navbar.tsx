@@ -4,6 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Menu, X, Home, LogIn, UserPlus, Moon, Sun } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeProvider';
+import { useLanguage } from '@/providers/LanguageProvider';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Navbar: React.FC = () => {
   const {
@@ -12,6 +14,7 @@ const Navbar: React.FC = () => {
     logout
   } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -29,12 +32,13 @@ const Navbar: React.FC = () => {
         <nav className="hidden md:flex items-center gap-6">
           {isLoggedIn ? <div className="flex items-center gap-4">
               <Link to="/profile" className="text-foreground hover:text-primary transition-colors">
-                Profile
+                {t("profile")}
               </Link>
               <button onClick={logout} className="text-foreground hover:text-primary transition-colors">
-                Log Out
+                {t("logout")}
               </button>
             </div> : <div className="flex items-center gap-6">
+              <LanguageSwitcher />
               <button 
                 onClick={toggleTheme} 
                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors flex items-center" 
@@ -60,40 +64,56 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {mobileMenuOpen && <div className="md:hidden">
           <div className="space-y-1 px-4 pb-3 pt-2">
-            <button
-              onClick={toggleTheme}
-              className="flex items-center gap-2 py-2 text-base text-muted-foreground w-full"
-            >
-              {theme === 'dark' ? (
-                <>
-                  <Sun size={18} strokeWidth={1.5} />
-                  <span>Light Mode</span>
-                </>
-              ) : (
-                <>
-                  <Moon size={18} strokeWidth={1.5} />
-                  <span>Dark Mode</span>
-                </>
-              )}
-            </button>
+            <div className="flex items-center justify-between py-2">
+              <button
+                onClick={toggleTheme}
+                className="flex items-center gap-2 text-base text-muted-foreground"
+              >
+                {theme === 'dark' ? (
+                  <>
+                    <Sun size={18} strokeWidth={1.5} />
+                    <span>{t("lightMode")}</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon size={18} strokeWidth={1.5} />
+                    <span>{t("darkMode")}</span>
+                  </>
+                )}
+              </button>
+            </div>
+            
+            {/* Language options in mobile menu */}
+            <div className="flex items-center justify-between py-2 border-t border-border">
+              <Link to="#" onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#languageSwitcher')?.click();
+              }} className="flex items-center gap-2 text-base text-muted-foreground">
+                <span>Language / Valoda</span>
+              </Link>
+              <div className="hidden">
+                <LanguageSwitcher />
+              </div>
+            </div>
+            
             {isLoggedIn ? <>
                 <Link to="/profile" className="block py-2 text-base text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>
-                  Profile
+                  {t("profile")}
                 </Link>
                 <button onClick={() => {
                   logout();
                   setMobileMenuOpen(false);
                 }} className="block py-2 text-base text-muted-foreground w-full text-left">
-                  Log Out
+                  {t("logout")}
                 </button>
               </> : <>
                 <Link to="/login" className="flex items-center gap-2 py-2 text-base text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>
                   <LogIn size={18} strokeWidth={1.5} />
-                  <span>Log In</span>
+                  <span>{t("login")}</span>
                 </Link>
                 <Link to="/signup" className="flex items-center gap-2 py-2 text-base text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>
                   <UserPlus size={18} strokeWidth={1.5} className="text-primary" />
-                  <span>Sign Up</span>
+                  <span>{t("signup")}</span>
                 </Link>
               </>}
           </div>

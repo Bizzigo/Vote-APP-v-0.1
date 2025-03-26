@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Search, MapPin } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { useLocationContext } from '@/providers/LocationProvider';
+import { useLanguage } from '@/providers/LanguageProvider';
+import { useToast } from '@/hooks/use-toast';
 
 const SearchBar = ({ 
   searchTerm, 
@@ -23,6 +25,8 @@ const SearchBar = ({
   const { isActive, toggleLocation } = useLocationContext();
   const [distanceKm, setDistanceKm] = useState<number>(10);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { t } = useLanguage();
+  const { toast } = useToast();
   
   // Local state for standalone usage (when props aren't provided)
   const [localSearchTerm, setLocalSearchTerm] = useState('');
@@ -34,14 +38,22 @@ const SearchBar = ({
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (term.trim()) {
-      if (onSearch) {
-        // Pass the distanceKm to the onSearch function when location is active
-        onSearch(term.trim(), isActive, isActive ? distanceKm : undefined);
-      } else {
-        // Default behavior - navigate to search page
-        navigate(`/search?q=${encodeURIComponent(term.trim())}`);
-      }
+    if (!term.trim()) {
+      // Show a toast message if the search term is empty
+      toast({
+        title: "Please enter a search term",
+        description: "Type something to search for vendors",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (onSearch) {
+      // Pass the distanceKm to the onSearch function when location is active
+      onSearch(term.trim(), isActive, isActive ? distanceKm : undefined);
+    } else {
+      // Default behavior - navigate to search page
+      navigate(`/search?q=${encodeURIComponent(term.trim())}`);
     }
   };
 
@@ -69,7 +81,7 @@ const SearchBar = ({
           <Input
             ref={inputRef}
             type="text"
-            placeholder="Search for local businesses..."
+            placeholder={t("searchPlaceholder")}
             value={term}
             onChange={handleInputChange}
             className="h-12 text-base rounded-3xl border border-blue-500 pl-12 pr-12 focus-visible:ring-blue-200 focus-visible:border-blue-500 shadow-sm hover:shadow-md transition-all hover:border-blue-500 hover:border-2 focus-visible:border-2"
@@ -96,8 +108,8 @@ const SearchBar = ({
       {isActive && (
         <div className="mt-4 px-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-500">Distance: {distanceKm} km</span>
-            <span className="text-xs text-gray-400">Location enabled</span>
+            <span className="text-sm text-gray-500">{t("distance")}: {distanceKm} {t("km")}</span>
+            <span className="text-xs text-gray-400">{t("distanceEnabled")}</span>
           </div>
           <Slider
             value={[distanceKm]}
