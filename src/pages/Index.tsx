@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -56,8 +57,8 @@ const Index = () => {
     <Layout>
       {!hasSearched ? (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
-          <div className="text-center mb-8 max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 mx-auto text-primary">
+          <div className="text-center mb-12 max-w-3xl mx-auto">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 mx-auto text-primary">
               Bizzigo
             </h1>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto mt-3 animate-fade-in">
@@ -70,9 +71,26 @@ const Index = () => {
               searchTerm={searchTerm} 
               setSearchTerm={setSearchTerm} 
               onSearch={handleSearch}
-              className="shadow-md"
+              className=""
               mainPage={true}
             />
+            <div className="flex justify-center space-x-4 mt-6">
+              <button
+                onClick={() => handleSearch(searchTerm)}
+                className="bg-gray-50 text-sm text-gray-700 py-2 px-4 rounded-md hover:bg-gray-100 transition-colors"
+              >
+                Search Bizzigo
+              </button>
+              <button
+                onClick={() => {
+                  setSearchTerm('Popular services');
+                  handleSearch('Popular services');
+                }}
+                className="bg-gray-50 text-sm text-gray-700 py-2 px-4 rounded-md hover:bg-gray-100 transition-colors"
+              >
+                I'm Feeling Lucky
+              </button>
+            </div>
           </div>
         </div>
       ) : (
