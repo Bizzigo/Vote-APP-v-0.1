@@ -1,4 +1,3 @@
-
 export type Role = 'admin' | 'visitor';
 export type SubscriptionPlan = 'startup' | 'enterprise';
 
@@ -11,6 +10,8 @@ export interface User {
   votedFor?: string;
   subscriptionPlan?: SubscriptionPlan;
   subscriptionStatus?: 'active' | 'canceled' | 'past_due';
+  profileCompleted?: boolean;
+  provider?: 'google' | 'facebook' | 'email';
 }
 
 export interface Vendor {
@@ -54,6 +55,8 @@ export interface AuthContextType {
   voteForCandidate: (candidateId: string) => void;
   isLoggedIn: boolean;
   isAdmin: boolean;
+  updateUser: (userUpdates: Partial<User>) => void;
+  completeProfile: (profileData: any) => void;
 }
 
 export interface SubscriptionFeature {

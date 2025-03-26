@@ -4,6 +4,7 @@ import { User, AuthContextType } from '@/lib/types';
 import { mockVisitorUser, mockAdminUser } from '@/lib/mockData';
 import { useToast } from "@/hooks/use-toast";
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -12,14 +13,21 @@ const SUPERADMIN_EMAIL = 'girts.kizenbahs@gmail.com';
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const { toast: uiToast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check for saved user in localStorage
     const savedUser = localStorage.getItem('votingAppUser');
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      const parsedUser = JSON.parse(savedUser);
+      setUser(parsedUser);
+      
+      // Check if profile needs to be completed and redirect if necessary
+      if (parsedUser && !parsedUser.profileCompleted) {
+        navigate('/profile');
+      }
     }
-  }, []);
+  }, [navigate]);
 
   const login = (email: string, provider: string) => {
     // Check if the user is the superadmin
@@ -28,20 +36,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       ...mockAdminUser, 
       email: SUPERADMIN_EMAIL, 
       name: 'Super Admin',
-    } : mockVisitorUser;
-    
-    // Override the email if not superadmin
-    if (!isSuperAdmin) {
-      newUser.email = email;
-    }
+      provider: provider as 'google' | 'facebook' | 'email',
+      profileCompleted: true
+    } : {
+      ...mockVisitorUser,
+      email,
+      provider: provider as 'google' | 'facebook' | 'email',
+      profileCompleted: false
+    };
     
     // In a real app, this would be an API call
     setUser(newUser);
     localStorage.setItem('votingAppUser', JSON.stringify(newUser));
     
     // Use the Sonner toast for login notification
-    toast.success("Welcome back!", {
-      description: `You've successfully logged in as ${newUser.name}`,
+    toast.success("Welcome!", {
+      description: `You've successfully logged in with ${provider}`,
+    });
+    
+    // If profile is not completed, redirect to profile page
+    if (!newUser.profileCompleted) {
+      toast.info("Complete your profile", {
+        description: "Please complete your vendor profile to get started",
+      });
+      navigate('/profile');
+    }
+  };
+
+  const updateUser = (userUpdates: Partial<User>) => {
+    if (!user) return;
+    
+    const updatedUser = {
+      ...user,
+      ...userUpdates
+    };
+    
+    setUser(updatedUser);
+    localStorage.setItem('votingAppUser', JSON.stringify(updatedUser));
+  };
+
+  const completeProfile = (profileData: any) => {
+    if (!user) return;
+    
+    const updatedUser = {
+      ...user,
+      ...profileData,
+      profileCompleted: true
+    };
+    
+    setUser(updatedUser);
+    localStorage.setItem('votingAppUser', JSON.stringify(updatedUser));
+    
+    toast.success("Profile completed", {
+      description: "Your vendor profile has been successfully set up!",
     });
   };
 
@@ -94,6 +141,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     voteForCandidate,
     isLoggedIn,
     isAdmin,
+    updateUser,
+    completeProfile
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

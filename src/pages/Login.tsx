@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -8,20 +8,31 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from 'sonner';
 
 const Login = () => {
-  const { login, isLoggedIn } = useAuth();
+  const { login, isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
 
   // Redirect if already logged in
-  React.useEffect(() => {
+  useEffect(() => {
     if (isLoggedIn) {
-      navigate('/profile');
+      // If profile is not completed, redirect to profile page
+      if (user && !user.profileCompleted) {
+        navigate('/profile');
+      } else {
+        navigate('/');
+      }
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, user]);
 
   const handleSocialLogin = (provider: string) => {
-    // In a real app, this would initiate OAuth flow
-    login(`user@example.com`, provider);
-    navigate('/profile');
+    // In a real app, this would initiate OAuth flow with the actual provider
+    try {
+      login(`user_${Math.floor(Math.random() * 10000)}@example.com`, provider);
+    } catch (error) {
+      toast.error("Login failed", {
+        description: "There was a problem with the login process. Please try again.",
+      });
+      console.error("Login error:", error);
+    }
   };
 
   return (
@@ -70,23 +81,43 @@ const Login = () => {
                 className="w-full flex items-center justify-center gap-2"
                 onClick={() => handleSocialLogin('facebook')}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-blue-600">
                   <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
                 </svg>
                 Sign in with Facebook
               </Button>
             </div>
-          </CardContent>
-          
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-center text-sm">
-              <p className="text-muted-foreground">
-                Don't have an account?{" "}
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t"></span>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">Or</span>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">
+                Need a vendor account?{" "}
                 <Link to="/signup" className="text-primary hover:underline">
-                  Sign up
+                  Sign up here
                 </Link>
               </p>
             </div>
+          </CardContent>
+          
+          <CardFooter className="flex flex-col space-y-4">
+            <p className="text-center text-xs text-muted-foreground">
+              By continuing, you agree to our{" "}
+              <Link to="/terms" className="underline hover:text-primary">
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link to="/privacy" className="underline hover:text-primary">
+                Privacy Policy
+              </Link>
+            </p>
             
             <p className="text-center text-xs text-muted-foreground">
               This is a demo app. No real authentication is implemented.
