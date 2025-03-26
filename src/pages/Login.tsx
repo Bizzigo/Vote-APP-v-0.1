@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { Facebook, Github, Twitter } from 'lucide-react';
 
 const Login = () => {
   const { isLoggedIn, user } = useAuth();
@@ -35,27 +36,27 @@ const Login = () => {
     }
   }, [isLoggedIn, navigate, user]);
 
-  const handleGoogleLogin = async () => {
+  const handleSocialLogin = async (provider: 'google' | 'facebook' | 'twitter' | 'github') => {
     try {
-      console.log('Initiating Google login...');
+      console.log(`Initiating ${provider} login...`);
       const redirectTo = `${window.location.origin}/auth/callback`;
       console.log('Redirect URL:', redirectTo);
       
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider,
         options: {
           redirectTo: redirectTo
         }
       });
 
       if (error) {
-        console.error("Google login error:", error);
+        console.error(`${provider} login error:`, error);
         toast.error("Login failed", {
-          description: error.message || "There was a problem with the Google login process",
+          description: error.message || `There was a problem with the ${provider} login process`,
         });
       } else {
-        toast.info("Redirecting to Google", {
-          description: "Please wait while we redirect you to Google for authentication"
+        toast.info(`Redirecting to ${provider}`, {
+          description: `Please wait while we redirect you to ${provider} for authentication`
         });
       }
     } catch (error) {
@@ -82,7 +83,7 @@ const Login = () => {
               <Button 
                 variant="outline"
                 className="w-full flex items-center justify-center gap-2"
-                onClick={handleGoogleLogin}
+                onClick={() => handleSocialLogin('google')}
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                   <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
@@ -105,6 +106,33 @@ const Login = () => {
                   </g>
                 </svg>
                 Sign in with Google
+              </Button>
+              
+              <Button 
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2 bg-[#1877F2]/10 hover:bg-[#1877F2]/20"
+                onClick={() => handleSocialLogin('facebook')}
+              >
+                <Facebook size={20} className="text-[#1877F2]" />
+                Sign in with Facebook
+              </Button>
+              
+              <Button 
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2 bg-[#000000]/10 hover:bg-[#000000]/20"
+                onClick={() => handleSocialLogin('github')}
+              >
+                <Github size={20} />
+                Sign in with GitHub
+              </Button>
+              
+              <Button 
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20"
+                onClick={() => handleSocialLogin('twitter')}
+              >
+                <Twitter size={20} className="text-[#1DA1F2]" />
+                Sign in with X
               </Button>
             </div>
             

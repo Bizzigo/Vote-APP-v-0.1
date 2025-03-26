@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { Facebook, Github, Twitter } from 'lucide-react';
 
 const Signup = () => {
   const { isLoggedIn, user } = useAuth();
@@ -32,10 +33,10 @@ const Signup = () => {
     }
   }, [isLoggedIn, navigate, user]);
 
-  const handleGoogleSignup = async () => {
+  const handleSocialSignup = async (provider: 'google' | 'facebook' | 'twitter' | 'github') => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider,
         options: {
           redirectTo: window.location.origin + '/auth/callback'
         }
@@ -43,7 +44,7 @@ const Signup = () => {
       
       if (error) {
         toast.error("Signup failed", {
-          description: error.message || "There was a problem with the signup process",
+          description: error.message || `There was a problem with the ${provider} signup process`,
         });
         console.error("Signup error:", error);
       }
@@ -60,14 +61,14 @@ const Signup = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm p-6 rounded-md mb-8">
           <h1 className="text-3xl font-bold">Create Your Vendor Account</h1>
-          <p className="text-muted-foreground mt-2">Sign up with Google to get started</p>
+          <p className="text-muted-foreground mt-2">Sign up with your preferred social account to get started</p>
         </div>
         
         <Card className="shadow-sm border-border/40">
           <CardHeader>
             <CardTitle>Create an Account</CardTitle>
             <CardDescription>
-              Sign up with Google to create your vendor account
+              Sign up with your preferred method to create your vendor account
             </CardDescription>
           </CardHeader>
           
@@ -78,7 +79,7 @@ const Signup = () => {
               </p>
               
               <Button 
-                onClick={handleGoogleSignup}
+                onClick={() => handleSocialSignup('google')}
                 className="w-full max-w-md flex items-center justify-center gap-2"
                 variant="outline"
               >
@@ -103,6 +104,33 @@ const Signup = () => {
                   </g>
                 </svg>
                 Sign up with Google
+              </Button>
+              
+              <Button 
+                onClick={() => handleSocialSignup('facebook')}
+                className="w-full max-w-md flex items-center justify-center gap-2 bg-[#1877F2]/10 hover:bg-[#1877F2]/20"
+                variant="outline"
+              >
+                <Facebook size={20} className="text-[#1877F2]" />
+                Sign up with Facebook
+              </Button>
+              
+              <Button 
+                onClick={() => handleSocialSignup('github')}
+                className="w-full max-w-md flex items-center justify-center gap-2 bg-[#000000]/10 hover:bg-[#000000]/20"
+                variant="outline"
+              >
+                <Github size={20} />
+                Sign up with GitHub
+              </Button>
+              
+              <Button 
+                onClick={() => handleSocialSignup('twitter')}
+                className="w-full max-w-md flex items-center justify-center gap-2 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20"
+                variant="outline"
+              >
+                <Twitter size={20} className="text-[#1DA1F2]" />
+                Sign up with X
               </Button>
             </div>
           </CardContent>
