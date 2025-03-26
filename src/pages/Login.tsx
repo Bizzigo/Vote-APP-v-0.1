@@ -8,11 +8,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { Facebook, Github, Twitter } from 'lucide-react';
+import { useLanguage } from '@/providers/LanguageProvider';
 
 const Login = () => {
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { t } = useLanguage();
   
   // Check for error parameter in URL
   useEffect(() => {
@@ -72,9 +74,9 @@ const Login = () => {
       <div className="container max-w-md mx-auto py-12">
         <Card className="animate-scale-in">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">{t("welcomeBack") || "Welcome Back"}</CardTitle>
             <CardDescription className="text-center">
-              Sign in to continue to the Vendor Directory
+              {t("signInToContinue") || "Sign in to continue to the Vendor Directory"}
             </CardDescription>
           </CardHeader>
           
@@ -105,42 +107,42 @@ const Login = () => {
                     />
                   </g>
                 </svg>
-                Sign in with Google
+                {t("signInWithGoogle") || "Sign in with Google"}
               </Button>
               
               <Button 
                 variant="outline"
-                className="w-full flex items-center justify-center gap-2 bg-[#1877F2]/10 hover:bg-[#1877F2]/20"
+                className="w-full flex items-center justify-center gap-2"
                 onClick={() => handleSocialLogin('facebook')}
               >
                 <Facebook size={20} className="text-[#1877F2]" />
-                Sign in with Facebook
+                {t("signInWithFacebook") || "Sign in with Facebook"}
               </Button>
               
               <Button 
                 variant="outline"
-                className="w-full flex items-center justify-center gap-2 bg-[#000000]/10 hover:bg-[#000000]/20"
+                className="w-full flex items-center justify-center gap-2"
                 onClick={() => handleSocialLogin('github')}
               >
                 <Github size={20} />
-                Sign in with GitHub
+                {t("signInWithGithub") || "Sign in with GitHub"}
               </Button>
               
               <Button 
                 variant="outline"
-                className="w-full flex items-center justify-center gap-2 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20"
+                className="w-full flex items-center justify-center gap-2"
                 onClick={() => handleSocialLogin('twitter')}
               >
                 <Twitter size={20} className="text-[#1DA1F2]" />
-                Sign in with X
+                {t("signInWithX") || "Sign in with X"}
               </Button>
             </div>
             
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
-                Need a vendor account?{" "}
+                {t("needVendorAccount") || "Need a vendor account?"}{" "}
                 <Link to="/signup" className="text-primary hover:underline">
-                  Sign up here
+                  {t("signUpHere") || "Sign up here"}
                 </Link>
               </p>
             </div>
@@ -148,13 +150,13 @@ const Login = () => {
           
           <CardFooter className="flex flex-col space-y-4">
             <p className="text-center text-xs text-muted-foreground">
-              By continuing, you agree to our{" "}
+              {t("byContinuing") || "By continuing, you agree to our"}{" "}
               <Link to="/terms" className="underline hover:text-primary">
-                Terms of Service
+                {t("termsOfService") || "Terms of Service"}
               </Link>{" "}
-              and{" "}
+              {t("and") || "and"}{" "}
               <Link to="/privacy" className="underline hover:text-primary">
-                Privacy Policy
+                {t("privacyPolicy") || "Privacy Policy"}
               </Link>
             </p>
           </CardFooter>

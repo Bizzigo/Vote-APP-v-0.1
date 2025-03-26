@@ -15,11 +15,13 @@ import {
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { Facebook, Github, Twitter } from 'lucide-react';
+import { useLanguage } from '@/providers/LanguageProvider';
 
 const Signup = () => {
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState('startup');
+  const { t } = useLanguage();
 
   // Redirect if already logged in
   useEffect(() => {
@@ -60,22 +62,22 @@ const Signup = () => {
     <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm p-6 rounded-md mb-8">
-          <h1 className="text-3xl font-bold">Create Your Vendor Account</h1>
-          <p className="text-muted-foreground mt-2">Sign up with your preferred social account to get started</p>
+          <h1 className="text-3xl font-bold">{t("createVendorAccount") || "Create Your Vendor Account"}</h1>
+          <p className="text-muted-foreground mt-2">{t("signUpPreferredSocial") || "Sign up with your preferred social account to get started"}</p>
         </div>
         
         <Card className="shadow-sm border-border/40">
           <CardHeader>
-            <CardTitle>Create an Account</CardTitle>
+            <CardTitle>{t("createAccount") || "Create an Account"}</CardTitle>
             <CardDescription>
-              Sign up with your preferred method to create your vendor account
+              {t("signUpMethod") || "Sign up with your preferred method to create your vendor account"}
             </CardDescription>
           </CardHeader>
           
           <CardContent className="space-y-6">
             <div className="flex flex-col items-center justify-center space-y-4">
               <p className="text-center text-muted-foreground">
-                Create an account to register your business in our directory. After signing up, you'll be able to complete your vendor profile.
+                {t("createAccountInfo") || "Create an account to register your business in our directory. After signing up, you'll be able to complete your vendor profile."}
               </p>
               
               <Button 
@@ -103,54 +105,54 @@ const Signup = () => {
                     />
                   </g>
                 </svg>
-                Sign up with Google
+                {t("signUpWithGoogle") || "Sign up with Google"}
               </Button>
               
               <Button 
                 onClick={() => handleSocialSignup('facebook')}
-                className="w-full max-w-md flex items-center justify-center gap-2 bg-[#1877F2]/10 hover:bg-[#1877F2]/20"
+                className="w-full max-w-md flex items-center justify-center gap-2"
                 variant="outline"
               >
                 <Facebook size={20} className="text-[#1877F2]" />
-                Sign up with Facebook
+                {t("signUpWithFacebook") || "Sign up with Facebook"}
               </Button>
               
               <Button 
                 onClick={() => handleSocialSignup('github')}
-                className="w-full max-w-md flex items-center justify-center gap-2 bg-[#000000]/10 hover:bg-[#000000]/20"
+                className="w-full max-w-md flex items-center justify-center gap-2"
                 variant="outline"
               >
                 <Github size={20} />
-                Sign up with GitHub
+                {t("signUpWithGithub") || "Sign up with GitHub"}
               </Button>
               
               <Button 
                 onClick={() => handleSocialSignup('twitter')}
-                className="w-full max-w-md flex items-center justify-center gap-2 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20"
+                className="w-full max-w-md flex items-center justify-center gap-2"
                 variant="outline"
               >
                 <Twitter size={20} className="text-[#1DA1F2]" />
-                Sign up with X
+                {t("signUpWithX") || "Sign up with X"}
               </Button>
             </div>
           </CardContent>
           
           <CardFooter className="flex flex-col space-y-4">
             <p className="text-center text-sm">
-              Already have an account?{" "}
+              {t("alreadyHaveAccount") || "Already have an account?"}{" "}
               <Link to="/login" className="text-primary hover:underline">
-                Log in
+                {t("logIn") || "Log in"}
               </Link>
             </p>
             
             <p className="text-center text-xs text-muted-foreground">
-              By continuing, you agree to our{" "}
+              {t("byContinuing") || "By continuing, you agree to our"}{" "}
               <Link to="/terms" className="underline hover:text-primary">
-                Terms of Service
+                {t("termsOfService") || "Terms of Service"}
               </Link>{" "}
-              and{" "}
+              {t("and") || "and"}{" "}
               <Link to="/privacy" className="underline hover:text-primary">
-                Privacy Policy
+                {t("privacyPolicy") || "Privacy Policy"}
               </Link>
             </p>
           </CardFooter>

@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'lv';
@@ -65,11 +64,104 @@ export const translations: Translations = {
   // Toast message
   "noVendorsFoundTitle": {
     en: "No vendors found",
-    lv: "Nav atrasts neviens pakalpojumu sniedzējs"
+    lv: "Nav atrasts neviens pakalpojuma sniedzējs"
   },
   "returningToHome": {
     en: "Returning to home page in 3 seconds...",
     lv: "Atgriežamies uz sākumlapu pēc 3 sekundēm..."
+  },
+  // Login/Signup pages
+  "welcomeBack": {
+    en: "Welcome Back",
+    lv: "Sveicināti Atpakaļ"
+  },
+  "signInToContinue": {
+    en: "Sign in to continue to the Vendor Directory",
+    lv: "Ielogojieties, lai turpinātu darbu ar sniedzēju katalogu"
+  },
+  "signInWithGoogle": {
+    en: "Sign in with Google",
+    lv: "Ielogoties ar Google"
+  },
+  "signInWithFacebook": {
+    en: "Sign in with Facebook",
+    lv: "Ielogoties ar Facebook"
+  },
+  "signInWithGithub": {
+    en: "Sign in with GitHub",
+    lv: "Ielogoties ar GitHub"
+  },
+  "signInWithX": {
+    en: "Sign in with X",
+    lv: "Ielogoties ar X"
+  },
+  "signUpWithGoogle": {
+    en: "Sign up with Google",
+    lv: "Reģistrēties ar Google"
+  },
+  "signUpWithFacebook": {
+    en: "Sign up with Facebook",
+    lv: "Reģistrēties ar Facebook"
+  },
+  "signUpWithGithub": {
+    en: "Sign up with GitHub",
+    lv: "Reģistrēties ar GitHub"
+  },
+  "signUpWithX": {
+    en: "Sign up with X",
+    lv: "Reģistrēties ar X"
+  },
+  "needVendorAccount": {
+    en: "Need a vendor account?",
+    lv: "Nepieciešams sniedzēja konts?"
+  },
+  "signUpHere": {
+    en: "Sign up here",
+    lv: "Reģistrējieties šeit"
+  },
+  "byContinuing": {
+    en: "By continuing, you agree to our",
+    lv: "Turpinot, jūs piekrītat mūsu"
+  },
+  "termsOfService": {
+    en: "Terms of Service",
+    lv: "Pakalpojumu Sniegšanas Noteikumiem"
+  },
+  "and": {
+    en: "and",
+    lv: "un"
+  },
+  "privacyPolicy": {
+    en: "Privacy Policy",
+    lv: "Privātuma Politikai"
+  },
+  "createVendorAccount": {
+    en: "Create Your Vendor Account",
+    lv: "Izveidojiet Savu Sniedzēja Kontu"
+  },
+  "signUpPreferredSocial": {
+    en: "Sign up with your preferred social account to get started",
+    lv: "Reģistrējieties ar savu vēlamo sociālo kontu, lai sāktu"
+  },
+  "createAccount": {
+    en: "Create an Account",
+    lv: "Izveidot Kontu"
+  },
+  "signUpMethod": {
+    en: "Sign up with your preferred method to create your vendor account",
+    lv: "Reģistrējieties ar vēlamo metodi, lai izveidotu sniedzēja kontu"
+  },
+  "createAccountInfo": {
+    en: "Create an account to register your business in our directory. After signing up, you'll be able to complete your vendor profile.",
+    lv: "Izveidojiet kontu, lai reģistrētu savu uzņēmumu mūsu katalogā. Pēc reģistrēšanās varēsiet aizpildīt sniedzēja profilu."
+  },
+  "alreadyHaveAccount": {
+    en: "Already have an account?",
+    lv: "Jau ir konts?"
+  },
+  "logIn": {
+    en: "Log in",
+    lv: "Ienākt"
   }
 };
 

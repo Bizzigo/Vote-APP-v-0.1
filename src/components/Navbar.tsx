@@ -83,20 +83,12 @@ const Navbar: React.FC = () => {
               </button>
             </div>
             
-            {/* Language options in mobile menu */}
+            {/* Language options in mobile menu - Fixed to use LanguageSwitcher directly */}
             <div className="flex items-center justify-between py-2 border-t border-border">
-              <Link to="#" onClick={(e) => {
-                e.preventDefault();
-                const languageSwitcher = document.querySelector('#languageSwitcher');
-                if (languageSwitcher instanceof HTMLElement) {
-                  languageSwitcher.click();
-                }
-              }} className="flex items-center gap-2 text-base text-muted-foreground">
+              <div className="text-base text-muted-foreground">
                 <span>Language / Valoda</span>
-              </Link>
-              <div className="hidden">
-                <LanguageSwitcher />
               </div>
+              <LanguageSwitcher />
             </div>
             
             {isLoggedIn ? <>
