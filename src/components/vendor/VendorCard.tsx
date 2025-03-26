@@ -20,7 +20,7 @@ const VendorCard: React.FC<VendorCardProps> = ({
   vendor, 
   distance = null,
   isDirty = false,
-  showContactMethods = true // Changed default to true
+  showContactMethods = true
 }) => {
   const vendorNameSlug = vendor.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   
@@ -42,8 +42,8 @@ const VendorCard: React.FC<VendorCardProps> = ({
     <Card className={`overflow-hidden transition-all duration-200 ${isDirty ? 'border-primary/50' : ''}`}>
       <CardContent className="p-0">
         <Link to={`/vendor/${vendorNameSlug}`} className="flex flex-col sm:flex-row items-stretch">
-          {/* Logo part */}
-          <div className="relative overflow-hidden bg-muted sm:w-48 flex-shrink-0" style={{ height: '150px' }}>
+          {/* Logo part - increased size and improved fitting */}
+          <div className="relative overflow-hidden bg-muted sm:w-56 flex-shrink-0" style={{ height: '180px' }}>
             <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent z-10" />
             <Avatar className="h-full w-full rounded-none">
               <AvatarImage 

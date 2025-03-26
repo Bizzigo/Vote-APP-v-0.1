@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -94,8 +95,8 @@ const Index = () => {
     <Layout>
       {!hasSearched ? (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
-          <div className="text-center mb-12 max-w-3xl mx-auto">
-            <p className="text-muted-foreground max-w-xl mt-3 animate-fade-in text-lg mx-0 my-0 mb-14">
+          <div className="text-center mb-6 max-w-3xl mx-auto">
+            <p className="text-muted-foreground max-w-xl mt-3 animate-fade-in text-lg mx-0 my-0 mb-4">
               Te ir uzticami un profesionāli pakalpojumu sniedzēji. JĀ, atrodi savu!
             </p>
           </div>

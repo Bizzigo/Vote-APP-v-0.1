@@ -32,14 +32,14 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
   return (
     <div className="w-full bg-white dark:bg-card animate-scale-in border border-border/40 shadow-sm p-6 rounded-lg mb-8">
       <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
-        {/* Vendor logo */}
-        <Avatar className="h-32 w-32 rounded-lg border border-border/40 shadow-sm">
+        {/* Vendor logo - increased size */}
+        <Avatar className="h-40 w-40 rounded-lg border border-border/40 shadow-sm">
           <AvatarImage 
             src={vendor.logo || placeholderImage} 
             alt={vendor.name} 
             className="object-cover"
           />
-          <AvatarFallback className="rounded-lg bg-secondary text-2xl">{vendor.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+          <AvatarFallback className="rounded-lg bg-secondary text-3xl">{vendor.name.substring(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
         
         {/* Vendor info */}

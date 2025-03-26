@@ -38,7 +38,17 @@ const App = () => {
               <LocationProvider>
                 <TooltipWrapper>
                   <Toaster />
-                  <Sonner position="top-right" />
+                  <Sonner 
+                    position="bottom-center" 
+                    toastOptions={{
+                      classNames: {
+                        toast: "animate-[slide-in-from-bottom_0.2s_ease-out,fade-in_0.2s_ease-out]",
+                        title: "font-semibold text-lg",
+                        description: "text-sm text-muted-foreground"
+                      },
+                      duration: 3000
+                    }}
+                  />
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/login" element={<Login />} />
