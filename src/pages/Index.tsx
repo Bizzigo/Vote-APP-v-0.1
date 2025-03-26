@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -123,9 +124,11 @@ const Index = () => {
             />
           </div>
           
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold">{t("searchResults")}</h2>
-          </div>
+          {filteredVendors.length > 0 && (
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold">{t("searchResults")}</h2>
+            </div>
+          )}
           
           {filteredVendors.length === 0 ? (
             <div className="text-center py-4">
