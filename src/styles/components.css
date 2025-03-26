@@ -1,0 +1,18 @@
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors;
+  }
+  
+  .section-title {
+    @apply text-2xl font-semibold mb-6 text-foreground;
+  }
+  
+  .card-modern {
+    @apply bg-card border border-border/40 shadow-sm rounded-lg p-6 card-hover;
+  }
+}

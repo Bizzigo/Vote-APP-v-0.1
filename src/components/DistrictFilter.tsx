@@ -1,74 +1,54 @@
 
 import React from 'react';
-import { districts } from '@/lib/mockData';
+import { useLanguage } from '@/providers/LanguageProvider';
+import { mockVendors } from '@/lib/mockData';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Check } from 'lucide-react';
 
 interface DistrictFilterProps {
-  selectedDistricts: string[];
-  setSelectedDistricts: React.Dispatch<React.SetStateAction<string[]>>;
+  onDistrictSelect: (district: string) => void;
+  selectedDistrict: string | null;
 }
 
-const DistrictFilter: React.FC<DistrictFilterProps> = ({
-  selectedDistricts,
-  setSelectedDistricts,
-}) => {
-  const toggleDistrict = (district: string) => {
-    if (selectedDistricts.includes(district)) {
-      setSelectedDistricts(selectedDistricts.filter((d) => d !== district));
-    } else {
-      setSelectedDistricts([...selectedDistricts, district]);
+const DistrictFilter = ({ onDistrictSelect, selectedDistrict }: DistrictFilterProps) => {
+  const { t } = useLanguage();
+  
+  // Extract unique districts from vendors and count vendors in each district
+  const districtCounts = mockVendors.reduce((acc, vendor) => {
+    if (vendor.district) {
+      acc[vendor.district] = (acc[vendor.district] || 0) + 1;
     }
-  };
-
-  const selectAll = () => {
-    setSelectedDistricts([...districts]);
-  };
-
-  const clearAll = () => {
-    setSelectedDistricts([]);
-  };
-
+    return acc;
+  }, {} as Record<string, number>);
+  
+  // Convert to array and sort alphabetically
+  const districts = Object.keys(districtCounts).sort();
+  
   return (
-    <div className="mb-6 md:mb-0">
-      <h3 className="text-lg font-medium mb-3">Filter by District</h3>
-      <div className="space-y-2">
-        {districts.map((district) => (
-          <div
-            key={district}
-            className="flex items-center"
-          >
+    <div>
+      <h4 className="font-medium mb-2">{t("districts")}</h4>
+      <ScrollArea className="h-40">
+        <div className="space-y-1">
+          {districts.map((district) => (
             <button
-              onClick={() => toggleDistrict(district)}
-              className={`flex items-center space-x-2 px-3 py-2 w-full hover:bg-secondary/70 transition-colors ${
-                selectedDistricts.includes(district) ? 'bg-secondary' : 'bg-transparent'
+              key={district}
+              onClick={() => onDistrictSelect(district)}
+              className={`w-full text-left px-2 py-1.5 rounded-md text-sm flex justify-between items-center ${
+                selectedDistrict === district 
+                  ? 'bg-primary/10 text-primary font-medium' 
+                  : 'hover:bg-secondary'
               }`}
             >
-              <div className={`w-5 h-5 flex items-center justify-center border ${
-                selectedDistricts.includes(district) 
-                  ? 'border-primary bg-primary text-primary-foreground' 
-                  : 'border-muted-foreground'
-              }`}>
-                {selectedDistricts.includes(district) && <Check className="h-3.5 w-3.5" />}
-              </div>
-              <span className="text-sm">{district} District</span>
+              <span className="line-clamp-1">{district}</span>
+              {selectedDistrict === district ? (
+                <Check size={16} className="text-primary flex-shrink-0" />
+              ) : (
+                <span className="text-xs text-muted-foreground">{districtCounts[district]}</span>
+              )}
             </button>
-          </div>
-        ))}
-      </div>
-      <div className="flex space-x-2 mt-4">
-        <button
-          onClick={selectAll}
-          className="text-xs px-3 py-1 bg-secondary hover:bg-secondary/70 transition-colors"
-        >
-          Select All
-        </button>
-        <button
-          onClick={clearAll}
-          className="text-xs px-3 py-1 bg-secondary hover:bg-secondary/70 transition-colors"
-        >
-          Clear All
-        </button>
-      </div>
+          ))}
+        </div>
+      </ScrollArea>
     </div>
   );
 };

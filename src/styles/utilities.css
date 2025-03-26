@@ -1,0 +1,44 @@
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-sm;
+  }
+  
+  .glass-dark {
+    @apply bg-[#1E293B]/50 backdrop-blur-md border border-[#1E293B]/80 shadow-md;
+  }
+  
+  .animation-delay-150 {
+    animation-delay: 150ms;
+  }
+  
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+  
+  .clip-path-slant {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+  }
+
+  .typewriter {
+    overflow: hidden;
+    display: inline-block;
+    width: fit-content;
+  }
+  
+  .hero-gradient {
+    background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-md hover:border-primary/20;
+  }
+}

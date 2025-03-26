@@ -1,0 +1,56 @@
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes searchPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+    border-color: rgba(59, 130, 246, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0);
+    border-color: rgba(59, 130, 246, 1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    border-color: rgba(59, 130, 246, 0.6);
+  }
+}
+
+@keyframes enhancedSearchPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.175);
+    border-color: rgba(37, 99, 235, 0.9);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.05);
+    border-color: rgba(37, 99, 235, 1);
+    transform: scale(1.00375);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    border-color: rgba(37, 99, 235, 0.9);
+    transform: scale(1);
+  }
+}
+
+@layer utilities {
+  .search-pulse-animation {
+    @apply border border-blue-500 relative;
+    animation: searchPulse 3s infinite ease-in-out;
+  }
+  
+  .enhanced-search-pulse-animation {
+    @apply border-2 border-blue-600 relative;
+    animation: enhancedSearchPulse 2s infinite ease-in-out;
+  }
+  
+  .animate-typing-no-blink {
+    animation: typing 2.5s steps(40) forwards;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+  }
+}
