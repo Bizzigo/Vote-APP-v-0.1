@@ -1,5 +1,6 @@
 
 export type Role = 'admin' | 'visitor';
+export type SubscriptionPlan = 'hobby' | 'freelancer' | 'startup' | 'enterprise';
 
 export interface User {
   id: string;
@@ -8,6 +9,8 @@ export interface User {
   role: Role;
   hasVoted: boolean;
   votedFor?: string;
+  subscriptionPlan?: SubscriptionPlan;
+  subscriptionStatus?: 'active' | 'canceled' | 'past_due';
 }
 
 export interface Vendor {
@@ -23,6 +26,15 @@ export interface Vendor {
     lng: number;
   };
   keywords?: string[]; // Added keywords field
+  phone?: string;
+  email?: string;
+  website?: string;
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+  };
 }
 
 export interface Candidate {
@@ -42,4 +54,17 @@ export interface AuthContextType {
   voteForCandidate: (candidateId: string) => void;
   isLoggedIn: boolean;
   isAdmin: boolean;
+}
+
+export interface SubscriptionFeature {
+  name: string;
+  included: boolean;
+}
+
+export interface SubscriptionOption {
+  id: SubscriptionPlan;
+  name: string;
+  price: number;
+  features: SubscriptionFeature[];
+  isPopular?: boolean;
 }

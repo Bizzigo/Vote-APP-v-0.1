@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, AuthContextType } from '@/lib/types';
 import { mockVisitorUser, mockAdminUser } from '@/lib/mockData';
 import { useToast } from "@/hooks/use-toast";
+import { toast } from 'sonner';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -10,7 +11,7 @@ const SUPERADMIN_EMAIL = 'girts.kizenbahs@gmail.com';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const { toast } = useToast();
+  const { toast: uiToast } = useToast();
 
   useEffect(() => {
     // Check for saved user in localStorage
@@ -29,21 +30,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       name: 'Super Admin',
     } : mockVisitorUser;
     
+    // Override the email if not superadmin
+    if (!isSuperAdmin) {
+      newUser.email = email;
+    }
+    
     // In a real app, this would be an API call
     setUser(newUser);
     localStorage.setItem('votingAppUser', JSON.stringify(newUser));
-    toast({
-      title: "Welcome back!",
-      description: `Welcome back, ${newUser.name}!`,
+    
+    // Use the Sonner toast for login notification
+    toast.success("Welcome back!", {
+      description: `You've successfully logged in as ${newUser.name}`,
     });
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('votingAppUser');
-    toast({
-      title: "Logged out",
-      description: "You have been logged out.",
+    
+    // Use the Sonner toast for logout notification
+    toast.success("Logged out", {
+      description: "You have been logged out successfully.",
     });
   };
 
@@ -51,7 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
     
     if (user.hasVoted) {
-      toast({
+      uiToast({
         title: "Vote failed",
         description: "You have already voted!",
         variant: "destructive",
@@ -68,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     setUser(updatedUser);
     localStorage.setItem('votingAppUser', JSON.stringify(updatedUser));
-    toast({
+    uiToast({
       title: "Vote recorded",
       description: "Your vote has been recorded!",
     });

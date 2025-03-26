@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import Layout from '@/components/Layout';
@@ -31,9 +30,11 @@ import {
   Hash,
   CreditCard,
   Wallet,
-  BanknoteIcon
+  BanknoteIcon,
+  CheckCircle2
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SubscriptionPlans } from '@/components/subscription/SubscriptionPlans';
 
 const formSchema = z.object({
   // Business info
@@ -69,6 +70,8 @@ const UserProfile = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [avatar, setAvatar] = useState(placeholderImage);
+  const [activeTab, setActiveTab] = useState("business");
+  const [subscriptionPlan, setSubscriptionPlan] = useState("startup");
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -83,7 +86,7 @@ const UserProfile = () => {
       
       // Contact info
       email: user?.email || "",
-      phone: "+371 20000000",
+      phone: "+371 20 000 000",
       city: "Riga",
       website: "https://example.com",
       facebook: "vendor_profile",
@@ -122,6 +125,10 @@ const UserProfile = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleChangePlan = () => {
+    setActiveTab("subscription");
   };
 
   if (!user) {
@@ -178,6 +185,31 @@ const UserProfile = () => {
                     {user.role === 'admin' ? 'Administrator' : 'Vendor'}
                   </Badge>
                 </div>
+                
+                <div className="w-full pt-4 border-t border-border">
+                  <h3 className="font-medium mb-2">Current Plan</h3>
+                  <div className="bg-muted/50 p-3 rounded-md">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-medium">{subscriptionPlan === 'hobby' ? 'Hobby' : 
+                        subscriptionPlan === 'freelancer' ? 'Freelancer' : 
+                        subscriptionPlan === 'startup' ? 'Startup' : 'Enterprise'}</span>
+                      <Badge variant="secondary">Active</Badge>
+                    </div>
+                    <div className="text-sm text-muted-foreground mb-2">
+                      {subscriptionPlan === 'hobby' ? '$19/month' : 
+                       subscriptionPlan === 'freelancer' ? '$29/month' : 
+                       subscriptionPlan === 'startup' ? '$59/month' : '$99/month'}
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={handleChangePlan}
+                    >
+                      Change Plan
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -190,12 +222,13 @@ const UserProfile = () => {
               <CardContent>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <Tabs defaultValue="business" className="w-full">
-                      <TabsList className="grid grid-cols-4 mb-4">
+                    <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
+                      <TabsList className="grid grid-cols-5 mb-4">
                         <TabsTrigger value="business">Business</TabsTrigger>
                         <TabsTrigger value="contact">Contact</TabsTrigger>
                         <TabsTrigger value="payment">Payment</TabsTrigger>
                         <TabsTrigger value="services">Services</TabsTrigger>
+                        <TabsTrigger value="subscription">Subscription</TabsTrigger>
                       </TabsList>
                       
                       <TabsContent value="business" className="space-y-4">
@@ -593,12 +626,42 @@ const UserProfile = () => {
                           </div>
                         </div>
                       </TabsContent>
+                      
+                      <TabsContent value="subscription" className="space-y-4">
+                        <div className="mb-6">
+                          <h3 className="text-lg font-medium mb-3">Current Subscription</h3>
+                          <div className="bg-muted/40 p-4 rounded-md border border-border/40 mb-6">
+                            <div className="flex items-center gap-2 mb-2">
+                              <CheckCircle2 className="text-green-500 h-5 w-5" />
+                              <span className="font-medium">{subscriptionPlan === 'hobby' ? 'Hobby' : 
+                                subscriptionPlan === 'freelancer' ? 'Freelancer' : 
+                                subscriptionPlan === 'startup' ? 'Startup' : 'Enterprise'} Plan</span>
+                            </div>
+                            <div className="pl-7 space-y-1 text-sm text-muted-foreground">
+                              <p>Billing: Monthly</p>
+                              <p>Next payment: August 15, 2023</p>
+                              <p>Payment method: Visa ending in 4242</p>
+                            </div>
+                          </div>
+                          
+                          <h3 className="text-lg font-medium mb-3">Change Subscription Plan</h3>
+                          <SubscriptionPlans selectedPlan={subscriptionPlan} setSelectedPlan={setSubscriptionPlan} />
+                          
+                          <div className="mt-6 flex justify-end">
+                            <Button variant="default" className="font-medium">
+                              Update Subscription
+                            </Button>
+                          </div>
+                        </div>
+                      </TabsContent>
                     </Tabs>
                     
-                    <Button type="submit" className="w-full sm:w-auto flex items-center gap-2">
-                      <Save size={16} />
-                      Save Changes
-                    </Button>
+                    {activeTab !== "subscription" && (
+                      <Button type="submit" className="w-full sm:w-auto flex items-center gap-2">
+                        <Save size={16} />
+                        Save Changes
+                      </Button>
+                    )}
                   </form>
                 </Form>
               </CardContent>
