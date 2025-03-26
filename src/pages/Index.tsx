@@ -10,6 +10,7 @@ import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
 import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
+import { CheckCircle2, Clock, TrendingUp } from 'lucide-react';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -60,17 +61,17 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="bg-[#0F172A] text-white py-16 w-full px-4 sm:px-6 md:px-8 mb-6 left-0 right-0 box-border border-b border-[#1E293B]">
+      <div className="relative py-16 px-4 sm:px-6 md:px-8 mb-12 rounded-xl bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/10">
         <div className="text-center mb-8 max-w-3xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-4 mx-auto bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 mx-auto">
             Ideālo pakalpojumu sniedzēju katalogs
           </h1>
-          <p className="text-sm sm:text-base text-gray-400 max-w-xl mx-auto mt-3 animate-fade-in">
+          <p className="text-muted-foreground text-lg max-w-xl mx-auto mt-3 animate-fade-in">
             Vienkāršākais veids, kā atrast uzticamus un kvalificētus pakalpojumu sniedzējus Latvijā
           </p>
         </div>
         
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <SearchBar 
             searchTerm={searchTerm} 
             setSearchTerm={setSearchTerm} 
@@ -79,9 +80,47 @@ const Index = () => {
         </div>
       </div>
       
-      <div className="py-8 px-4 sm:px-6 md:px-8 w-full max-w-full">
+      <div className="py-8 w-full max-w-full">
         {!hasSearched && (
           <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <div className="bg-card border rounded-lg p-6 shadow-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-primary/10 p-2 rounded-full">
+                    <CheckCircle2 className="h-5 w-5 text-primary" />
+                  </div>
+                  <h2 className="font-medium text-lg">Verified Providers</h2>
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  All service providers in our directory are vetted and verified for quality and reliability.
+                </p>
+              </div>
+              
+              <div className="bg-card border rounded-lg p-6 shadow-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-primary/10 p-2 rounded-full">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                  </div>
+                  <h2 className="font-medium text-lg">Top Rated</h2>
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  Discover service providers with high satisfaction ratings from real customers.
+                </p>
+              </div>
+              
+              <div className="bg-card border rounded-lg p-6 shadow-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-primary/10 p-2 rounded-full">
+                    <Clock className="h-5 w-5 text-primary" />
+                  </div>
+                  <h2 className="font-medium text-lg">Quick Response</h2>
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  Our service providers are committed to responding to your inquiries within 24 hours.
+                </p>
+              </div>
+            </div>
+            
             <RecentVendors />
             <TopSearched />
             <CategoryCloud />
@@ -91,14 +130,14 @@ const Index = () => {
         {hasSearched && (
           <div className="mt-8">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">Search Results</h2>
+              <h2 className="text-2xl font-bold">Search Results</h2>
               {filteredVendors.length > 0 && (
                 <button 
                   onClick={() => {
                     setHasSearched(false);
                     setSearchTerm('');
                   }}
-                  className="text-sm text-indigo-400 hover:text-indigo-300"
+                  className="text-sm text-primary hover:text-primary/80"
                 >
                   Back to Explore
                 </button>
@@ -107,7 +146,7 @@ const Index = () => {
             
             {filteredVendors.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-400">
+                <p className="text-muted-foreground">
                   No vendors found. Try adjusting your search.
                 </p>
               </div>
