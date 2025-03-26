@@ -21,11 +21,13 @@ const VendorContactMethods: React.FC<VendorContactMethodsProps> = ({
   hasFacebook,
   hasWebsite
 }) => {
-  // Generate random phone number for Latvia in the specified format
+  // Generate standard format phone number for Latvia
   const generatePhoneNumber = () => {
-    const part1 = Math.floor(20000 + Math.random() * 29999);
-    const part2 = Math.floor(100 + Math.random() * 899);
-    return `+371 ${part1 > 99999 ? part1 : '2' + part1} ${part2}`;
+    const prefix = "+371";
+    const part1 = Math.floor(20 + Math.random() * 9); // 20-29 range for first two digits
+    const part2 = Math.floor(100 + Math.random() * 899); // 100-999 range for next three digits
+    const part3 = Math.floor(100 + Math.random() * 899); // 100-999 range for last three digits
+    return `${prefix} ${part1} ${part2} ${part3}`;
   };
   
   const phoneNumber = generatePhoneNumber();
