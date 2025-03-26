@@ -7,14 +7,12 @@ import * as z from 'zod';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -66,45 +64,15 @@ const UserProfile = () => {
         return;
       }
       
-      const profileData = {
+      const formattedData = {
         ...data,
-        keywords: data.keywords.split(',').map(k => k.trim()),
+        keywords: data.keywords ? data.keywords : "",
       };
       
-      await completeProfile(profileData);
+      await completeProfile(formattedData);
       
-      if (user && data.businessName) {
-        // Create vendor entry if needed, with correct user_id
-        const { error: vendorError } = await supabase
-          .from('vendors')
-          .insert({
-            user_id: user.id, // Use user.id instead of user_id
-            name: data.businessName || data.name,
-            category: data.category,
-            city: data.city,
-            description: data.description,
-            keywords: data.keywords ? data.keywords.split(',').map(k => k.trim()) : [],
-            phone: data.phone,
-            email: user.email,
-            website: data.website,
-            facebook: data.facebook,
-            instagram: data.instagram,
-            twitter: data.twitter,
-            linkedin: data.linkedin,
-          });
-          
-        if (vendorError) {
-          console.error('Error creating vendor:', vendorError);
-          toast.error("Failed to create vendor profile", {
-            description: vendorError.message
-          });
-        } else {
-          toast.success("Your vendor profile has been created successfully!");
-          navigate('/');
-        }
-      } else {
-        navigate('/');
-      }
+      toast.success("Your profile has been updated successfully!");
+      navigate('/');
     } catch (error) {
       console.error('Error submitting form:', error);
       toast.error("Failed to update profile", {

@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { User } from '@/lib/types';
@@ -98,54 +97,89 @@ export const completeProfile = async (user: User | null, profileData: any) => {
   if (!user || !user.id) return { error: 'User not found' };
   
   try {
+    console.log('Completing profile with data:', profileData);
+    
+    // Prepare data for the profiles table update
+    const profileUpdate = {
+      name: profileData.name,
+      profile_completed: true
+    };
+    
     // Update profile in Supabase
-    const { error } = await supabase
+    const { error: profileError } = await supabase
       .from('profiles')
-      .update({
-        ...profileData,
-        profile_completed: true
-      })
+      .update(profileUpdate)
       .eq('id', user.id);
     
-    if (error) {
-      throw error;
+    if (profileError) {
+      console.error('Error updating profile:', profileError);
+      throw profileError;
+    }
+    
+    // Create vendor entry if business name is provided
+    if (profileData.businessName) {
+      // Format keywords properly
+      const keywords = profileData.keywords 
+        ? profileData.keywords.split(',').map((k: string) => k.trim()) 
+        : [];
+      
+      // Check if vendor already exists
+      const { data: existingVendor } = await supabase
+        .from('vendors')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      const vendorData = {
+        user_id: user.id,
+        name: profileData.businessName || profileData.name,
+        category: profileData.category,
+        city: profileData.city,
+        description: profileData.description,
+        keywords: keywords,
+        phone: profileData.phone,
+        email: user.email,
+        website: profileData.website,
+        facebook: profileData.facebook,
+        instagram: profileData.instagram,
+        twitter: profileData.twitter,
+        linkedin: profileData.linkedin,
+      };
+      
+      let vendorError;
+      
+      if (existingVendor) {
+        // Update existing vendor
+        const { error } = await supabase
+          .from('vendors')
+          .update(vendorData)
+          .eq('id', existingVendor.id);
+        vendorError = error;
+      } else {
+        // Create new vendor
+        const { error } = await supabase
+          .from('vendors')
+          .insert(vendorData);
+        vendorError = error;
+      }
+      
+      if (vendorError) {
+        console.error('Error with vendor data:', vendorError);
+        throw vendorError;
+      }
     }
     
     // Update local state
     const updatedUser = {
       ...user,
-      ...profileData,
+      name: profileData.name,
       profileCompleted: true
     };
     
-    // Add vendor data if applicable
-    if (profileData.businessName) {
-      // Create vendor entry
-      const { error: vendorError } = await supabase
-        .from('vendors')
-        .insert({
-          user_id: user.id,
-          name: profileData.businessName || profileData.name,
-          category: profileData.category,
-          city: profileData.city,
-          description: profileData.description,
-          keywords: profileData.keywords ? profileData.keywords.split(',').map((k: string) => k.trim()) : [],
-          phone: profileData.phone,
-          email: user.email,
-          website: profileData.website,
-          facebook: profileData.facebook,
-          instagram: profileData.instagram,
-          twitter: profileData.twitter,
-          linkedin: profileData.linkedin,
-        });
-        
-      if (vendorError) {
-        console.error('Error creating vendor:', vendorError);
-      }
-    }
-    
     toast.success("Profile completed", {
-      description: "Your vendor profile has been successfully set up!",
+      description: profileData.businessName 
+        ? "Your vendor profile has been successfully set up!" 
+        : "Your profile has been updated successfully!",
     });
     
     return { user: updatedUser, error: null };

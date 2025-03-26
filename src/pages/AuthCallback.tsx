@@ -10,13 +10,6 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Check if we have a hash fragment with tokens (happens with OAuth providers)
-        if (window.location.hash) {
-          console.log('Found hash fragment, extracting tokens');
-          // The session will be automatically set by Supabase's internal handlers
-          // We don't need to manually extract and set tokens
-        }
-        
         // Get the current session
         const { data, error } = await supabase.auth.getSession();
         
@@ -49,10 +42,13 @@ const AuthCallback = () => {
           }
           
           // Always redirect to the profile page after successful login
-          // This allows the user to create a vendor profile
           toast.success("Login successful", {
-            description: "Welcome! Please complete your vendor profile."
+            description: profile?.profile_completed 
+              ? "Welcome back!" 
+              : "Welcome! Please complete your profile."
           });
+          
+          // Redirect to profile page for profile completion
           navigate('/profile');
         } else {
           console.error('No session established after authentication');
