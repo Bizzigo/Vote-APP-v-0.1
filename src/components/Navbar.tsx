@@ -49,9 +49,6 @@ const Navbar: React.FC = () => {
               <Link to="/login" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors flex items-center" aria-label="Log in">
                 <LogIn size={20} strokeWidth={1.5} />
               </Link>
-              <Link to="/signup" className="text-primary hover:text-primary/80 transition-colors flex items-center" aria-label="Sign up">
-                <UserPlus size={20} strokeWidth={1.5} />
-              </Link>
             </div>}
         </nav>
 
@@ -105,10 +102,6 @@ const Navbar: React.FC = () => {
                 <Link to="/login" className="flex items-center gap-2 py-2 text-base text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>
                   <LogIn size={18} strokeWidth={1.5} />
                   <span>{t("login")}</span>
-                </Link>
-                <Link to="/signup" className="flex items-center gap-2 py-2 text-base text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>
-                  <UserPlus size={18} strokeWidth={1.5} className="text-primary" />
-                  <span>{t("signup")}</span>
                 </Link>
               </>}
           </div>

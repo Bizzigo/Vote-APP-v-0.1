@@ -11,8 +11,7 @@ import { LanguageProvider } from "@/providers/LanguageProvider";
 import React from "react";
 
 import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import AuthPage from "./pages/AuthPage";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import VendorProfile from "./pages/VendorProfile";
@@ -53,8 +52,8 @@ const App = () => {
                     />
                     <Routes>
                       <Route path="/" element={<Index />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/signup" element={<Signup />} />
+                      <Route path="/login" element={<AuthPage />} />
+                      <Route path="/signup" element={<AuthPage />} />
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/vendor/:vendorSlug" element={<VendorProfile />} />
                       <Route path="/profile" element={<UserProfile />} />

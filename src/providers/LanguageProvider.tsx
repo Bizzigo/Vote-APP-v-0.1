@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'lv';
@@ -20,7 +21,7 @@ export const translations: Translations = {
   },
   "signup": {
     en: "Sign Up",
-    lv: "Reģistrēties"
+    lv: "Izveidot kontu"
   },
   "lightMode": {
     en: "Light Mode",
@@ -73,11 +74,11 @@ export const translations: Translations = {
   // Login/Signup pages
   "welcomeBack": {
     en: "Welcome Back",
-    lv: "Sveicināti Atpakaļ"
+    lv: "Ienākt sistēmā"
   },
   "signInToContinue": {
     en: "Sign in to continue to the Vendor Directory",
-    lv: "Ielogojieties, lai turpinātu darbu ar sniedzēju katalogu"
+    lv: "Ienākt sistēmā"
   },
   "signInWithGoogle": {
     en: "Sign in with Google",
@@ -145,11 +146,11 @@ export const translations: Translations = {
   },
   "createAccount": {
     en: "Create an Account",
-    lv: "Izveidot Kontu"
+    lv: "Izveidot kontu"
   },
   "signUpMethod": {
-    en: "Sign up with your preferred method to create your vendor account",
-    lv: "Reģistrējieties ar vēlamo metodi, lai izveidotu sniedzēja kontu"
+    en: "Create your account",
+    lv: "Izveidojiet savu kontu"
   },
   "createAccountInfo": {
     en: "Create an account to register your business in our directory. After signing up, you'll be able to complete your vendor profile.",
