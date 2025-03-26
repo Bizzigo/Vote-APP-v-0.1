@@ -101,11 +101,14 @@ const Signup = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold mb-6">Create Your Vendor Account</h1>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm p-6 rounded-md mb-8">
+          <h1 className="text-3xl font-bold">Create Your Vendor Account</h1>
+          <p className="text-muted-foreground mt-2">Enter your business details to get started</p>
+        </div>
         
         <div className="grid grid-cols-1 gap-6">
-          <Card>
+          <Card className="shadow-sm border-border/40">
             <CardHeader>
               <CardTitle>Business Information</CardTitle>
               <CardDescription>
@@ -114,10 +117,10 @@ const Signup = () => {
             </CardHeader>
             <CardContent>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <h3 className="text-lg font-medium">Account Information</h3>
+                      <h3 className="text-lg font-medium text-foreground">Account Information</h3>
                       
                       <FormField
                         control={form.control}
@@ -185,7 +188,7 @@ const Signup = () => {
                     </div>
                     
                     <div className="space-y-4">
-                      <h3 className="text-lg font-medium">Business Details</h3>
+                      <h3 className="text-lg font-medium text-foreground">Business Details</h3>
                       
                       <FormField
                         control={form.control}
@@ -213,7 +216,7 @@ const Signup = () => {
                               <FormLabel>Category</FormLabel>
                               <FormControl>
                                 <select
-                                  className="w-full h-10 rounded-md border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                   {...field}
                                 >
                                   <option value="">Select Category</option>
@@ -271,8 +274,8 @@ const Signup = () => {
                     </div>
                   </div>
                   
-                  <div className="pt-6 border-t mt-6">
-                    <h3 className="text-lg font-medium mb-4">Business Description</h3>
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-medium mb-4 text-foreground">Business Description</h3>
                     
                     <FormField
                       control={form.control}
@@ -309,13 +312,14 @@ const Signup = () => {
                             </div>
                           </FormControl>
                           <FormMessage />
+                          <p className="text-sm text-muted-foreground mt-1">These keywords will help customers find your business</p>
                         </FormItem>
                       )}
                     />
                   </div>
                   
-                  <div className="pt-6 border-t mt-6">
-                    <h3 className="text-lg font-medium mb-4">Additional Contact Information</h3>
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-medium mb-4 text-foreground">Additional Contact Information</h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
@@ -413,7 +417,7 @@ const Signup = () => {
           </Card>
           
           {/* Subscription Plans */}
-          <Card>
+          <Card className="shadow-sm border-border/40">
             <CardHeader>
               <CardTitle>Choose a Subscription Plan</CardTitle>
               <CardDescription>
@@ -436,7 +440,7 @@ const Signup = () => {
             </Button>
           </div>
           
-          <div className="text-center text-sm mt-4">
+          <div className="text-center text-sm mt-4 mb-8">
             <p className="text-muted-foreground">
               Already have an account?{" "}
               <Link to="/login" className="text-primary hover:underline">
