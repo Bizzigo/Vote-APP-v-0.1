@@ -104,7 +104,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     >
       <div className="relative w-full">
         <Input
-          type="search"
+          type="text"
           value={searchTerm}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}

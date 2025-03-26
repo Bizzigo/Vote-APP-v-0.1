@@ -21,11 +21,15 @@ const VendorContactMethods: React.FC<VendorContactMethodsProps> = ({
   hasFacebook,
   hasWebsite
 }) => {
+  // Generate random phone number for Latvia for demo purposes
+  const phoneNumber = `+371 ${Math.floor(2000000 + Math.random() * 8000000)}`;
+  
   return (
     <div className="flex flex-wrap items-center gap-2 mt-3">
       {hasPhone && (
-        <a href={`tel:+37120000000`} className="p-2 hover:bg-secondary rounded-full transition-colors" title="Call">
+        <a href={`tel:${phoneNumber.replace(/\s/g, '')}`} className="p-2 hover:bg-secondary rounded-full transition-colors flex items-center gap-1" title={phoneNumber}>
           <Phone className="h-4 w-4 text-gray-600" />
+          <span className="text-xs text-gray-600">{phoneNumber}</span>
         </a>
       )}
       {hasWhatsapp && (
