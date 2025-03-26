@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Cloud, CloudSun, Sun, CloudRain, CloudSnow, CloudLightning, CloudFog, Loader2 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { useLocationContext } from '@/providers/LocationProvider';
 import { useLanguage } from '@/providers/LanguageProvider';
@@ -35,8 +34,8 @@ const WeatherBadge: React.FC = () => {
       setError(null);
       
       try {
-        // Use a working API key for OpenWeatherMap
-        const apiKey = '1b2d9eca14f2aaabba370a5e1e7d4b0c'; // Updated API key
+        // Updated API key for OpenWeatherMap
+        const apiKey = '4d8fb5b93d4af21d66a2948710284366';
         const response = await fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${coordinates.lat}&lon=${coordinates.lng}&units=metric&appid=${apiKey}`
         );
@@ -56,6 +55,11 @@ const WeatherBadge: React.FC = () => {
     };
 
     fetchWeather();
+    
+    // Refresh weather data every 30 minutes
+    const interval = setInterval(fetchWeather, 30 * 60 * 1000);
+    
+    return () => clearInterval(interval);
   }, [isActive, coordinates]);
 
   const getWeatherIcon = () => {
