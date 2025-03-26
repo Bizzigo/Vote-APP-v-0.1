@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import VendorHeader from '@/components/vendor/VendorHeader';
-import VendorProfileHeader from '@/components/vendor-profile/VendorProfileHeader';
+import SearchHeader from '@/components/SearchHeader';
 import VendorProfileGrid from '@/components/vendor-profile/VendorProfileGrid';
 import VendorProfileLoading from '@/components/vendor-profile/VendorProfileLoading';
 import VendorProfileNotFound from '@/components/vendor-profile/VendorProfileNotFound';
@@ -56,13 +56,13 @@ const VendorProfile: React.FC = () => {
   
   return (
     <Layout hideBreadcrumbs={true}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <VendorProfileHeader 
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          handleSearch={handleSearch}
-        />
+      <SearchHeader 
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        handleSearch={handleSearch}
+      />
 
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <VendorHeader
           vendor={{...vendor, rating: averageRating || vendor.rating}}
           registrationNumber={registrationNumber}

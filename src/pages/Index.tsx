@@ -1,7 +1,7 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
+import SearchHeader from '@/components/SearchHeader';
 import VendorCard from '@/components/vendor/VendorCard';
 import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
@@ -114,47 +114,40 @@ const Index = () => {
           </div>
         </div>
       ) : (
-        <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8">
-          <div className="flex justify-center w-full mb-8">
-            <SearchBar 
-              searchTerm={searchTerm} 
-              setSearchTerm={setSearchTerm} 
-              onSearch={handleSearch} 
-              className="w-full max-w-xl" 
-            />
+        <div className="container mx-auto">
+          <SearchHeader 
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            handleSearch={handleSearch}
+          />
+          
+          <div className="px-4 sm:px-6 md:px-8 pb-8">
+            {filteredVendors.length === 0 ? (
+              <div className="text-center py-4">
+                <p className="text-muted-foreground mb-6">
+                  {t("noVendorsFound")}
+                </p>
+                
+                <MistralFallback searchTerm={searchTerm} />
+              </div>
+            ) : (
+              <div className="flex flex-col space-y-4">
+                {filteredVendors.map((vendor: any, index) => (
+                  <div 
+                    key={vendor.id} 
+                    className="animate-fade-in" 
+                    style={{animationDelay: `${index * 50}ms`}}
+                  >
+                    <VendorCard 
+                      vendor={vendor} 
+                      showContactMethods={true} 
+                      distance={vendor.distanceKm ? `${vendor.distanceKm.toFixed(1)} ${t("km")}` : null} 
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-          
-          {filteredVendors.length > 0 && (
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold">{t("searchResults")}</h2>
-            </div>
-          )}
-          
-          {filteredVendors.length === 0 ? (
-            <div className="text-center py-4">
-              <p className="text-muted-foreground mb-6">
-                {t("noVendorsFound")}
-              </p>
-              
-              <MistralFallback searchTerm={searchTerm} />
-            </div>
-          ) : (
-            <div className="flex flex-col space-y-4">
-              {filteredVendors.map((vendor: any, index) => (
-                <div 
-                  key={vendor.id} 
-                  className="animate-fade-in" 
-                  style={{animationDelay: `${index * 50}ms`}}
-                >
-                  <VendorCard 
-                    vendor={vendor} 
-                    showContactMethods={true} 
-                    distance={vendor.distanceKm ? `${vendor.distanceKm.toFixed(1)} ${t("km")}` : null} 
-                  />
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       )}
     </Layout>
