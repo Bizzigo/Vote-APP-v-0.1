@@ -1,4 +1,3 @@
-
 import { Vendor, User, Candidate } from './types';
 
 // Placeholder image for vendors without a logo
@@ -114,6 +113,17 @@ export const mockVendors: Vendor[] = [
     location: { lat: 45.5051, lng: -122.6750 },
     keywords: ['Solar Power', 'Wind Energy', 'Green Solutions', 'Sustainability', 'Clean Energy', 'Renewable Resources']
   },
+  {
+    id: '9',
+    name: 'Santa Kursaite',
+    logo: placeholderImage,
+    city: 'Rīga',
+    category: 'Healthcare',
+    description: 'Professional homeopathic services with a holistic approach to wellness.',
+    rating: 4.7,
+    location: { lat: 56.9496, lng: 24.1052 }, // Coordinates for Rīga
+    keywords: ['homeopāts', 'alternative medicine', 'holistic health', 'natural remedies', 'wellness']
+  }
 ];
 
 export const mockAdminUser: User = {
