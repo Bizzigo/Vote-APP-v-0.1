@@ -10,6 +10,15 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
+        // Handle the hash fragment if present (which contains tokens)
+        if (window.location.hash) {
+          const hashParams = new URLSearchParams(window.location.hash.substring(1));
+          if (hashParams.has('access_token')) {
+            console.log('Found access token in URL hash, processing auth...');
+            // The session will be automatically handled by Supabase client
+          }
+        }
+        
         // Get the current session
         const { data, error } = await supabase.auth.getSession();
         

@@ -1,5 +1,6 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, AuthContextType } from '@/lib/types';
+import { User, AuthContextType, Role } from '@/lib/types';
 import { mockVisitorUser, mockAdminUser } from '@/lib/mockData';
 import { useToast } from "@/hooks/use-toast";
 import { toast } from 'sonner';
@@ -45,7 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 id: profile.id,
                 name: profile.name || session.user.user_metadata.full_name || 'User',
                 email: profile.email || session.user.email || '',
-                role: profile.role || 'visitor',
+                role: (profile.role || 'visitor') as Role,
                 hasVoted: profile.has_voted || false,
                 votedFor: profile.voted_for || undefined,
                 subscriptionPlan: profile.subscription_plan as any || undefined,

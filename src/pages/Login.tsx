@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
@@ -11,6 +11,17 @@ import { supabase } from '@/integrations/supabase/client';
 const Login = () => {
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  
+  // Check for error parameter in URL
+  useEffect(() => {
+    const errorType = searchParams.get('error');
+    if (errorType === 'auth') {
+      toast.error("Authentication failed", {
+        description: "There was a problem with the authentication process"
+      });
+    }
+  }, [searchParams]);
 
   // Redirect if already logged in
   useEffect(() => {
