@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -215,7 +216,7 @@ const VendorProfile = () => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout hideBreadcrumbs={true}>
         <div className="flex justify-center items-center h-[70vh]">
           <p className="text-xl">Loading vendor profile...</p>
         </div>
@@ -225,7 +226,7 @@ const VendorProfile = () => {
   
   if (notFound || !vendor) {
     return (
-      <Layout>
+      <Layout hideBreadcrumbs={true}>
         <div className="flex flex-col justify-center items-center h-[70vh] space-y-4">
           <p className="text-xl">Vendor not found</p>
           <Link to="/" className="text-blue-600 hover:underline">
@@ -237,7 +238,7 @@ const VendorProfile = () => {
   }
   
   return (
-    <Layout>
+    <Layout hideBreadcrumbs={true}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex justify-center w-full mb-8">
           <SearchBar 
