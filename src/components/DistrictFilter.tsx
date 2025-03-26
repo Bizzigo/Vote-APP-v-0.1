@@ -1,56 +1,75 @@
 
 import React from 'react';
-import { useLanguage } from '@/providers/LanguageProvider';
-import { mockVendors } from '@/lib/mockData';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Check } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Vendor } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 interface DistrictFilterProps {
-  onDistrictSelect: (district: string) => void;
+  vendors: Vendor[];
   selectedDistrict: string | null;
+  onChange: (district: string | null) => void;
 }
 
-const DistrictFilter = ({ onDistrictSelect, selectedDistrict }: DistrictFilterProps) => {
-  const { t } = useLanguage();
-  
-  // Extract unique districts from vendors and count vendors in each district
-  const districtCounts = mockVendors.reduce((acc, vendor) => {
-    if (vendor.district) {
-      acc[vendor.district] = (acc[vendor.district] || 0) + 1;
-    }
-    return acc;
-  }, {} as Record<string, number>);
-  
-  // Convert to array and sort alphabetically
-  const districts = Object.keys(districtCounts).sort();
-  
+export function DistrictFilter({ vendors, selectedDistrict, onChange }: DistrictFilterProps) {
+  const [open, setOpen] = React.useState(false);
+
+  // Extract unique cities from vendors
+  const districts = Array.from(new Set(
+    vendors
+      .map(vendor => vendor.city)
+      .filter((city): city is string => !!city)
+  )).sort();
+
   return (
-    <div>
-      <h4 className="font-medium mb-2">{t("districts")}</h4>
-      <ScrollArea className="h-40">
-        <div className="space-y-1">
-          {districts.map((district) => (
-            <button
-              key={district}
-              onClick={() => onDistrictSelect(district)}
-              className={`w-full text-left px-2 py-1.5 rounded-md text-sm flex justify-between items-center ${
-                selectedDistrict === district 
-                  ? 'bg-primary/10 text-primary font-medium' 
-                  : 'hover:bg-secondary'
-              }`}
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="justify-between w-full md:w-[200px]"
+        >
+          {selectedDistrict ? selectedDistrict : "All Districts"}
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-full md:w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder="Search district..." />
+          <CommandEmpty>No district found.</CommandEmpty>
+          <CommandGroup>
+            <CommandItem
+              onSelect={() => {
+                onChange(null);
+                setOpen(false);
+              }}
+              className="justify-between"
             >
-              <span className="line-clamp-1">{district}</span>
-              {selectedDistrict === district ? (
-                <Check size={16} className="text-primary flex-shrink-0" />
-              ) : (
-                <span className="text-xs text-muted-foreground">{districtCounts[district]}</span>
-              )}
-            </button>
-          ))}
-        </div>
-      </ScrollArea>
-    </div>
+              All Districts
+              {!selectedDistrict && <Check className="h-4 w-4" />}
+            </CommandItem>
+            
+            {districts.map((district) => (
+              <CommandItem
+                key={district}
+                onSelect={() => {
+                  onChange(district === selectedDistrict ? null : district);
+                  setOpen(false);
+                }}
+                className="justify-between"
+              >
+                {district}
+                {selectedDistrict === district && <Check className="h-4 w-4" />}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
-};
+}
 
 export default DistrictFilter;
