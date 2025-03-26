@@ -1,10 +1,12 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
-import useLocation from '@/hooks/useLocation';
+import useLocation, { Coordinates } from '@/hooks/useLocation';
 
 interface LocationContextType {
   isActive: boolean;
   toggleLocation: () => void;
+  coordinates: Coordinates | null;
+  calculateDistance: (lat1: number, lon1: number, lat2: number, lon2: number) => number;
 }
 
 const LocationContext = createContext<LocationContextType | undefined>(undefined);

@@ -7,8 +7,7 @@ import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
 import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
-import { MapPin } from 'lucide-react';
-import { useLocation as useLocationHook } from '@/hooks/useLocation';
+import { useLocationContext } from '@/providers/LocationProvider';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -16,10 +15,10 @@ const Index = () => {
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const { toast } = useToast();
-  const { isActive: locationActive, toggleLocation } = useLocationHook();
+  const { isActive: locationActive, coordinates, calculateDistance } = useLocationContext();
 
-  const handleSearch = useCallback((query: string, useAI: boolean) => {
-    console.log('Search initiated:', { query });
+  const handleSearch = useCallback((query: string, useLocation: boolean) => {
+    console.log('Search initiated:', { query, useLocation });
     
     if (query.trim() === '') {
       setFilteredVendors([]);
@@ -27,11 +26,44 @@ const Index = () => {
       return;
     }
     
-    const results = aiSearchVendors(vendors, query);
-    console.log('AI search results:', results.length, 'vendors found');
+    // Get base search results from AI search
+    let results = aiSearchVendors(vendors, query);
+    
+    // Add distance calculation if location is active and we have coordinates
+    if (useLocation && coordinates) {
+      // Filter vendors that have location data
+      results = results
+        .filter(vendor => vendor.location && vendor.location.lat && vendor.location.lng)
+        .map(vendor => {
+          // Calculate distance if vendor has location
+          if (vendor.location && coordinates) {
+            const distance = calculateDistance(
+              coordinates.lat,
+              coordinates.lng,
+              vendor.location.lat,
+              vendor.location.lng
+            );
+            
+            // Add distance property to vendor (for sorting and display)
+            return {
+              ...vendor,
+              distanceKm: distance
+            };
+          }
+          return vendor;
+        })
+        // Sort by distance (closest first)
+        .sort((a, b) => {
+          const distA = (a as any).distanceKm || Number.MAX_VALUE;
+          const distB = (b as any).distanceKm || Number.MAX_VALUE;
+          return distA - distB;
+        });
+    }
+    
+    console.log('Search results:', results.length, 'vendors found', useLocation ? '(with location sorting)' : '');
     setFilteredVendors(results);
     setHasSearched(true);
-  }, [vendors]);
+  }, [vendors, coordinates, calculateDistance]);
 
   useEffect(() => {
     let timeoutId: number | undefined;
@@ -73,17 +105,8 @@ const Index = () => {
               setSearchTerm={setSearchTerm} 
               onSearch={handleSearch}
               className="shadow-md"
+              mainPage={true}
             />
-            <button
-              onClick={toggleLocation}
-              className="absolute right-6 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
-              aria-label="Toggle location"
-            >
-              <MapPin 
-                className={`h-5 w-5 ${locationActive ? 'text-primary fill-primary/20' : 'text-muted-foreground'}`} 
-              />
-              <span className="sr-only">Use my location</span>
-            </button>
           </div>
         </div>
       ) : (
@@ -111,7 +134,7 @@ const Index = () => {
             </div>
           ) : (
             <div className="flex flex-col space-y-4">
-              {filteredVendors.map((vendor, index) => (
+              {filteredVendors.map((vendor: any, index) => (
                 <div 
                   key={vendor.id} 
                   className="animate-fade-in" 
@@ -120,6 +143,7 @@ const Index = () => {
                   <VendorCard 
                     vendor={vendor} 
                     showContactMethods={true}
+                    distance={vendor.distanceKm ? `${vendor.distanceKm.toFixed(1)} km` : null}
                   />
                 </div>
               ))}
