@@ -28,7 +28,6 @@ import { SubscriptionPlans } from '@/components/subscription/SubscriptionPlans';
 const formSchema = z.object({
   name: z.string().min(2, { message: "Business name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
   businessName: z.string().min(2, { message: "Business name must be at least 2 characters." }),
   category: z.string().min(1, { message: "Please select a category." }),
   city: z.string().min(2, { message: "City must be at least 2 characters." }),
@@ -53,7 +52,6 @@ const Signup = () => {
     defaultValues: {
       name: "",
       email: "",
-      password: "",
       businessName: "",
       category: "",
       city: "",
@@ -86,7 +84,7 @@ const Signup = () => {
 
   return (
     <Layout>
-      <div className="container max-w-4xl mx-auto py-8">
+      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8 max-w-4xl">
         <h1 className="text-3xl font-bold mb-6">Create Your Vendor Account</h1>
         
         <div className="grid grid-cols-1 gap-6">
@@ -143,19 +141,35 @@ const Signup = () => {
                         />
                       </div>
                       
-                      <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input type="password" placeholder="••••••••" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div className="flex flex-col space-y-4 mt-6">
+                        <p className="text-sm text-muted-foreground">Sign up with social accounts</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            onClick={() => handleSocialSignup('google')}
+                            className="flex items-center justify-center gap-2"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <path d="M8 12 h8"></path>
+                              <path d="M12 8 v8"></path>
+                            </svg>
+                            Sign up with Google
+                          </Button>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            onClick={() => handleSocialSignup('facebook')}
+                            className="flex items-center justify-center gap-2"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                            Sign up with Facebook
+                          </Button>
+                        </div>
+                      </div>
                     </TabsContent>
                     
                     <TabsContent value="business" className="space-y-4">
@@ -273,7 +287,7 @@ const Signup = () => {
                 Select the plan that best fits your business needs
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 sm:px-6">
               <SubscriptionPlans selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} />
             </CardContent>
           </Card>
