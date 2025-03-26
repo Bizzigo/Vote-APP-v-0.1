@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -13,7 +12,6 @@ import {
   CardFooter 
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -84,7 +82,7 @@ const Signup = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8 max-w-4xl">
+      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold mb-6">Create Your Vendor Account</h1>
         
         <div className="grid grid-cols-1 gap-6">
@@ -287,7 +285,7 @@ const Signup = () => {
                 Select the plan that best fits your business needs
               </CardDescription>
             </CardHeader>
-            <CardContent className="px-4 sm:px-6">
+            <CardContent>
               <SubscriptionPlans selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} />
             </CardContent>
           </Card>

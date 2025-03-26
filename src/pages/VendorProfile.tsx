@@ -234,7 +234,7 @@ const VendorProfile = () => {
   
   return (
     <Layout>
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground mb-4 hover:text-foreground transition-colors">
           <ArrowLeft size={16} />
           <span>Back to vendors</span>
