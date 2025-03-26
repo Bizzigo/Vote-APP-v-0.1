@@ -15,35 +15,37 @@ export const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
   const plans = [
     {
       id: 'startup',
-      name: 'Startup',
-      price: '$29',
-      description: 'A plan that scales with your rapidly growing business.',
+      name: 'Monthly Plan',
+      price: '9,99€',
+      description: 'Billed monthly, cancel anytime.',
       features: [
-        'Full contact block features',
-        'Unlimited categories',
+        'Full profile info',
+        'All contact details',
         'Unlimited keywords',
-        'Job offers',
-        'Review system',
-        'Basic analytics',
-        '24-hour support',
+        'Unlimited categories',
+        'Unlimited offers',
+        'Unlimited ads',
+        'Email support',
       ],
       popular: true,
+      billing: 'monthly'
     },
     {
       id: 'enterprise',
-      name: 'Enterprise',
-      price: '$59',
-      description: 'Dedicated support and infrastructure for your company.',
+      name: 'Yearly Plan',
+      price: '99€',
+      description: 'Billed annually, save over 17%.',
       features: [
-        'Everything in Startup plan',
-        'Own shop',
-        'Unlimited classifieds',
-        'Priority support',
-        'Advanced analytics',
-        'Custom integrations',
-        'Dedicated account manager',
+        'Full profile info',
+        'All contact details',
+        'Unlimited keywords',
+        'Unlimited categories',
+        'Unlimited offers',
+        'Unlimited ads',
+        'Email support',
       ],
       popular: false,
+      billing: 'yearly'
     },
   ];
 
@@ -72,7 +74,9 @@ export const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
               <h3 className="text-xl font-bold">{plan.name}</h3>
               <div className="flex items-baseline">
                 <span className="text-4xl font-bold">{plan.price}</span>
-                <span className="text-sm text-muted-foreground ml-1">/month</span>
+                <span className="text-sm text-muted-foreground ml-1">
+                  {plan.billing === 'monthly' ? '/month' : '/year'}
+                </span>
               </div>
               <p className="text-sm text-muted-foreground">{plan.description}</p>
             </div>

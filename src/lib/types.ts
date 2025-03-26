@@ -1,3 +1,4 @@
+
 export type Role = 'admin' | 'visitor';
 export type SubscriptionPlan = 'startup' | 'enterprise';
 
