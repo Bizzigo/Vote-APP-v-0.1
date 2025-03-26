@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -7,7 +6,6 @@ import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
 import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
-import { useLocationContext } from '@/providers/LocationProvider';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -15,10 +13,9 @@ const Index = () => {
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const { toast } = useToast();
-  const { isActive: locationActive, coordinates, calculateDistance } = useLocationContext();
 
-  const handleSearch = useCallback((query: string, useLocation: boolean) => {
-    console.log('Search initiated:', { query, useLocation });
+  const handleSearch = useCallback((query: string) => {
+    console.log('Search initiated:', { query });
     
     if (query.trim() === '') {
       setFilteredVendors([]);
@@ -29,41 +26,10 @@ const Index = () => {
     // Get base search results from AI search
     let results = aiSearchVendors(vendors, query);
     
-    // Add distance calculation if location is active and we have coordinates
-    if (useLocation && coordinates) {
-      // Filter vendors that have location data
-      results = results
-        .filter(vendor => vendor.location && vendor.location.lat && vendor.location.lng)
-        .map(vendor => {
-          // Calculate distance if vendor has location
-          if (vendor.location && coordinates) {
-            const distance = calculateDistance(
-              coordinates.lat,
-              coordinates.lng,
-              vendor.location.lat,
-              vendor.location.lng
-            );
-            
-            // Add distance property to vendor (for sorting and display)
-            return {
-              ...vendor,
-              distanceKm: distance
-            };
-          }
-          return vendor;
-        })
-        // Sort by distance (closest first)
-        .sort((a, b) => {
-          const distA = (a as any).distanceKm || Number.MAX_VALUE;
-          const distB = (b as any).distanceKm || Number.MAX_VALUE;
-          return distA - distB;
-        });
-    }
-    
-    console.log('Search results:', results.length, 'vendors found', useLocation ? '(with location sorting)' : '');
+    console.log('Search results:', results.length, 'vendors found');
     setFilteredVendors(results);
     setHasSearched(true);
-  }, [vendors, coordinates, calculateDistance]);
+  }, [vendors]);
 
   useEffect(() => {
     let timeoutId: number | undefined;
