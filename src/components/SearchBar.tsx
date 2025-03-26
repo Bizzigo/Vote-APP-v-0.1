@@ -71,6 +71,11 @@ const SearchBar = ({
     }
   };
 
+  // Apply a special pulse class if mainPage is true
+  const inputClasses = `h-12 text-base rounded-3xl pl-12 pr-12 focus-visible:ring-blue-200 focus-visible:border-blue-500 shadow-sm hover:shadow-md transition-all hover:border-blue-500 hover:border-2 focus-visible:border-2 ${
+    mainPage ? 'search-pulse-animation' : 'border border-blue-500'
+  }`;
+
   return (
     <div className={`relative w-full ${mainPage ? 'mx-auto' : ''} ${className}`}>
       <form onSubmit={handleSearch} className="w-full">
@@ -84,7 +89,7 @@ const SearchBar = ({
             placeholder={t("searchPlaceholder")}
             value={term}
             onChange={handleInputChange}
-            className="h-12 text-base rounded-3xl border border-blue-500 pl-12 pr-12 focus-visible:ring-blue-200 focus-visible:border-blue-500 shadow-sm hover:shadow-md transition-all hover:border-blue-500 hover:border-2 focus-visible:border-2"
+            className={inputClasses}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
