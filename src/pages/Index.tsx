@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -11,6 +12,7 @@ import { useLanguage } from '@/providers/LanguageProvider';
 import CategoryGrid from '@/components/CategoryGrid';
 import UserProfileBadge from '@/components/UserProfileBadge';
 import WeatherBadge from '@/components/WeatherBadge';
+import MistralFallback from '@/components/MistralFallback';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -75,7 +77,7 @@ const Index = () => {
       timeoutId = window.setTimeout(() => {
         setHasSearched(false);
         setSearchTerm('');
-      }, 3000);
+      }, 5000); // Increased timeout to give users time to see the Mistral response
     }
     return () => {
       if (timeoutId) window.clearTimeout(timeoutId);
@@ -135,10 +137,12 @@ const Index = () => {
           </div>
           
           {filteredVendors.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">
+            <div className="text-center py-4">
+              <p className="text-muted-foreground mb-6">
                 {t("noVendorsFound")}
               </p>
+              
+              <MistralFallback searchTerm={searchTerm} />
             </div>
           ) : (
             <div className="flex flex-col space-y-4">
