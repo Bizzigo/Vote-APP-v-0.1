@@ -30,7 +30,7 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
   onRatingClick
 }) => {
   return (
-    <div className="w-full bg-white animate-scale-in border border-border/40 shadow-sm p-6 rounded-lg mb-8">
+    <div className="w-full bg-white dark:bg-card animate-scale-in border border-border/40 shadow-sm p-6 rounded-lg mb-8">
       <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
         {/* Vendor logo */}
         <Avatar className="h-32 w-32 rounded-lg border border-border/40 shadow-sm">

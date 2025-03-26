@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Menu, X, Home, LogIn, UserPlus } from 'lucide-react';
+import { Menu, X, Home, LogIn, UserPlus, Moon, Sun } from 'lucide-react';
+import { useTheme } from '@/providers/ThemeProvider';
 
 const Navbar: React.FC = () => {
   const {
@@ -10,12 +11,13 @@ const Navbar: React.FC = () => {
     user,
     logout
   } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
   
-  return <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md">
+  return <header className="sticky top-0 z-40 w-full bg-white/80 dark:bg-foreground/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
@@ -33,7 +35,14 @@ const Navbar: React.FC = () => {
                 Log Out
               </button>
             </div> : <div className="flex items-center gap-6">
-              <Link to="/login" className="text-gray-500 hover:text-gray-700 transition-colors flex items-center" aria-label="Log in">
+              <button 
+                onClick={toggleTheme} 
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors flex items-center" 
+                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {theme === 'dark' ? <Sun size={20} strokeWidth={1.5} /> : <Moon size={20} strokeWidth={1.5} />}
+              </button>
+              <Link to="/login" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors flex items-center" aria-label="Log in">
                 <LogIn size={20} strokeWidth={1.5} />
               </Link>
               <Link to="/signup" className="text-primary hover:text-primary/80 transition-colors flex items-center" aria-label="Sign up">
@@ -51,6 +60,22 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {mobileMenuOpen && <div className="md:hidden">
           <div className="space-y-1 px-4 pb-3 pt-2">
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-2 py-2 text-base text-muted-foreground w-full"
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun size={18} strokeWidth={1.5} />
+                  <span>Light Mode</span>
+                </>
+              ) : (
+                <>
+                  <Moon size={18} strokeWidth={1.5} />
+                  <span>Dark Mode</span>
+                </>
+              )}
+            </button>
             {isLoggedIn ? <>
                 <Link to="/profile" className="block py-2 text-base text-muted-foreground" onClick={() => setMobileMenuOpen(false)}>
                   Profile

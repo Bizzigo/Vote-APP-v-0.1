@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { LocationProvider } from "@/providers/LocationProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import React from "react";
 
 import Index from "./pages/Index";
@@ -32,28 +33,30 @@ const App = () => {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <AuthProvider>
-            <LocationProvider>
-              <TooltipWrapper>
-                <Toaster />
-                <Sonner position="top-right" />
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/admin" element={<Admin />} />
-                  <Route path="/vendor/:vendorSlug" element={<VendorProfile />} />
-                  <Route path="/profile" element={<UserProfile />} />
-                  <Route path="/terms" element={<Terms />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route path="/cookies" element={<Cookies />} />
-                  <Route path="/auth/callback" element={<AuthCallback />} />
-                  <Route path="/404" element={<NotFound />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </TooltipWrapper>
-            </LocationProvider>
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <LocationProvider>
+                <TooltipWrapper>
+                  <Toaster />
+                  <Sonner position="top-right" />
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/vendor/:vendorSlug" element={<VendorProfile />} />
+                    <Route path="/profile" element={<UserProfile />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/cookies" element={<Cookies />} />
+                    <Route path="/auth/callback" element={<AuthCallback />} />
+                    <Route path="/404" element={<NotFound />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </TooltipWrapper>
+              </LocationProvider>
+            </AuthProvider>
+          </ThemeProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </React.StrictMode>
