@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'lv';
@@ -118,8 +117,8 @@ export const translations: Translations = {
     lv: "Reģistrēties ar X"
   },
   "needVendorAccount": {
-    en: "Need a vendor account?",
-    lv: "Nepieciešams sniedzēja konts?"
+    en: "Want to join?",
+    lv: "Vēlies reģistrēties?"
   },
   "signUpHere": {
     en: "Sign up here",

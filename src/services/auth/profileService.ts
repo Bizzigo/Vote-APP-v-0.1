@@ -1,107 +1,92 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
 import { User } from '@/lib/types';
 
-export const updateUser = async (user: User, userUpdates: Partial<User>) => {
-  if (!user || !user.id) return { error: 'User not found' };
-  
+export const updateUser = async (currentUser: User, updates: Partial<User>) => {
   try {
-    // Update profile in Supabase
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        name: userUpdates.name,
-        has_voted: userUpdates.hasVoted,
-        voted_for: userUpdates.votedFor,
-        subscription_plan: userUpdates.subscriptionPlan,
-        subscription_status: userUpdates.subscriptionStatus,
-        // Don't update profile_completed here
-      })
-      .eq('id', user.id);
-    
-    if (error) {
-      throw error;
+    if (!currentUser) {
+      return { error: { message: 'No user logged in' } };
     }
     
-    // Update local state
-    const updatedUser = {
-      ...user,
-      ...userUpdates
+    // Update the profile in Supabase
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({
+        name: updates.name,
+        // Add other fields as needed
+      })
+      .eq('id', currentUser.id)
+      .select()
+      .single();
+      
+    if (error) {
+      console.error('Error updating user:', error);
+      return { error };
+    }
+    
+    // Return the updated user
+    const updatedUser: User = {
+      ...currentUser,
+      ...updates
     };
     
     return { user: updatedUser, error: null };
-  } catch (error) {
-    console.error('Update user error:', error);
-    toast.error("Update failed", {
-      description: "There was a problem updating your profile",
-    });
+  } catch (error: any) {
     return { error };
   }
 };
 
-export const completeProfile = async (user: User | null, profileData: any) => {
-  if (!user || !user.id) return { error: 'User not found' };
-  
+export const completeProfile = async (
+  currentUser: User | null, 
+  profileData: any
+) => {
   try {
-    console.log('Completing profile with data:', profileData);
+    if (!currentUser) {
+      return { error: { message: 'No user logged in' }, user: null };
+    }
     
-    // Prepare data for the profiles table update
-    const profileUpdate = {
-      name: profileData.name,
-      profile_completed: true,
-      // Include all fields from the form
-      phone: profileData.phone || null,
-      website: profileData.website || null,
-      facebook: profileData.facebook || null,
-      instagram: profileData.instagram || null,
-      twitter: profileData.twitter || null,
-      linkedin: profileData.linkedin || null
-    };
+    console.log('Updating profile for user:', currentUser.id);
+    console.log('Profile data to save:', profileData);
     
-    console.log('Updating profile with:', profileUpdate);
-    
-    // Update profile in Supabase
-    const { error: profileError } = await supabase
+    // Update the profile in Supabase
+    const { data, error } = await supabase
       .from('profiles')
-      .update(profileUpdate)
-      .eq('id', user.id);
+      .update({
+        name: profileData.name,
+        business_name: profileData.businessName,
+        category: profileData.category,
+        city: profileData.city,
+        description: profileData.description,
+        keywords: profileData.keywords,
+        phone: profileData.phone,
+        website: profileData.website,
+        facebook: profileData.facebook,
+        instagram: profileData.instagram,
+        twitter: profileData.twitter,
+        linkedin: profileData.linkedin,
+        profile_completed: true // Mark the profile as completed
+      })
+      .eq('id', currentUser.id)
+      .select()
+      .single();
     
-    if (profileError) {
-      console.error('Error updating profile:', profileError);
-      throw profileError;
+    if (error) {
+      console.error('Error completing profile:', error);
+      return { error, user: null };
     }
     
-    // Create vendor entry if business name is provided
-    if (profileData.businessName) {
-      // Import and use vendorService to handle vendor-related operations
-      const { createOrUpdateVendor } = await import('./vendorService');
-      const vendorResult = await createOrUpdateVendor(user, profileData);
-      
-      if (vendorResult.error) {
-        throw vendorResult.error;
-      }
-    }
+    console.log('Profile updated successfully:', data);
     
-    // Update local state
-    const updatedUser = {
-      ...user,
+    // Return the updated user
+    const updatedUser: User = {
+      ...currentUser,
       name: profileData.name,
       profileCompleted: true
     };
     
-    toast.success("Profile completed", {
-      description: profileData.businessName 
-        ? "Your vendor profile has been successfully set up!" 
-        : "Your profile has been updated successfully!",
-    });
-    
     return { user: updatedUser, error: null };
-  } catch (error) {
-    console.error('Complete profile error:', error);
-    toast.error("Update failed", {
-      description: "There was a problem updating your profile",
-    });
-    return { error };
+  } catch (error: any) {
+    console.error('Unexpected error in completeProfile:', error);
+    return { error, user: null };
   }
 };

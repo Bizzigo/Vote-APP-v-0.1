@@ -136,6 +136,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await authService.logout();
     setUser(null);
     setSession(null);
+    // Add redirect to home page after logout
+    navigate('/');
   };
 
   const voteForCandidate = async (candidateId: string) => {
