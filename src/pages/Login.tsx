@@ -38,10 +38,13 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     try {
       console.log('Initiating Google login...');
+      const redirectTo = `${window.location.origin}/auth/callback`;
+      console.log('Redirect URL:', redirectTo);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin + '/auth/callback'
+          redirectTo: redirectTo
         }
       });
 
@@ -49,6 +52,10 @@ const Login = () => {
         console.error("Google login error:", error);
         toast.error("Login failed", {
           description: error.message || "There was a problem with the Google login process",
+        });
+      } else {
+        toast.info("Redirecting to Google", {
+          description: "Please wait while we redirect you to Google for authentication"
         });
       }
     } catch (error) {
