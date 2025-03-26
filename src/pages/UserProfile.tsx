@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import Layout from '@/components/Layout';
@@ -38,6 +39,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SubscriptionPlans } from '@/components/subscription/SubscriptionPlans';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const formSchema = z.object({
   // Business info
@@ -76,6 +78,7 @@ const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("business");
   const [subscriptionPlan, setSubscriptionPlan] = useState("startup");
   const [isNewUser, setIsNewUser] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -120,28 +123,157 @@ const UserProfile = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!user) return;
     
-    if (isNewUser) {
-      completeProfile({
-        name: values.name,
-      });
+    setIsSubmitting(true);
+    
+    try {
+      // Process keywords into an array for storage
+      const keywordsArray = values.keywords 
+        ? values.keywords.split(',').map(k => k.trim()).filter(Boolean) 
+        : [];
+        
+      // Services array
+      const servicesArray = values.services
+        ? values.services.split(',').map(s => s.trim()).filter(Boolean)
+        : [];
       
-      toast.success("Profile created", {
-        description: "Your vendor profile has been successfully created.",
+      if (isNewUser) {
+        // Save profile data
+        const profileData = {
+          name: values.name,
+          profile_completed: true,
+          businessName: values.name,
+          category: values.category,
+          city: values.city
+        };
+        
+        // Create vendor data
+        const vendorData = {
+          user_id: user.id,
+          name: values.name,
+          category: values.category,
+          city: values.city,
+          description: values.description,
+          keywords: keywordsArray,
+          phone: values.phone,
+          email: values.email,
+          website: values.website && values.website.length > 0 ? values.website : null,
+          facebook: values.facebook,
+          instagram: values.instagram,
+          twitter: null, // Not in form currently
+          linkedin: null, // Not in form currently
+        };
+        
+        // Update profile in Supabase
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update(profileData)
+          .eq('id', user.id);
+          
+        if (profileError) {
+          throw new Error(`Error updating profile: ${profileError.message}`);
+        }
+        
+        // Insert vendor in Supabase
+        const { error: vendorError } = await supabase
+          .from('vendors')
+          .insert(vendorData);
+          
+        if (vendorError) {
+          throw new Error(`Error creating vendor: ${vendorError.message}`);
+        }
+        
+        // Call completeProfile to update local state
+        await completeProfile({
+          name: values.name,
+          profileCompleted: true
+        });
+        
+        toast.success("Profile created", {
+          description: "Your vendor profile has been successfully created.",
+        });
+        
+        navigate('/');
+      } else {
+        // Update existing profile
+        // First update the profile
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({
+            name: values.name,
+          })
+          .eq('id', user.id);
+          
+        if (profileError) {
+          throw new Error(`Error updating profile: ${profileError.message}`);
+        }
+        
+        // Check if vendor record exists
+        const { data: existingVendor, error: vendorCheckError } = await supabase
+          .from('vendors')
+          .select('id')
+          .eq('user_id', user.id)
+          .maybeSingle();
+          
+        if (vendorCheckError) {
+          throw new Error(`Error checking vendor: ${vendorCheckError.message}`);
+        }
+        
+        // Prepare vendor data
+        const vendorData = {
+          name: values.name,
+          category: values.category,
+          city: values.city,
+          description: values.description,
+          keywords: keywordsArray,
+          phone: values.phone,
+          email: values.email,
+          website: values.website && values.website.length > 0 ? values.website : null,
+          facebook: values.facebook,
+          instagram: values.instagram,
+        };
+        
+        if (existingVendor) {
+          // Update existing vendor
+          const { error: updateError } = await supabase
+            .from('vendors')
+            .update(vendorData)
+            .eq('id', existingVendor.id);
+            
+          if (updateError) {
+            throw new Error(`Error updating vendor: ${updateError.message}`);
+          }
+        } else {
+          // Create new vendor if not exists
+          vendorData.user_id = user.id;
+          const { error: insertError } = await supabase
+            .from('vendors')
+            .insert(vendorData);
+            
+          if (insertError) {
+            throw new Error(`Error creating vendor: ${insertError.message}`);
+          }
+        }
+        
+        // Update local state
+        updateUser({
+          name: values.name,
+        });
+        
+        uiToast({
+          title: "Profile updated",
+          description: "Your vendor profile has been successfully updated.",
+        });
+      }
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      toast.error("Save failed", {
+        description: error instanceof Error ? error.message : "There was a problem saving your profile",
       });
-      
-      navigate('/');
-    } else {
-      updateUser({
-        name: values.name,
-      });
-      
-      uiToast({
-        title: "Profile updated",
-        description: "Your vendor profile has been successfully updated.",
-      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -407,9 +539,22 @@ const UserProfile = () => {
                           />
                         </div>
                         
-                        <Button type="submit" className="w-full gap-2 mt-4">
-                          <span>Complete Profile</span>
-                          <ArrowRight size={16} />
+                        <Button 
+                          type="submit" 
+                          className="w-full gap-2 mt-4"
+                          disabled={isSubmitting}
+                        >
+                          {isSubmitting ? (
+                            <>
+                              <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin mr-2"></div>
+                              Saving...
+                            </>
+                          ) : (
+                            <>
+                              <span>Complete Profile</span>
+                              <ArrowRight size={16} />
+                            </>
+                          )}
                         </Button>
                       </div>
                     ) : (
@@ -848,9 +993,22 @@ const UserProfile = () => {
                       </Tabs>
                       
                       {activeTab !== "subscription" && (
-                        <Button type="submit" className="w-full sm:w-auto flex items-center gap-2">
-                          <Save size={16} />
-                          Save Changes
+                        <Button 
+                          type="submit" 
+                          className="w-full sm:w-auto flex items-center gap-2"
+                          disabled={isSubmitting}
+                        >
+                          {isSubmitting ? (
+                            <>
+                              <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin mr-2"></div>
+                              Saving...
+                            </>
+                          ) : (
+                            <>
+                              <Save size={16} />
+                              Save Changes
+                            </>
+                          )}
                         </Button>
                       )}
                     )}
