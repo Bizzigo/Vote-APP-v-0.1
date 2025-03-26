@@ -87,7 +87,10 @@ const Navbar: React.FC = () => {
             <div className="flex items-center justify-between py-2 border-t border-border">
               <Link to="#" onClick={(e) => {
                 e.preventDefault();
-                document.querySelector('#languageSwitcher')?.click();
+                const languageSwitcher = document.querySelector('#languageSwitcher');
+                if (languageSwitcher instanceof HTMLElement) {
+                  languageSwitcher.click();
+                }
               }} className="flex items-center gap-2 text-base text-muted-foreground">
                 <span>Language / Valoda</span>
               </Link>
