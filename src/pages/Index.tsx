@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -9,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useLocationContext } from '@/providers/LocationProvider';
 import { useLanguage } from '@/providers/LanguageProvider';
 import CategoryGrid from '@/components/CategoryGrid';
+import UserProfileBadge from '@/components/UserProfileBadge';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -106,6 +108,10 @@ const Index = () => {
             />
             <div className="mt-8 w-full">
               <CategoryGrid onCategorySelect={category => handleSearch(category, isActive)} />
+            </div>
+            
+            <div className="mt-6 mb-4">
+              <UserProfileBadge className="py-2" />
             </div>
           </div>
         </div>
