@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -9,7 +8,6 @@ import { aiSearchVendors, generateSearchSuggestions } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
 import { useLocationContext } from '@/providers/LocationProvider';
 import CategoryGrid from '@/components/CategoryGrid';
-import CategoryCloud from '@/components/CategoryCloud';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -112,9 +110,6 @@ const Index = () => {
             />
             <div className="mt-8 w-full">
               <CategoryGrid onCategorySelect={category => handleSearch(category, isActive)} />
-            </div>
-            <div className="mt-12 w-full">
-              <CategoryCloud highlightedCategory="vakances" />
             </div>
           </div>
         </div>
