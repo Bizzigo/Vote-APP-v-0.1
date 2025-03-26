@@ -96,7 +96,47 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Categories Grid - Moved below the search bar */}
+      {/* Search Results Section - Moved above categories */}
+      {hasSearched && (
+        <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Search Results</h2>
+            {filteredVendors.length > 0 && (
+              <button 
+                onClick={() => {
+                  setHasSearched(false);
+                  setSearchTerm('');
+                }}
+                className="text-sm text-primary hover:text-primary/80"
+              >
+                Back to Explore
+              </button>
+            )}
+          </div>
+          
+          {filteredVendors.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">
+                No vendors found. Try adjusting your search.
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col space-y-4">
+              {filteredVendors.map((vendor, index) => (
+                <div 
+                  key={vendor.id} 
+                  className="animate-fade-in" 
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <VendorCard vendor={vendor} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      
+      {/* Categories Grid - Below search results */}
       <div className="container mx-auto px-4 sm:px-6 md:px-8 py-12">
         <h2 className="text-2xl font-bold mb-6">Popular Categories</h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -126,45 +166,6 @@ const Index = () => {
             <RecentVendors />
             <TopSearched />
           </>
-        )}
-        
-        {hasSearched && (
-          <div className="mt-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Search Results</h2>
-              {filteredVendors.length > 0 && (
-                <button 
-                  onClick={() => {
-                    setHasSearched(false);
-                    setSearchTerm('');
-                  }}
-                  className="text-sm text-primary hover:text-primary/80"
-                >
-                  Back to Explore
-                </button>
-              )}
-            </div>
-            
-            {filteredVendors.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground">
-                  No vendors found. Try adjusting your search.
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-col space-y-4">
-                {filteredVendors.map((vendor, index) => (
-                  <div 
-                    key={vendor.id} 
-                    className="animate-fade-in" 
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <VendorCard vendor={vendor} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
         )}
       </div>
     </Layout>
