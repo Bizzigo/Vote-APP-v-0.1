@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'lv';
@@ -39,6 +38,11 @@ export const translations: Translations = {
   "searchPlaceholder": {
     en: "Search for local businesses...",
     lv: "Meklēt vietējos uzņēmumus..."
+  },
+  // User profile badge
+  "registeredUsers": {
+    en: "registered users",
+    lv: "reģistrēti lietotāji"
   },
   // Search results
   "searchResults": {

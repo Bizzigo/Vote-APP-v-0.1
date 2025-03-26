@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/providers/LanguageProvider';
 
 interface UserProfileBadgeProps {
@@ -10,7 +10,27 @@ const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({ className = "" }) =
   const { t } = useLanguage();
   
   // This would normally be fetched from an API
-  const registeredUserCount = 1248;
+  const finalCount = 1248;
+  const [count, setCount] = useState(0);
+  const countRef = useRef<HTMLSpanElement>(null);
+  
+  useEffect(() => {
+    const duration = 1500; // animation duration in ms
+    const steps = 50; // number of steps in the animation
+    const increment = Math.ceil(finalCount / steps);
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= finalCount) {
+        clearInterval(timer);
+        setCount(finalCount);
+      } else {
+        setCount(current);
+      }
+    }, duration / steps);
+    
+    return () => clearInterval(timer);
+  }, [finalCount]);
   
   return (
     <div className={`flex items-center justify-center ${className}`}>
@@ -48,7 +68,8 @@ const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({ className = "" }) =
           />
         </div>
         <div className="text-sm text-foreground/80">
-          <span className="font-semibold">{registeredUserCount.toLocaleString()}</span> {t("registeredUsers")}
+          <span ref={countRef} className="font-semibold">{count.toLocaleString()}</span>{' '}
+          <span className="uppercase">{t("registeredUsers")}</span>
         </div>
       </div>
     </div>
