@@ -42,21 +42,18 @@ const AuthCallback = () => {
           if (profileError) {
             console.error('Error fetching profile:', profileError);
             toast.error("Could not retrieve your profile", {
-              description: "We'll redirect you to the home page"
+              description: "We'll redirect you to the profile page"
             });
-            navigate('/');
+            navigate('/profile');
             return;
           }
           
-          // Redirect based on profile completion status
-          if (profile && !profile.profile_completed) {
-            navigate('/profile');
-          } else {
-            toast.success("Login successful", {
-              description: "Welcome back!"
-            });
-            navigate('/');
-          }
+          // Always redirect to the profile page after successful login
+          // This allows the user to create a vendor profile
+          toast.success("Login successful", {
+            description: "Welcome! Please complete your vendor profile."
+          });
+          navigate('/profile');
         } else {
           console.error('No session established after authentication');
           toast.error("Authentication failed", {

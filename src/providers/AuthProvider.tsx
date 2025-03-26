@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Role } from '@/lib/types';
@@ -30,6 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             
             if (error) {
               console.error('Error fetching user profile:', error);
+              setLoading(false);
               return;
             }
 
@@ -50,8 +52,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               
               setUser(mappedUser);
               
-              // Redirect if profile needs to be completed
-              if (!profile.profile_completed) {
+              // Only redirect if we're not already on the profile page
+              // and the profile needs to be completed
+              const currentPath = window.location.pathname;
+              if (!profile.profile_completed && 
+                  !currentPath.includes('/profile') && 
+                  !currentPath.includes('/auth/callback')) {
                 navigate('/profile');
               }
             }
