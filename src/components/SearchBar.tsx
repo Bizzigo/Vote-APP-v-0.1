@@ -100,7 +100,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <form 
       onSubmit={handleSubmit} 
-      className={`relative flex w-full max-w-3xl mx-auto ${className}`}
+      className={`relative flex w-full mx-auto ${className}`}
     >
       <div className="relative w-full">
         <Input
@@ -118,7 +118,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="absolute right-10 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
           >
             <X className="h-4 w-4" />
             <span className="sr-only">Clear search</span>

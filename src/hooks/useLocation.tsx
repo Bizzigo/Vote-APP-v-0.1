@@ -1,54 +1,48 @@
 
-import { useState, useEffect, createContext, useContext } from 'react';
+import { useState, useCallback } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
-interface LocationContextType {
-  locationActive: boolean;
-  userLocation: GeolocationPosition['coords'] | null;
-  toggleLocation: () => void;
-}
+export const useLocation = () => {
+  const [isActive, setIsActive] = useState(false);
+  const { toast } = useToast();
 
-const LocationContext = createContext<LocationContextType>({
-  locationActive: false,
-  userLocation: null,
-  toggleLocation: () => {},
-});
-
-export const LocationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [locationActive, setLocationActive] = useState(false);
-  const [userLocation, setUserLocation] = useState<GeolocationPosition['coords'] | null>(null);
-
-  const toggleLocation = ()  => {
-    if (!locationActive) {
+  const toggleLocation = useCallback(() => {
+    if (!isActive) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            setUserLocation(position.coords);
-            setLocationActive(true);
+            setIsActive(true);
+            toast({
+              title: "Location accessed",
+              description: "Using your current location",
+            });
           },
           (error) => {
             console.error("Error getting location:", error);
-            setLocationActive(false);
-            setUserLocation(null);
+            toast({
+              title: "Location error",
+              description: "Could not access your location",
+              variant: "destructive",
+            });
           }
         );
+      } else {
+        toast({
+          title: "Location not supported",
+          description: "Your browser doesn't support geolocation",
+          variant: "destructive",
+        });
       }
     } else {
-      setLocationActive(false);
-      setUserLocation(null);
+      setIsActive(false);
+      toast({
+        title: "Location disabled",
+        description: "No longer using your location",
+      });
     }
-  };
+  }, [isActive, toast]);
 
-  return (
-    <LocationContext.Provider value={{ locationActive, userLocation, toggleLocation }}>
-      {children}
-    </LocationContext.Provider>
-  );
+  return { isActive, toggleLocation };
 };
 
-export const useLocation = () => {
-  const context = useContext(LocationContext);
-  if (context === undefined) {
-    throw new Error('useLocation must be used within a LocationProvider');
-  }
-  return context;
-};
+export default useLocation;

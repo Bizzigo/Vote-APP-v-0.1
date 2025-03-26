@@ -2,7 +2,7 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Breadcrumbs from './Breadcrumbs';
 
 interface LayoutProps {

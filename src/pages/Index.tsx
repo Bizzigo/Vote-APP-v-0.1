@@ -3,14 +3,12 @@ import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
 import VendorCard from '@/components/vendor/VendorCard';
-import RecentVendors from '@/components/RecentVendors';
-import TopSearched from '@/components/TopSearched';
 import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
 import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
-import { Badge } from '@/components/ui/badge';
-import { Link } from 'react-router-dom';
+import { MapPin } from 'lucide-react';
+import { useLocation as useLocationHook } from '@/hooks/useLocation';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -18,6 +16,7 @@ const Index = () => {
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const { toast } = useToast();
+  const { isActive: locationActive, toggleLocation } = useLocationHook();
 
   const handleSearch = useCallback((query: string, useAI: boolean) => {
     console.log('Search initiated:', { query });
@@ -57,28 +56,37 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="w-full bg-primary/5 py-16">
-        <div className="container mx-auto px-4 sm:px-6 md:px-8">
+      {!hasSearched ? (
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
           <div className="text-center mb-8 max-w-3xl mx-auto">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 mx-auto text-primary">
-              Ideālo pakalpojumu sniedzēju katalogs
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 mx-auto text-primary">
+              Bizzigo
             </h1>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto mt-3 animate-fade-in">
               Vienkāršākais veids, kā atrast uzticamus un kvalificētus pakalpojumu sniedzējus Latvijā
             </p>
           </div>
           
-          <div className="max-w-3xl mx-auto mt-8">
+          <div className="w-full max-w-xl mx-auto px-4 relative">
             <SearchBar 
               searchTerm={searchTerm} 
               setSearchTerm={setSearchTerm} 
               onSearch={handleSearch}
+              className="shadow-md"
             />
+            <button
+              onClick={toggleLocation}
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Toggle location"
+            >
+              <MapPin 
+                className={`h-5 w-5 ${locationActive ? 'text-primary fill-primary/20' : 'text-muted-foreground'}`} 
+              />
+              <span className="sr-only">Use my location</span>
+            </button>
           </div>
         </div>
-      </div>
-      
-      {hasSearched && (
+      ) : (
         <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold">Search Results</h2>
@@ -119,15 +127,6 @@ const Index = () => {
           )}
         </div>
       )}
-      
-      <div className="container mx-auto px-4 sm:px-6 md:px-8">
-        {!hasSearched && (
-          <>            
-            <RecentVendors />
-            <TopSearched />
-          </>
-        )}
-      </div>
     </Layout>
   );
 };
