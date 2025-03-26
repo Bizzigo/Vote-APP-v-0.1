@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Role } from '@/lib/types';
@@ -136,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isLoggedIn = !!user;
   const isAdmin = user?.role === 'admin';
 
-  const value = {
+  return <AuthContext.Provider value={{
     user,
     login,
     logout,
@@ -145,9 +144,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAdmin,
     updateUser,
     completeProfile
-  };
-
-  return <AuthContext.Provider value={value}>{loading ? (
+  }}>{loading ? (
     <div className="flex justify-center items-center h-screen">
       <div className="text-center">
         <div className="mb-4 w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin mx-auto"></div>
