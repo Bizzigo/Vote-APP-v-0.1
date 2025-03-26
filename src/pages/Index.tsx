@@ -11,20 +11,6 @@ import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import { Briefcase, Building, Coffee, Construction, Hammer, Laptop, ServerCog, Shirt, Truck, Wrench } from 'lucide-react';
-
-const categories = [
-  { name: 'IT Services', count: 247, icon: Laptop, slug: 'it-services' },
-  { name: 'Construction', count: 184, icon: Construction, slug: 'construction' },
-  { name: 'Manufacturing', count: 156, icon: Wrench, slug: 'manufacturing' },
-  { name: 'Retail', count: 132, icon: Shirt, slug: 'retail' },
-  { name: 'Transportation', count: 117, icon: Truck, slug: 'transportation' },
-  { name: 'Business Services', count: 104, icon: Briefcase, slug: 'business-services' },
-  { name: 'Food & Beverage', count: 93, icon: Coffee, slug: 'food-beverage' },
-  { name: 'Technical Services', count: 86, icon: ServerCog, slug: 'technical-services' },
-  { name: 'Craftsmanship', count: 74, icon: Hammer, slug: 'craftsmanship' },
-  { name: 'Corporate Services', count: 68, icon: Building, slug: 'corporate-services' },
-];
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -133,29 +119,6 @@ const Index = () => {
           )}
         </div>
       )}
-      
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-12">
-        <h2 className="text-2xl font-bold mb-6">Popular Categories</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {categories.map((category) => (
-            <Link 
-              key={category.slug}
-              to={`/category/${category.slug}`}
-              className="flex items-center justify-between p-4 bg-card rounded-lg border border-border hover:border-accent/50 transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2 rounded-full">
-                  <category.icon className="h-5 w-5 text-primary" />
-                </div>
-                <span>{category.name}</span>
-              </div>
-              <Badge variant="outline" className="text-xs font-normal">
-                {category.count}
-              </Badge>
-            </Link>
-          ))}
-        </div>
-      </div>
       
       <div className="container mx-auto px-4 sm:px-6 md:px-8">
         {!hasSearched && (

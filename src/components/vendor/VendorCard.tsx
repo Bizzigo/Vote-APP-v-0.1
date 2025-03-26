@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import VendorInfoBadges from '@/components/vendor/VendorInfoBadges';
 import VendorContactMethods from '@/components/vendor/VendorContactMethods';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, Phone } from 'lucide-react';
 import { placeholderImage } from '@/lib/mockData';
 
 interface VendorCardProps {
@@ -20,13 +20,13 @@ const VendorCard: React.FC<VendorCardProps> = ({
   vendor, 
   distance = null,
   isDirty = false,
-  showContactMethods = false
+  showContactMethods = true // Changed default to true
 }) => {
   const vendorNameSlug = vendor.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   
-  // Define contact methods - in a real app this would come from the vendor data
+  // Define contact methods - always have phone true to show phone number
   const contactMethodsAvailable = {
-    hasPhone: Math.random() > 0.3,
+    hasPhone: true, // Always show phone
     hasWhatsapp: Math.random() > 0.4,
     hasTelegram: Math.random() > 0.5,
     hasInstagram: Math.random() > 0.4,
@@ -43,7 +43,7 @@ const VendorCard: React.FC<VendorCardProps> = ({
       <CardContent className="p-0">
         <Link to={`/vendor/${vendorNameSlug}`} className="flex flex-col sm:flex-row items-stretch">
           {/* Logo part */}
-          <div className="relative overflow-hidden bg-muted sm:w-48 h-40 sm:h-auto flex-shrink-0">
+          <div className="relative overflow-hidden bg-muted sm:w-48 flex-shrink-0" style={{ height: '150px' }}>
             <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent z-10" />
             <Avatar className="h-full w-full rounded-none">
               <AvatarImage 

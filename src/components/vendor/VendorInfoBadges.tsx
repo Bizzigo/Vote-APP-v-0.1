@@ -86,7 +86,7 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
       <VendorBadge
         icon={<Star className="h-3 w-3 text-yellow-500" />}
         label={`${rating.toFixed(1)} / ${reviewCount}`}
-        className="text-gray-700"
+        className="bg-gray-600 text-white"
         scrollToId="reviews-section"
       />
       

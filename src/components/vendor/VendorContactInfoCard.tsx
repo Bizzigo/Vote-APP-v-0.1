@@ -18,6 +18,12 @@ interface VendorContactInfoCardProps {
 }
 
 const VendorContactInfoCard: React.FC<VendorContactInfoCardProps> = ({ vendorId, contactMethods }) => {
+  // Always show phone
+  const updatedContactMethods = {
+    ...contactMethods,
+    hasPhone: true
+  };
+
   return (
     <Card className="overflow-hidden border-border/50 hover:border-primary/30 transition-colors duration-300">
       <CardContent className="pt-6">
@@ -27,12 +33,12 @@ const VendorContactInfoCard: React.FC<VendorContactInfoCardProps> = ({ vendorId,
         </div>
         <VendorContactMethods
           vendorId={vendorId}
-          hasPhone={contactMethods.hasPhone}
-          hasWhatsapp={contactMethods.hasWhatsapp}
-          hasTelegram={contactMethods.hasTelegram}
-          hasInstagram={contactMethods.hasInstagram}
-          hasFacebook={contactMethods.hasFacebook}
-          hasWebsite={contactMethods.hasWebsite}
+          hasPhone={updatedContactMethods.hasPhone}
+          hasWhatsapp={updatedContactMethods.hasWhatsapp}
+          hasTelegram={updatedContactMethods.hasTelegram}
+          hasInstagram={updatedContactMethods.hasInstagram}
+          hasFacebook={updatedContactMethods.hasFacebook}
+          hasWebsite={updatedContactMethods.hasWebsite}
         />
       </CardContent>
     </Card>
