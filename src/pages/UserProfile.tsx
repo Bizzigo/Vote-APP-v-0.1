@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from '@/providers/AuthProvider';
+import { useAuth } from '@/hooks/useAuth'; // Fixed import path
 import { profileService } from '@/services/profileService';
 
 interface Profile {
