@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -103,7 +102,7 @@ const Index = () => {
           <div className="w-full max-w-xl mx-auto px-4 relative">
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch} className="" mainPage={true} />
             <div className="mt-8 w-full">
-              <CategoryGrid onCategorySelect={(category) => handleSearch(category, isActive, isActive ? distanceKm : undefined)} />
+              <CategoryGrid onCategorySelect={(category) => handleSearch(category, isActive)} />
             </div>
           </div>
         </div>
