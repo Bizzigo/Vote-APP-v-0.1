@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { useToast } from '@/hooks/use-toast';
@@ -24,12 +24,13 @@ interface Review {
 }
 
 const VendorProfile = () => {
-  const params = useParams<{ id: string }>();
-  const id = params.id;
+  const params = useParams<{ vendorSlug: string }>();
+  const vendorSlug = params.vendorSlug;
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
   const reviewsSectionRef = useRef<HTMLDivElement>(null);
   
   const [services, setServices] = useState<string[]>([
@@ -120,7 +121,7 @@ const VendorProfile = () => {
       paypal: Math.random() > 0.5,
       crypto: Math.random() > 0.7
     };
-  }, [id]);
+  }, [vendorSlug]);
   
   const contactMethods = React.useMemo(() => {
     return {
@@ -132,22 +133,29 @@ const VendorProfile = () => {
       hasWebsite: Math.random() > 0.2,
       hasLursoftProfile: Math.random() > 0.5,
     };
-  }, [id]);
+  }, [vendorSlug]);
   
   useEffect(() => {
     const fetchVendor = () => {
       setLoading(true);
       
-      if (!id) {
+      if (!vendorSlug) {
         setNotFound(true);
         setLoading(false);
         return;
       }
       
-      console.log("Fetching vendor with ID:", id);
+      console.log("Fetching vendor with slug:", vendorSlug);
       console.log("Available vendors:", mockVendors);
       
-      const foundVendor = mockVendors.find(v => v.id === id);
+      let foundVendor = mockVendors.find(v => v.id === vendorSlug);
+      
+      if (!foundVendor) {
+        foundVendor = mockVendors.find(v => {
+          const vendorNameSlug = v.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+          return vendorNameSlug === vendorSlug;
+        });
+      }
       
       if (foundVendor) {
         console.log("Found vendor:", foundVendor);
@@ -175,7 +183,7 @@ const VendorProfile = () => {
     };
     
     fetchVendor();
-  }, [id, toast]);
+  }, [vendorSlug, toast]);
   
   const averageRating = React.useMemo(() => {
     if (reviews.length === 0) return 0;
@@ -226,8 +234,8 @@ const VendorProfile = () => {
   
   return (
     <Layout>
-      <div className="py-8">
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground mb-6 hover:text-foreground transition-colors">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-6">
+        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground mb-4 hover:text-foreground transition-colors">
           <ArrowLeft size={16} />
           <span>Back to vendors</span>
         </Link>
@@ -244,13 +252,16 @@ const VendorProfile = () => {
           onRatingClick={scrollToReviews}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
-          <VendorContactInfoCard vendorId={vendor.id} contactMethods={contactMethods} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="md:col-span-2">
+            <VendorDescriptionCard vendor={vendor} />
+          </div>
+          <div>
+            <VendorContactInfoCard vendorId={vendor.id} contactMethods={contactMethods} />
+          </div>
         </div>
 
-        <VendorDescriptionCard vendor={vendor} />
-
-        <div className="mt-6 mb-6">
+        <div className="mb-6">
           <VendorServiceTabs
             services={services}
             jobVacancies={jobVacancies}
@@ -260,9 +271,8 @@ const VendorProfile = () => {
           />
         </div>
 
-        <VendorPaymentInfoCard paymentMethods={paymentMethods} />
-        
-        <div className="mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <VendorPaymentInfoCard paymentMethods={paymentMethods} />
           <VendorKeywordsCard services={services} />
         </div>
       </div>
