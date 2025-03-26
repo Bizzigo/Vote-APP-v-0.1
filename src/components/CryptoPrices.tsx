@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-import { Bitcoin, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface CryptoData {
   bitcoin?: {
@@ -86,10 +86,7 @@ const CryptoPrices: React.FC = () => {
       {cryptoData && !loading && (
         <div className="flex flex-col space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1">
-              <Bitcoin className="h-5 w-5" />
-              <span className="font-medium">BTC</span>
-            </div>
+            <span className="font-medium">BTC</span>
             <div className="flex items-center gap-2">
               <span className="font-bold">
                 {cryptoData.bitcoin ? formatPrice(cryptoData.bitcoin.usd) : '-'}
@@ -99,10 +96,7 @@ const CryptoPrices: React.FC = () => {
           </div>
           
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1">
-              <Bitcoin className="h-5 w-5" />
-              <span className="font-medium">XRP</span>
-            </div>
+            <span className="font-medium">XRP</span>
             <div className="flex items-center gap-2">
               <span className="font-bold">
                 {cryptoData.ripple ? formatPrice(cryptoData.ripple.usd) : '-'}

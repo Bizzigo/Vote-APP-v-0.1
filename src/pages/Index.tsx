@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -13,6 +12,7 @@ import CategoryGrid from '@/components/CategoryGrid';
 import UserProfileBadge from '@/components/UserProfileBadge';
 import WeatherBadge from '@/components/WeatherBadge';
 import CryptoPrices from '@/components/CryptoPrices';
+import NameDay from '@/components/NameDay';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -35,10 +35,8 @@ const Index = () => {
       return;
     }
 
-    // Get base search results from AI search
     let results = aiSearchVendors(vendors, query);
 
-    // Add distance calculations if location is active
     if (useLocation && coordinates) {
       results = results.map(vendor => {
         if (vendor.location) {
@@ -51,16 +49,12 @@ const Index = () => {
         return vendor;
       });
 
-      // Filter by maximum distance if a distance limit is set
       if (distanceKm) {
         results = results.filter(vendor => {
-          // Keep vendors with a distance less than or equal to the specified maximum
-          // or vendors without location data
           return !vendor.distanceKm || vendor.distanceKm <= distanceKm;
         });
       }
 
-      // Sort by distance if location filtering is active
       results.sort((a, b) => {
         const distA = a.distanceKm || Number.MAX_VALUE;
         const distB = b.distanceKm || Number.MAX_VALUE;
@@ -90,7 +84,6 @@ const Index = () => {
     };
   }, [hasSearched, filteredVendors.length, toast, t]);
 
-  // Make sure we scroll to top when the page loads
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -121,11 +114,12 @@ const Index = () => {
               <UserProfileBadge className="py-2" />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
               {isActive && (
                 <WeatherBadge />
               )}
               <CryptoPrices />
+              <NameDay />
             </div>
           </div>
         </div>
