@@ -47,46 +47,56 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
     
     // Base scoring - check for matches in different fields
     searchTerms.forEach(term => {
-      // Direct matches in name (highest weight)
-      if (vendor.name.toLowerCase().includes(term)) {
-        score += 10;
+      // Check for exact or partial keyword matches (highest weight)
+      if (vendor.keywords && vendor.keywords.length > 0) {
+        const keywordMatches = vendor.keywords.filter(keyword => 
+          keyword.toLowerCase() === term || 
+          keyword.toLowerCase().includes(term) ||
+          term.includes(keyword.toLowerCase())
+        ).length;
+        
+        if (keywordMatches > 0) {
+          // Boost score based on the number of keyword matches
+          score += keywordMatches * 10;
+        }
       }
       
-      // Category matches (high weight)
-      if (vendor.category.toLowerCase().includes(term)) {
+      // Direct matches in name (high weight)
+      if (vendor.name.toLowerCase().includes(term)) {
         score += 8;
+      }
+      
+      // Category matches (medium-high weight)
+      if (vendor.category.toLowerCase().includes(term)) {
+        score += 7;
       }
       
       // City matches (medium weight)
       if (vendor.city.toLowerCase().includes(term)) {
-        score += 5;
+        score += 6;
       }
       
-      // Description matches (low-medium weight)
+      // Description matches (medium-low weight)
       if (vendor.description.toLowerCase().includes(term)) {
         score += 4;
       }
-      
-      // Keyword matches (high weight)
-      if (vendor.keywords && vendor.keywords.length > 0) {
-        vendor.keywords.forEach(keyword => {
-          if (keyword.toLowerCase().includes(term)) {
-            score += 7; // High importance for keyword matches
-          }
-        });
+    });
+    
+    // Bonus for exact matches
+    searchTerms.forEach(term => {
+      // Exact keyword match (highest bonus)
+      if (vendor.keywords && vendor.keywords.some(k => k.toLowerCase() === term)) {
+        score += 15;
       }
       
-      // Location information - if available
-      if (vendor.location) {
-        const locationString = `${vendor.location.lat},${vendor.location.lng}`;
-        if (locationString.includes(term)) {
-          score += 2;
-        }
+      // Exact name match
+      if (vendor.name.toLowerCase() === term) {
+        score += 12;
       }
     });
     
-    // Boost score based on rating
-    score += vendor.rating;
+    // Apply rating as a multiplier (vendors with higher ratings get boosted)
+    score = score * (1 + vendor.rating / 10);
     
     return { vendor, score };
   });
