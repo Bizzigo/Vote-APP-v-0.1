@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const Login = () => {
-  const { login, isLoggedIn, user } = useAuth();
+  const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
 
   // Redirect if already logged in
@@ -23,10 +24,21 @@ const Login = () => {
     }
   }, [isLoggedIn, navigate, user]);
 
-  const handleSocialLogin = (provider: string) => {
-    // In a real app, this would initiate OAuth flow with the actual provider
+  const handleGoogleLogin = async () => {
     try {
-      login(`user_${Math.floor(Math.random() * 10000)}@example.com`, provider);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+
+      if (error) {
+        toast.error("Login failed", {
+          description: error.message || "There was a problem with the login process",
+        });
+        console.error("Login error:", error);
+      }
     } catch (error) {
       toast.error("Login failed", {
         description: "There was a problem with the login process. Please try again.",
@@ -51,7 +63,7 @@ const Login = () => {
               <Button 
                 variant="outline"
                 className="w-full flex items-center justify-center gap-2"
-                onClick={() => handleSocialLogin('google')}
+                onClick={handleGoogleLogin}
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                   <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
@@ -75,26 +87,6 @@ const Login = () => {
                 </svg>
                 Sign in with Google
               </Button>
-              
-              <Button 
-                variant="outline"
-                className="w-full flex items-center justify-center gap-2"
-                onClick={() => handleSocialLogin('facebook')}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-blue-600">
-                  <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-                </svg>
-                Sign in with Facebook
-              </Button>
-            </div>
-            
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t"></span>
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">Or</span>
-              </div>
             </div>
             
             <div className="text-center">
@@ -117,10 +109,6 @@ const Login = () => {
               <Link to="/privacy" className="underline hover:text-primary">
                 Privacy Policy
               </Link>
-            </p>
-            
-            <p className="text-center text-xs text-muted-foreground">
-              This is a demo app. No real authentication is implemented.
             </p>
           </CardFooter>
         </Card>

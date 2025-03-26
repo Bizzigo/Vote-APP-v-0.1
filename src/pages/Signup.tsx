@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -12,91 +12,47 @@ import {
   CardDescription,
   CardFooter 
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { toast } from 'sonner';
-import { User, Mail, Building, Phone, MapPin, Globe, Facebook, Instagram, Twitter, Linkedin, Hash } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { SubscriptionPlans } from '@/components/subscription/SubscriptionPlans';
-
-const formSchema = z.object({
-  // Personal info
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  
-  // Business info
-  businessName: z.string().min(2, { message: "Business name must be at least 2 characters." }),
-  category: z.string().min(1, { message: "Please select a category." }),
-  city: z.string().min(2, { message: "City must be at least 2 characters." }),
-  phone: z.string().min(8, { message: "Please enter a valid phone number." }),
-  description: z.string().min(10, { message: "Please enter a business description." }),
-  
-  // Keywords
-  keywords: z.string().optional(),
-  
-  // Contact info
-  website: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
-  facebook: z.string().optional(),
-  instagram: z.string().optional(),
-  twitter: z.string().optional(),
-  linkedin: z.string().optional(),
-});
+import { supabase } from '@/integrations/supabase/client';
 
 const Signup = () => {
-  const { login, isLoggedIn } = useAuth();
+  const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState('startup');
 
   // Redirect if already logged in
-  React.useEffect(() => {
+  useEffect(() => {
     if (isLoggedIn) {
-      navigate('/profile');
+      // If profile is not completed, redirect to profile page
+      if (user && !user.profileCompleted) {
+        navigate('/profile');
+      } else {
+        navigate('/');
+      }
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, user]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      businessName: "",
-      category: "",
-      city: "",
-      phone: "",
-      description: "",
-      keywords: "",
-      website: "",
-      facebook: "",
-      instagram: "",
-      twitter: "",
-      linkedin: "",
-    },
-  });
-
-  const handleFormSubmit = (values: z.infer<typeof formSchema>) => {
-    if (!selectedPlan) {
-      toast.error("Please select a subscription plan");
-      return;
+  const handleGoogleSignup = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+      
+      if (error) {
+        toast.error("Signup failed", {
+          description: error.message || "There was a problem with the signup process",
+        });
+        console.error("Signup error:", error);
+      }
+    } catch (error) {
+      toast.error("Signup failed", {
+        description: "There was a problem with the signup process. Please try again.",
+      });
+      console.error("Signup error:", error);
     }
-
-    // In a real app, this would be an API call to register
-    console.log("Form values:", values);
-    console.log("Selected plan:", selectedPlan);
-    
-    // Simulate signup and login
-    login(values.email, 'email');
-    toast.success("Account created successfully!");
-    navigate('/profile');
-  };
-
-  const handleSocialSignup = (provider: string) => {
-    // In a real app, this would initiate OAuth flow
-    login(`user@example.com`, provider);
-    navigate('/profile');
   };
 
   return (
@@ -104,351 +60,73 @@ const Signup = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="w-full bg-card animate-scale-in border border-border/40 shadow-sm p-6 rounded-md mb-8">
           <h1 className="text-3xl font-bold">Create Your Vendor Account</h1>
-          <p className="text-muted-foreground mt-2">Enter your business details to get started</p>
+          <p className="text-muted-foreground mt-2">Sign up with Google to get started</p>
         </div>
         
-        <div className="grid grid-cols-1 gap-6">
-          <Card className="shadow-sm border-border/40">
-            <CardHeader>
-              <CardTitle>Business Information</CardTitle>
-              <CardDescription>
-                Enter your details to create a vendor account
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-foreground">Account Information</h3>
-                      
-                      <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Full Name</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" placeholder="John Doe" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email Address</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" placeholder="your@email.com" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <div className="flex flex-col space-y-4 mt-4">
-                        <p className="text-sm text-muted-foreground">Sign up with social accounts</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            onClick={() => handleSocialSignup('google')}
-                            className="flex items-center justify-center gap-2"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
-                              <circle cx="12" cy="12" r="10"></circle>
-                              <path d="M8 12 h8"></path>
-                              <path d="M12 8 v8"></path>
-                            </svg>
-                            Sign up with Google
-                          </Button>
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            onClick={() => handleSocialSignup('facebook')}
-                            className="flex items-center justify-center gap-2"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
-                              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                            </svg>
-                            Sign up with Facebook
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium text-foreground">Business Details</h3>
-                      
-                      <FormField
-                        control={form.control}
-                        name="businessName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Business Name</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" placeholder="Your Business Name" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <FormField
-                          control={form.control}
-                          name="category"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Category</FormLabel>
-                              <FormControl>
-                                <select
-                                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                  {...field}
-                                >
-                                  <option value="">Select Category</option>
-                                  <option value="Technology">Technology</option>
-                                  <option value="Finance">Finance</option>
-                                  <option value="Healthcare">Healthcare</option>
-                                  <option value="Retail">Retail</option>
-                                  <option value="Food">Food</option>
-                                  <option value="Education">Education</option>
-                                  <option value="Transportation">Transportation</option>
-                                  <option value="Energy">Energy</option>
-                                  <option value="Entertainment">Entertainment</option>
-                                  <option value="Construction">Construction</option>
-                                </select>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="city"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>City</FormLabel>
-                              <FormControl>
-                                <div className="relative">
-                                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input className="pl-10" placeholder="City" {...field} />
-                                </div>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      
-                      <FormField
-                        control={form.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Phone Number</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" placeholder="+371 20 123 456" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="border-t pt-6">
-                    <h3 className="text-lg font-medium mb-4 text-foreground">Business Description</h3>
-                    
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              placeholder="Describe your business..."
-                              className="min-h-[100px]"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+        <Card className="shadow-sm border-border/40">
+          <CardHeader>
+            <CardTitle>Create an Account</CardTitle>
+            <CardDescription>
+              Sign up with Google to create your vendor account
+            </CardDescription>
+          </CardHeader>
+          
+          <CardContent className="space-y-6">
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <p className="text-center text-muted-foreground">
+                Create an account to register your business in our directory. After signing up, you'll be able to complete your vendor profile.
+              </p>
+              
+              <Button 
+                onClick={handleGoogleSignup}
+                className="w-full max-w-md flex items-center justify-center gap-2"
+                variant="outline"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
+                    <path
+                      fill="#4285F4"
+                      d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"
                     />
-                    
-                    <FormField
-                      control={form.control}
-                      name="keywords"
-                      render={({ field }) => (
-                        <FormItem className="mt-4">
-                          <FormLabel>Keywords (comma separated)</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input 
-                                className="pl-10" 
-                                placeholder="e.g. consulting, development, design" 
-                                {...field} 
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                          <p className="text-sm text-muted-foreground mt-1">These keywords will help customers find your business</p>
-                        </FormItem>
-                      )}
+                    <path
+                      fill="#34A853"
+                      d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"
                     />
-                  </div>
-                  
-                  <div className="border-t pt-6">
-                    <h3 className="text-lg font-medium mb-4 text-foreground">Additional Contact Information</h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="website"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Website</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" placeholder="https://example.com" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    
-                    <h4 className="text-md font-medium mt-4 mb-2">Social Media (optional)</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="facebook"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Facebook</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Facebook className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" placeholder="Facebook profile" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="instagram"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Instagram</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" placeholder="Instagram handle" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="twitter"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Twitter</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Twitter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" placeholder="Twitter handle" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="linkedin"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>LinkedIn</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input className="pl-10" placeholder="LinkedIn profile" {...field} />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
+                    <path
+                      fill="#FBBC05"
+                      d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"
+                    />
+                  </g>
+                </svg>
+                Sign up with Google
+              </Button>
+            </div>
+          </CardContent>
           
-          {/* Subscription Plans */}
-          <Card className="shadow-sm border-border/40">
-            <CardHeader>
-              <CardTitle>Choose a Subscription Plan</CardTitle>
-              <CardDescription>
-                Select the plan that best fits your business needs
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SubscriptionPlans selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} />
-            </CardContent>
-          </Card>
-          
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <Button 
-              onClick={form.handleSubmit(handleFormSubmit)}
-              className="w-full md:w-auto font-medium"
-              size="lg"
-            >
-              Create Vendor Account
-            </Button>
-          </div>
-          
-          <div className="text-center text-sm mt-4 mb-8">
-            <p className="text-muted-foreground">
+          <CardFooter className="flex flex-col space-y-4">
+            <p className="text-center text-sm">
               Already have an account?{" "}
               <Link to="/login" className="text-primary hover:underline">
                 Log in
               </Link>
             </p>
-          </div>
-        </div>
+            
+            <p className="text-center text-xs text-muted-foreground">
+              By continuing, you agree to our{" "}
+              <Link to="/terms" className="underline hover:text-primary">
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link to="/privacy" className="underline hover:text-primary">
+                Privacy Policy
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
       </div>
     </Layout>
   );

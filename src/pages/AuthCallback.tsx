@@ -22,7 +22,7 @@ const AuthCallback = () => {
           .from('profiles')
           .select('profile_completed')
           .eq('id', data.session.user.id)
-          .single();
+          .maybeSingle();
           
         if (profileError) {
           console.error('Error fetching profile:', profileError);

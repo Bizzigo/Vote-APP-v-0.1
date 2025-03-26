@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, AuthContextType } from '@/lib/types';
 import { mockVisitorUser, mockAdminUser } from '@/lib/mockData';
@@ -33,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               .from('profiles')
               .select('*')
               .eq('id', session.user.id)
-              .single();
+              .maybeSingle();
             
             if (error) {
               console.error('Error fetching user profile:', error);
@@ -52,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 subscriptionPlan: profile.subscription_plan as any || undefined,
                 subscriptionStatus: profile.subscription_status as any || undefined,
                 profileCompleted: profile.profile_completed || false,
-                provider: profile.provider as any || 'email',
+                provider: profile.provider as any || 'google',
               };
               
               setUser(mappedUser);
@@ -111,39 +110,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       
-      // Real authentication with Supabase
-      let authResponse;
+      // Real authentication with Supabase - Only Google auth is enabled
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
       
-      if (provider === 'google') {
-        authResponse = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: `${window.location.origin}/auth/callback`
-          }
-        });
-      } else if (provider === 'facebook') {
-        authResponse = await supabase.auth.signInWithOAuth({
-          provider: 'facebook',
-          options: {
-            redirectTo: `${window.location.origin}/auth/callback`
-          }
-        });
-      } else {
-        // For demo purposes, we'll use passwordless sign-in with magic link
-        authResponse = await supabase.auth.signInWithOtp({
-          email: email,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`
-          }
-        });
-        
-        toast.success("Check your email", {
-          description: "We sent you a magic link to sign in",
-        });
-      }
-      
-      if (authResponse.error) {
-        throw authResponse.error;
+      if (error) {
+        throw error;
       }
     } catch (error: any) {
       console.error('Login error:', error);
@@ -341,7 +317,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   if (loading) {
-    // You could return a loading spinner here
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
   }
 
