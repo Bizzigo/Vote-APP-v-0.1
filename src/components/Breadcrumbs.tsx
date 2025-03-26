@@ -2,7 +2,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { Home } from 'lucide-react';
 
 interface BreadcrumbItem {
   label: string;
@@ -47,18 +46,9 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
   return (
     <Breadcrumb className="mb-6">
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/" className="flex items-center">
-              <Home className="h-4 w-4 mr-1" />
-              <span className="sr-only sm:not-sr-only sm:inline">Home</span>
-            </Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        
         {breadcrumbs.map((item, index) => (
           <React.Fragment key={item.path}>
-            <BreadcrumbSeparator />
+            {index > 0 && <BreadcrumbSeparator />}
             <BreadcrumbItem>
               {item.isCurrent ? (
                 <BreadcrumbPage>{item.label}</BreadcrumbPage>

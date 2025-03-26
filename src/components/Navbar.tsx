@@ -32,18 +32,18 @@ const Navbar: React.FC = () => {
               <button onClick={logout} className="text-foreground hover:text-primary transition-colors">
                 Log Out
               </button>
-            </div> : <div className="flex items-center gap-4">
-              <Link to="/login" className="text-gray-500 hover:text-gray-700 transition-colors" aria-label="Log in">
+            </div> : <div className="flex items-center gap-6">
+              <Link to="/login" className="text-gray-500 hover:text-gray-700 transition-colors flex items-center" aria-label="Log in">
                 <LogIn size={20} strokeWidth={1.5} />
               </Link>
-              <Link to="/signup" className="text-primary hover:text-primary/80 transition-colors" aria-label="Sign up">
+              <Link to="/signup" className="text-primary hover:text-primary/80 transition-colors flex items-center" aria-label="Sign up">
                 <UserPlus size={20} strokeWidth={1.5} />
               </Link>
             </div>}
         </nav>
 
         {/* Mobile Menu Button */}
-        <button className="md:hidden" onClick={toggleMobileMenu} aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}>
+        <button className="md:hidden flex items-center" onClick={toggleMobileMenu} aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}>
           {mobileMenuOpen ? <X size={24} className="text-primary" /> : <Menu size={24} className="text-primary" />}
         </button>
       </div>
