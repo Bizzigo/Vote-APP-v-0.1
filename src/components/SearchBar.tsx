@@ -72,15 +72,15 @@ const SearchBar = ({
   };
 
   // Apply a special pulse class if mainPage is true
-  const inputClasses = `h-12 text-base rounded-3xl pl-12 pr-12 focus-visible:ring-blue-200 focus-visible:border-blue-500 shadow-sm hover:shadow-md transition-all hover:border-blue-500 hover:border-2 focus-visible:border-2 ${
-    mainPage ? 'search-pulse-animation' : 'border border-blue-500'
+  const inputClasses = `h-12 text-base rounded-3xl pl-12 pr-12 focus-visible:ring-blue-300 focus-visible:border-blue-600 shadow-sm hover:shadow-md transition-all hover:border-blue-600 hover:border-2 focus-visible:border-2 ${
+    mainPage ? 'enhanced-search-pulse-animation' : 'border-2 border-blue-500'
   }`;
 
   return (
     <div className={`relative w-full ${mainPage ? 'mx-auto' : ''} ${className}`}>
       <form onSubmit={handleSearch} className="w-full">
         <div className="relative flex items-center">
-          <div className="absolute left-4 text-gray-400">
+          <div className="absolute left-4 text-foreground/70">
             <Search size={20} />
           </div>
           <Input
@@ -100,7 +100,7 @@ const SearchBar = ({
           <div className="absolute right-4 flex items-center space-x-2">
             <MapPin 
               size={20} 
-              className={`cursor-pointer transition-colors ${isActive ? 'text-primary' : 'text-gray-400'}`} 
+              className={`cursor-pointer transition-colors ${isActive ? 'text-primary' : 'text-foreground/70'}`} 
               onClick={(e) => {
                 e.preventDefault(); // Prevent form submission
                 toggleLocation();
@@ -113,14 +113,14 @@ const SearchBar = ({
       {isActive && (
         <div className="mt-4 px-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-500">{t("distance")}: {distanceKm} {t("km")}</span>
-            <span className="text-xs text-gray-400">{t("distanceEnabled")}</span>
+            <span className="text-sm text-foreground/70">{t("distance")}: {distanceKm} {t("km")}</span>
+            <span className="text-xs text-foreground/70">{t("distanceEnabled")}</span>
           </div>
           <Slider
             value={[distanceKm]}
-            min={1}
-            max={50}
-            step={1}
+            min={5}
+            max={100}
+            step={5}
             onValueChange={(value) => setDistanceKm(value[0])}
             className="w-full"
           />
