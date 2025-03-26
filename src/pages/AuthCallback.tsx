@@ -28,7 +28,7 @@ const AuthCallback = () => {
           // Check if profile is completed
           const { data: profile, error: profileError } = await supabase
             .from('profiles')
-            .select('profile_completed, name')
+            .select('profile_completed, name, phone, website, facebook, instagram, twitter, linkedin')
             .eq('id', data.session.user.id)
             .maybeSingle();
             

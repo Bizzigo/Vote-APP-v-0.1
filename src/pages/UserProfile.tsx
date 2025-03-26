@@ -68,7 +68,7 @@ const UserProfile = () => {
       // Call the completeProfile function which updates the profile in Supabase
       const result = await completeProfile(data);
       
-      if (result?.error) {
+      if (result && result.error) {
         throw result.error;
       }
       
