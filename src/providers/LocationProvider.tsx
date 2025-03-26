@@ -24,10 +24,10 @@ interface LocationProviderProps {
 }
 
 export const LocationProvider: React.FC<LocationProviderProps> = ({ children }) => {
-  const locationHook = useLocation();
+  const { isActive, toggleLocation, coordinates, calculateDistance } = useLocation();
 
   return (
-    <LocationContext.Provider value={locationHook}>
+    <LocationContext.Provider value={{ isActive, toggleLocation, coordinates, calculateDistance }}>
       {children}
     </LocationContext.Provider>
   );
