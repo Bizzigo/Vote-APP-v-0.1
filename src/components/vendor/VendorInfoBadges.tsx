@@ -32,18 +32,20 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
       <VendorBadge
         icon={<MapPin className="h-3 w-3" />}
         label={city}
+        className="whitespace-nowrap"
       />
       
       <VendorBadge
         label={category}
         scrollToId="reviews-section"
+        className="whitespace-nowrap"
       />
       
       {hasLursoftProfile && (
         <VendorBadge
           icon={<ExternalLink className="h-3 w-3" />}
           label="LURSOFT"
-          className="text-blue-600 hover:bg-blue-50"
+          className="text-blue-600 hover:bg-blue-50 whitespace-nowrap"
           href="https://www.lursoft.lv"
         />
       )}
@@ -52,7 +54,7 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
         <VendorBadge
           icon={<Briefcase className="h-3 w-3" />}
           label={`Vakances: ${jobVacancies}`}
-          className="text-purple-600"
+          className="text-purple-600 whitespace-nowrap"
           scrollToId="job-offers-section"
         />
       )}
@@ -61,7 +63,7 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
         <VendorBadge
           icon={<ShoppingBag className="h-3 w-3" />}
           label="Veikals"
-          className="text-green-600"
+          className="text-green-600 whitespace-nowrap"
           scrollToId="shop-section"
         />
       )}
@@ -73,7 +75,7 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
               <VendorBadge
                 icon={<span className={`inline-block h-2 w-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>}
                 label={isOnline ? 'Online' : 'Offline'}
-                className={isOnline ? 'text-green-600' : 'text-gray-500'}
+                className={`${isOnline ? 'text-green-600' : 'text-gray-500'} whitespace-nowrap`}
               />
             </div>
           </TooltipTrigger>
@@ -86,7 +88,7 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
       <VendorBadge
         icon={<Star className="h-3 w-3 text-yellow-500" />}
         label={`${rating.toFixed(1)} / ${reviewCount}`}
-        className="bg-gray-600 text-white"
+        className="bg-gray-600 text-white whitespace-nowrap"
         scrollToId="reviews-section"
       />
       
@@ -99,6 +101,7 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
             </svg>
           }
           label={`${distance} km`}
+          className="whitespace-nowrap"
         />
       )}
     </div>

@@ -38,7 +38,7 @@ const VendorBadge: React.FC<VendorBadgeProps> = ({
   const BadgeContent = () => (
     <Badge 
       variant={variant} 
-      className={`flex items-center gap-1 text-xs rounded-sm px-2 py-0.5 ${className} ${(scrollToId || onClick) ? 'cursor-pointer' : ''}`}
+      className={`flex items-center gap-1 text-xs rounded-sm px-2 py-0.5 whitespace-nowrap ${className} ${(scrollToId || onClick) ? 'cursor-pointer' : ''}`}
       onClick={handleClick}
     >
       {icon}

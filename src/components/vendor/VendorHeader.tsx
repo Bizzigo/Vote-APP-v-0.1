@@ -47,10 +47,10 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
           <h1 className="text-3xl font-bold">{vendor.name}</h1>
           
           <div className="flex flex-wrap gap-2 items-center">
-            <Badge variant="outline" className="rounded-sm px-2 py-0.5 bg-secondary/50">
+            <Badge variant="outline" className="rounded-sm px-2 py-0.5 bg-secondary/50 whitespace-nowrap">
               Reg. Nr: {registrationNumber}
             </Badge>
-            <Badge variant="outline" className="rounded-sm px-2 py-0.5 bg-secondary/50">
+            <Badge variant="outline" className="rounded-sm px-2 py-0.5 bg-secondary/50 whitespace-nowrap">
               Since: {registrationDate}
             </Badge>
           </div>

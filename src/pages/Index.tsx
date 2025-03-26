@@ -57,10 +57,10 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="w-full hero-gradient py-16">
+      <div className="w-full bg-black py-16">
         <div className="container mx-auto px-4 sm:px-6 md:px-8">
           <div className="text-center mb-8 max-w-3xl mx-auto">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 mx-auto text-white">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 mx-auto text-yellow-400">
               Ideālo pakalpojumu sniedzēju katalogs
             </h1>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto mt-3 animate-fade-in">
