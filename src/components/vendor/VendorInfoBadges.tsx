@@ -83,6 +83,13 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
         </Tooltip>
       </TooltipProvider>
       
+      <VendorBadge
+        icon={<Star className="h-3 w-3 text-yellow-500" />}
+        label={`${rating.toFixed(1)} / ${reviewCount}`}
+        className="text-gray-700"
+        scrollToId="reviews-section"
+      />
+      
       {distance && (
         <VendorBadge
           icon={

@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import VendorInfoBadges from '@/components/vendor/VendorInfoBadges';
 import VendorContactMethods from '@/components/vendor/VendorContactMethods';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 import { placeholderImage } from '@/lib/mockData';
 
 interface VendorCardProps {
@@ -35,12 +35,15 @@ const VendorCard: React.FC<VendorCardProps> = ({
     hasLursoftProfile: Math.random() > 0.5,
   };
   
+  // Generate a random number of reviews
+  const reviewCount = Math.floor(10 + Math.random() * 500);
+  
   return (
     <Card className={`overflow-hidden transition-all duration-200 ${isDirty ? 'border-primary/50' : ''}`}>
       <CardContent className="p-0">
         <Link to={`/vendor/${vendorNameSlug}`} className="flex flex-col sm:flex-row items-stretch">
           {/* Logo part */}
-          <div className="relative overflow-hidden bg-muted sm:w-48 h-40 sm:h-48">
+          <div className="relative overflow-hidden bg-muted sm:w-48 h-40 sm:h-auto flex-shrink-0">
             <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent z-10" />
             <Avatar className="h-full w-full rounded-none">
               <AvatarImage 
@@ -60,7 +63,7 @@ const VendorCard: React.FC<VendorCardProps> = ({
                 city={vendor.city}
                 category={vendor.category}
                 rating={vendor.rating}
-                reviewCount={0}
+                reviewCount={reviewCount}
                 hasLursoftProfile={Math.random() > 0.5}
                 jobVacancies={0}
                 hasShop={false}

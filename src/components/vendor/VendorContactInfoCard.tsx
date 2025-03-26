@@ -21,7 +21,7 @@ const VendorContactInfoCard: React.FC<VendorContactInfoCardProps> = ({ vendorId,
   return (
     <Card className="overflow-hidden border-border/50 hover:border-primary/30 transition-colors duration-300">
       <CardContent className="pt-6">
-        <div className="flex items-center gap-2 mb-5 pb-3 border-b border-border/30">
+        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-border/30">
           <Headphones className="text-primary h-5 w-5" />
           <h3 className="text-lg font-medium">Contact Methods</h3>
         </div>
