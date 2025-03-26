@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -25,11 +24,6 @@ const Index = () => {
   } = useLocationContext();
 
   const handleSearch = useCallback((query: string, useLocation: boolean, distanceKm?: number) => {
-    console.log('Search initiated:', {
-      query,
-      useLocation,
-      distanceKm
-    });
     if (query.trim() === '') {
       setFilteredVendors([]);
       setHasSearched(false);
@@ -70,12 +64,10 @@ const Index = () => {
   const handleCategorySelect = useCallback((category: string) => {
     setSearchTerm(category);
     
-    // Get vendors in this category, sorted by rating
     let results = vendors
       .filter(vendor => vendor.category === category)
       .sort((a, b) => b.rating - a.rating);
     
-    // If location is active, calculate distances and sort by proximity
     if (isActive && coordinates) {
       results = results.map(vendor => {
         if (vendor.location) {
@@ -88,10 +80,7 @@ const Index = () => {
         return vendor;
       });
       
-      // Sort by a combination of rating and distance
       results.sort((a, b) => {
-        // Higher rating is better, lower distance is better
-        // Create a combined score where rating has more weight than distance
         const scoreA = (a.rating * 2) - (a.distanceKm || 0) / 10;
         const scoreB = (b.rating * 2) - (b.distanceKm || 0) / 10;
         return scoreB - scoreA;
@@ -137,14 +126,25 @@ const Index = () => {
             </div>
           </div>
         </div> : <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Search Results</h2>
-            {filteredVendors.length > 0 && <button onClick={() => {
-          setHasSearched(false);
-          setSearchTerm('');
-        }} className="text-sm text-primary hover:text-primary/80">
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">Search Results</h2>
+              <button onClick={() => {
+                setHasSearched(false);
+                setSearchTerm('');
+              }} className="text-sm text-primary hover:text-primary/80">
                 Back to Explore
-              </button>}
+              </button>
+            </div>
+            
+            <div className="mb-4">
+              <SearchBar 
+                searchTerm={searchTerm} 
+                setSearchTerm={setSearchTerm} 
+                onSearch={handleSearch} 
+                mainPage={false} 
+              />
+            </div>
           </div>
           
           {filteredVendors.length === 0 ? <div className="text-center py-8">
