@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
+
 const Navbar: React.FC = () => {
   const {
     isLoggedIn,
@@ -13,7 +14,8 @@ const Navbar: React.FC = () => {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
-  return <header className="sticky top-0 z-40 w-full border-b border-border bg-white/80 backdrop-blur-md">
+  
+  return <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
@@ -24,20 +26,18 @@ const Navbar: React.FC = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           {isLoggedIn ? <div className="flex items-center gap-4">
-              <Link to="/profile">
-                <Button variant="outline" size="sm">
-                  Profile
-                </Button>
+              <Link to="/profile" className="text-foreground hover:text-primary transition-colors">
+                Profile
               </Link>
-              <Button variant="outline" size="sm" onClick={logout}>
+              <button onClick={logout} className="text-foreground hover:text-primary transition-colors">
                 Log Out
-              </Button>
+              </button>
             </div> : <div className="flex items-center gap-4">
-              <Link to="/login">
-                <Button variant="outline" size="sm">IENĀKT</Button>
+              <Link to="/login" className="text-foreground hover:text-primary transition-colors">
+                IENĀKT
               </Link>
-              <Link to="/signup">
-                <Button size="sm">PIEVIENOJIES</Button>
+              <Link to="/signup" className="text-primary font-medium hover:text-primary/80 transition-colors">
+                PIEVIENOJIES
               </Link>
             </div>}
         </nav>
@@ -56,9 +56,9 @@ const Navbar: React.FC = () => {
                   Profile
                 </Link>
                 <button onClick={() => {
-            logout();
-            setMobileMenuOpen(false);
-          }} className="block py-2 text-base text-muted-foreground w-full text-left">
+                  logout();
+                  setMobileMenuOpen(false);
+                }} className="block py-2 text-base text-muted-foreground w-full text-left">
                   Log Out
                 </button>
               </> : <>
@@ -73,4 +73,5 @@ const Navbar: React.FC = () => {
         </div>}
     </header>;
 };
+
 export default Navbar;

@@ -33,6 +33,7 @@ const SearchBar = ({
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchBarRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   
   // Local state for standalone usage (when props aren't provided)
   const [localSearchTerm, setLocalSearchTerm] = useState('');
@@ -100,18 +101,33 @@ const SearchBar = ({
     setShowSuggestions(false);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTerm(e.target.value);
+    // Preserve cursor position by preventing page scroll
+    if (inputRef.current) {
+      const cursorPosition = inputRef.current.selectionStart;
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.selectionStart = cursorPosition;
+          inputRef.current.selectionEnd = cursorPosition;
+        }
+      }, 0);
+    }
+  };
+
   return (
-    <div className="w-full max-w-xl" ref={searchBarRef}>
-      <form onSubmit={handleSearch} className={`w-full ${mainPage ? 'mx-auto' : ''} ${className}`}>
+    <div className={`w-full ${mainPage ? 'mx-auto' : ''} ${className}`} ref={searchBarRef}>
+      <form onSubmit={handleSearch} className="w-full">
         <div className="relative flex items-center">
           <div className="absolute left-4 text-gray-400">
             <Search size={20} />
           </div>
           <Input
+            ref={inputRef}
             type="text"
             placeholder="Search for local businesses..."
             value={term}
-            onChange={(e) => setTerm(e.target.value)}
+            onChange={handleInputChange}
             onFocus={() => setShowSuggestions(true)}
             className="h-12 text-base rounded-3xl border border-gray-300 pl-12 pr-12 focus-visible:ring-gray-200 focus-visible:border-gray-300 shadow-sm hover:shadow-md transition-shadow"
             onKeyDown={(e) => {
@@ -125,7 +141,10 @@ const SearchBar = ({
             <MapPin 
               size={20} 
               className={`cursor-pointer transition-colors ${isActive ? 'text-primary' : 'text-gray-400'}`} 
-              onClick={toggleLocation} 
+              onClick={(e) => {
+                e.preventDefault(); // Prevent form submission
+                toggleLocation();
+              }} 
             />
           </div>
         </div>
