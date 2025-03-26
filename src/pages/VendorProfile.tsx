@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { useToast } from '@/hooks/use-toast';
 import { mockVendors } from '@/lib/mockData';
@@ -235,11 +234,6 @@ const VendorProfile = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground mb-4 hover:text-foreground transition-colors">
-          <ArrowLeft size={16} />
-          <span>Back to vendors</span>
-        </Link>
-
         <VendorHeader
           vendor={{...vendor, rating: averageRating || vendor.rating}}
           registrationNumber={registrationNumber}
