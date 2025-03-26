@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -63,17 +62,17 @@ const UserProfile = () => {
         return;
       }
       
-      const formattedData = {
-        ...data,
-        keywords: data.keywords ? data.keywords : "",
-      };
+      console.log("Form data to submit:", data);
       
       // Call the completeProfile function which updates the profile in Supabase
-      await completeProfile(formattedData);
+      const result = await completeProfile(data);
+      
+      if (result.error) {
+        throw result.error;
+      }
       
       toast.success("Your profile has been updated successfully!");
-      // Remove navigation after saving profile - stay on the profile page
-      // navigate('/'); <- Removed this line
+      // Removed navigation after saving profile - staying on the profile page
     } catch (error) {
       console.error('Error submitting form:', error);
       toast.error("Failed to update profile", {

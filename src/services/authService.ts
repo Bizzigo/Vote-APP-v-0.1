@@ -104,15 +104,16 @@ export const completeProfile = async (user: User | null, profileData: any) => {
     const profileUpdate = {
       name: profileData.name,
       profile_completed: true,
-      // Added fields from form
-      phone: profileData.phone,
-      // Include fields even if empty to ensure they're saved
+      // Include all fields from the form, not just phone
+      phone: profileData.phone || null,
       website: profileData.website || null,
       facebook: profileData.facebook || null,
       instagram: profileData.instagram || null,
       twitter: profileData.twitter || null,
       linkedin: profileData.linkedin || null
     };
+    
+    console.log('Updating profile with:', profileUpdate);
     
     // Update profile in Supabase
     const { error: profileError } = await supabase
@@ -142,18 +143,20 @@ export const completeProfile = async (user: User | null, profileData: any) => {
       const vendorData = {
         user_id: user.id,
         name: profileData.businessName || profileData.name,
-        category: profileData.category,
-        city: profileData.city,
-        description: profileData.description,
+        category: profileData.category || null,
+        city: profileData.city || null,
+        description: profileData.description || null,
         keywords: keywords,
-        phone: profileData.phone,
+        phone: profileData.phone || null,
         email: user.email,
-        website: profileData.website,
-        facebook: profileData.facebook,
-        instagram: profileData.instagram,
-        twitter: profileData.twitter,
-        linkedin: profileData.linkedin,
+        website: profileData.website || null,
+        facebook: profileData.facebook || null,
+        instagram: profileData.instagram || null,
+        twitter: profileData.twitter || null,
+        linkedin: profileData.linkedin || null,
       };
+
+      console.log('Vendor data to save:', vendorData);
       
       let vendorError;
       

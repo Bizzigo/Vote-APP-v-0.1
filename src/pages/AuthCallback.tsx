@@ -28,7 +28,7 @@ const AuthCallback = () => {
           // Check if profile is completed
           const { data: profile, error: profileError } = await supabase
             .from('profiles')
-            .select('profile_completed')
+            .select('profile_completed, name, phone, website, facebook, instagram, twitter, linkedin')
             .eq('id', data.session.user.id)
             .maybeSingle();
             
@@ -41,6 +41,8 @@ const AuthCallback = () => {
             return;
           }
           
+          console.log('Retrieved profile:', profile);
+          
           toast.success("Login successful", {
             description: profile?.profile_completed 
               ? "Welcome back!" 
@@ -48,12 +50,7 @@ const AuthCallback = () => {
           });
           
           // Always redirect to profile page for profile completion if not completed
-          if (profile && !profile.profile_completed) {
-            navigate('/profile');
-          } else {
-            // Removed redirection to homepage - direct to profile page instead
-            navigate('/profile');
-          }
+          navigate('/profile');
         } else {
           console.error('No session established after authentication');
           toast.error("Authentication failed", {
