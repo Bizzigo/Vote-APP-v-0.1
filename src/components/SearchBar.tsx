@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Search, MapPin } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
 import { useLocationContext } from '@/providers/LocationProvider';
 
 const SearchBar = ({ 
@@ -25,7 +24,7 @@ const SearchBar = ({
   const [distanceKm, setDistanceKm] = useState<number>(10);
   
   // Local state for standalone usage (when props aren't provided)
-  const [localSearchTerm, setLocalSearchTerm] = React.useState('');
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
   
   // Use either provided props or local state
   const term = searchTerm !== undefined ? searchTerm : localSearchTerm;

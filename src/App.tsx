@@ -1,8 +1,9 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { LocationProvider } from "@/providers/LocationProvider";
 import React from "react";
@@ -22,14 +23,18 @@ import AuthCallback from "./pages/AuthCallback";
 // Create a client
 const queryClient = new QueryClient();
 
+function TooltipWrapper({ children }: { children: React.ReactNode }) {
+  return <TooltipProvider>{children}</TooltipProvider>;
+}
+
 const App = () => {
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <TooltipProvider>
-            <AuthProvider>
-              <LocationProvider>
+          <AuthProvider>
+            <LocationProvider>
+              <TooltipWrapper>
                 <Toaster />
                 <Sonner position="top-right" />
                 <Routes>
@@ -46,9 +51,9 @@ const App = () => {
                   <Route path="/404" element={<NotFound />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </LocationProvider>
-            </AuthProvider>
-          </TooltipProvider>
+              </TooltipWrapper>
+            </LocationProvider>
+          </AuthProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </React.StrictMode>
