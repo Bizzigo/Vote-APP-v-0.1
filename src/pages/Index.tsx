@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -17,8 +16,8 @@ const Index = () => {
   const { toast } = useToast();
   const { isActive, coordinates, calculateDistance } = useLocationContext();
   
-  const handleSearch = useCallback((query: string, useLocation: boolean) => {
-    console.log('Search initiated:', { query, useLocation });
+  const handleSearch = useCallback((query: string, useLocation: boolean, distanceKm?: number) => {
+    console.log('Search initiated:', { query, useLocation, distanceKm });
     if (query.trim() === '') {
       setFilteredVendors([]);
       setHasSearched(false);
@@ -42,6 +41,15 @@ const Index = () => {
         }
         return vendor;
       });
+      
+      // Filter by maximum distance if a distance limit is set
+      if (distanceKm) {
+        results = results.filter(vendor => {
+          // Keep vendors with a distance less than or equal to the specified maximum
+          // or vendors without location data
+          return !vendor.distanceKm || vendor.distanceKm <= distanceKm;
+        });
+      }
       
       // Sort by distance if location filtering is active
       results.sort((a, b) => {

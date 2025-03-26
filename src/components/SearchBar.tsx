@@ -15,7 +15,7 @@ const SearchBar = ({
 }: { 
   searchTerm?: string; 
   setSearchTerm?: React.Dispatch<React.SetStateAction<string>>; 
-  onSearch?: (query: string, useLocation: boolean) => void;
+  onSearch?: (query: string, useLocation: boolean, distanceKm?: number) => void;
   className?: string;
   mainPage?: boolean;
 }) => {
@@ -35,8 +35,8 @@ const SearchBar = ({
     
     if (term.trim()) {
       if (onSearch) {
-        // If onSearch is provided, use it (for Index.tsx)
-        onSearch(term.trim(), isActive);
+        // Pass the distanceKm to the onSearch function when location is active
+        onSearch(term.trim(), isActive, isActive ? distanceKm : undefined);
       } else {
         // Default behavior - navigate to search page
         navigate(`/search?q=${encodeURIComponent(term.trim())}`);
