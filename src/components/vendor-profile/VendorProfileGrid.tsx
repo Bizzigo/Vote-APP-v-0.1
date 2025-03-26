@@ -4,7 +4,7 @@ import VendorDescriptionCard from '@/components/vendor/VendorDescriptionCard';
 import VendorContactInfoCard from '@/components/vendor/VendorContactInfoCard';
 import VendorPaymentInfoCard from '@/components/vendor/VendorPaymentInfoCard';
 import VendorKeywordsCard from '@/components/vendor/VendorKeywordsCard';
-import VendorServiceTabs from '@/components/vendor/VendorServiceTabs';
+import VendorServiceTabs from '@/components/vendor/service-tabs';
 import { Vendor } from '@/lib/types';
 
 interface VendorProfileGridProps {
