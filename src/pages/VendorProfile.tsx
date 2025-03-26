@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import { useToast } from '@/hooks/use-toast';
 import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
+import SearchBar from '@/components/SearchBar';
 
 import VendorHeader from '@/components/vendor/VendorHeader';
 import VendorContactInfoCard from '@/components/vendor/VendorContactInfoCard';
@@ -31,6 +32,7 @@ const VendorProfile = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const reviewsSectionRef = useRef<HTMLDivElement>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   
   const [services, setServices] = useState<string[]>([
     'Web Development', 'Mobile Apps', 'Cloud Services', 'Consulting', 
@@ -207,6 +209,10 @@ const VendorProfile = () => {
     }
   };
 
+  const handleSearch = (query: string, useLocation: boolean, distanceKm?: number) => {
+    navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+  };
+
   if (loading) {
     return (
       <Layout>
@@ -222,8 +228,7 @@ const VendorProfile = () => {
       <Layout>
         <div className="flex flex-col justify-center items-center h-[70vh] space-y-4">
           <p className="text-xl">Vendor not found</p>
-          <Link to="/" className="text-blue-600 hover:underline flex items-center gap-2">
-            <ArrowLeft size={16} />
+          <Link to="/" className="text-blue-600 hover:underline">
             Return to Home
           </Link>
         </div>
@@ -245,6 +250,15 @@ const VendorProfile = () => {
           isOnline={isOnline}
           onRatingClick={scrollToReviews}
         />
+
+        <div className="flex justify-center w-full my-8">
+          <SearchBar 
+            searchTerm={searchTerm} 
+            setSearchTerm={setSearchTerm} 
+            onSearch={handleSearch} 
+            className="w-full max-w-xl" 
+          />
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div className="md:col-span-2">
