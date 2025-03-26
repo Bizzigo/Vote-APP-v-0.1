@@ -16,7 +16,7 @@ const LanguageSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+        <Button variant="ghost" size="icon" className="text-gray-500 hover:text-gray-700">
           <Globe size={20} strokeWidth={1.5} />
         </Button>
       </DropdownMenuTrigger>

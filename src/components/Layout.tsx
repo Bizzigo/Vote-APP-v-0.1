@@ -13,13 +13,14 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isLegalPage = ['/cookies', '/privacy', '/terms'].includes(location.pathname);
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-background text-foreground overflow-x-hidden relative">
       <MovingCircles />
       <Navbar />
       <main className="flex-1 w-full relative z-10">
-        {!isHomePage && (
+        {!isHomePage && !isLegalPage && (
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumbs />
           </div>
