@@ -4,17 +4,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Mail, Lock } from 'lucide-react';
 
 const Login = () => {
   const { login, isLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
 
   // Redirect if already logged in
   React.useEffect(() => {
@@ -22,17 +17,6 @@ const Login = () => {
       navigate('/profile');
     }
   }, [isLoggedIn, navigate]);
-
-  const handleEmailLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) {
-      toast.error("Please enter your email");
-      return;
-    }
-    // In a real app, this would validate credentials
-    login(email, 'email');
-    navigate('/profile');
-  };
 
   const handleSocialLogin = (provider: string) => {
     // In a real app, this would initiate OAuth flow
@@ -52,55 +36,7 @@ const Login = () => {
           </CardHeader>
           
           <CardContent className="space-y-4">
-            <form onSubmit={handleEmailLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input 
-                    id="email" 
-                    type="email" 
-                    placeholder="your@email.com"
-                    className="pl-10"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link to="#" className="text-sm text-primary hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input 
-                    id="password" 
-                    type="password" 
-                    placeholder="••••••••"
-                    className="pl-10"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-              </div>
-              
-              <Button type="submit" className="w-full">Sign In</Button>
-            </form>
-            
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3">
               <Button 
                 variant="outline"
                 className="w-full flex items-center justify-center gap-2"
@@ -126,7 +62,7 @@ const Login = () => {
                     />
                   </g>
                 </svg>
-                Google
+                Sign in with Google
               </Button>
               
               <Button 
@@ -137,7 +73,7 @@ const Login = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
                 </svg>
-                Facebook
+                Sign in with Facebook
               </Button>
             </div>
           </CardContent>

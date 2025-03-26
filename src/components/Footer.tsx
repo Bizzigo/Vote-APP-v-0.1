@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer className="bg-card text-card-foreground border-t border-border mt-16">
       <div className="container mx-auto py-12 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="font-semibold text-lg mb-4">Bizzigo</h3>
             <p className="text-muted-foreground text-sm mb-4">
@@ -32,27 +32,6 @@ const Footer = () => {
                 <span className="sr-only">LinkedIn</span>
               </a>
             </div>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-lg mb-4">Categories</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/category/it-services" className="text-muted-foreground hover:text-primary transition-colors">IT Services</Link>
-              </li>
-              <li>
-                <Link to="/category/construction" className="text-muted-foreground hover:text-primary transition-colors">Construction</Link>
-              </li>
-              <li>
-                <Link to="/category/manufacturing" className="text-muted-foreground hover:text-primary transition-colors">Manufacturing</Link>
-              </li>
-              <li>
-                <Link to="/category/retail" className="text-muted-foreground hover:text-primary transition-colors">Retail</Link>
-              </li>
-              <li>
-                <Link to="/category/transportation" className="text-muted-foreground hover:text-primary transition-colors">Transportation</Link>
-              </li>
-            </ul>
           </div>
 
           <div>
@@ -97,11 +76,11 @@ const Footer = () => {
 
         <Separator className="my-8" />
 
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm text-muted-foreground">
+        <div className="flex flex-col items-center text-center">
+          <p className="text-sm text-muted-foreground mb-4">
             © {new Date().getFullYear()} Bizzigo Pro SIA. All rights reserved.
           </p>
-          <div className="flex space-x-4 mt-4 md:mt-0">
+          <div className="flex space-x-6">
             <Link to="/terms" className="text-xs text-muted-foreground hover:text-primary transition-colors">
               Terms
             </Link>
