@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { supabase } from '@/integrations/supabase/client';
 
 interface UserProfileBadgeProps {
   className?: string;
@@ -8,12 +9,48 @@ interface UserProfileBadgeProps {
 
 const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({ className = "" }) => {
   const { t } = useLanguage();
-  
-  // This would normally be fetched from an API
-  const finalCount = 1248;
   const [count, setCount] = useState(0);
+  const [finalCount, setFinalCount] = useState(0);
   const countRef = useRef<HTMLSpanElement>(null);
   
+  useEffect(() => {
+    // Initial fetch of user count
+    const fetchUserCount = async () => {
+      const { count: userCount } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true });
+      
+      setFinalCount(userCount || 0);
+    };
+
+    fetchUserCount();
+
+    // Subscribe to realtime changes
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'profiles'
+        },
+        async () => {
+          // Refetch count when profiles table changes
+          const { count: newCount } = await supabase
+            .from('profiles')
+            .select('*', { count: 'exact', head: true });
+          setFinalCount(newCount || 0);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // Animation effect for counting
   useEffect(() => {
     const duration = 1500; // animation duration in ms
     const steps = 50; // number of steps in the animation
@@ -77,3 +114,4 @@ const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({ className = "" }) =
 };
 
 export default UserProfileBadge;
+
