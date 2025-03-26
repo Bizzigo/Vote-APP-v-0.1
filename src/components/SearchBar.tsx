@@ -116,7 +116,7 @@ const SearchBar = ({
   };
 
   return (
-    <div className={`w-full ${mainPage ? 'mx-auto' : ''} ${className}`} ref={searchBarRef}>
+    <div className={`relative w-full ${mainPage ? 'mx-auto' : ''} ${className}`} ref={searchBarRef}>
       <form onSubmit={handleSearch} className="w-full">
         <div className="relative flex items-center">
           <div className="absolute left-4 text-gray-400">
