@@ -68,7 +68,7 @@ const UserProfile = () => {
       // Call the completeProfile function which updates the profile in Supabase
       const result = await completeProfile(data);
       
-      if (result && result.error) {
+      if (result?.error) {
         throw result.error;
       }
       
@@ -86,8 +86,8 @@ const UserProfile = () => {
 
   return (
     <Layout>
-      <div className="container max-w-3xl mx-auto py-12">
-        <Card>
+      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <Card className="w-full">
           <CardHeader>
             <CardTitle className="text-2xl">Complete Your Profile</CardTitle>
           </CardHeader>
@@ -313,7 +313,7 @@ const UserProfile = () => {
                   )}
                 />
                 
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </Button>
               </form>

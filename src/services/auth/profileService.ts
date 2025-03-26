@@ -50,7 +50,7 @@ export const completeProfile = async (user: User | null, profileData: any) => {
     const profileUpdate = {
       name: profileData.name,
       profile_completed: true,
-      // Include all fields from the form, not just phone
+      // Include all fields from the form
       phone: profileData.phone || null,
       website: profileData.website || null,
       facebook: profileData.facebook || null,
