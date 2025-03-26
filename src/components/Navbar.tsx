@@ -34,12 +34,10 @@ const Navbar: React.FC = () => {
               </Button>
             </div> : <div className="flex items-center gap-4">
               <Link to="/login">
-                <Button variant="outline" size="sm">
-                  Log In
-                </Button>
+                <Button variant="outline" size="sm">IENĀKT</Button>
               </Link>
               <Link to="/signup">
-                <Button size="sm">Sign Up</Button>
+                <Button size="sm">PIEVIENOJIES</Button>
               </Link>
             </div>}
         </nav>

@@ -7,8 +7,6 @@ import { Vendor } from '@/lib/types';
 import { aiSearchVendors, generateSearchSuggestions } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
 import { useLocationContext } from '@/providers/LocationProvider';
-import CategoryGrid from '@/components/CategoryGrid';
-
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,16 +20,22 @@ const Index = () => {
     coordinates,
     calculateDistance
   } = useLocationContext();
-
   const handleSearch = useCallback((query: string, useLocation: boolean, distanceKm?: number) => {
+    console.log('Search initiated:', {
+      query,
+      useLocation,
+      distanceKm
+    });
     if (query.trim() === '') {
       setFilteredVendors([]);
       setHasSearched(false);
       return;
     }
 
+    // Get base search results from AI search
     let results = aiSearchVendors(vendors, query);
 
+    // Add distance calculations if location is active
     if (useLocation && coordinates) {
       results = results.map(vendor => {
         if (vendor.location) {
@@ -44,12 +48,16 @@ const Index = () => {
         return vendor;
       });
 
+      // Filter by maximum distance if a distance limit is set
       if (distanceKm) {
         results = results.filter(vendor => {
+          // Keep vendors with a distance less than or equal to the specified maximum
+          // or vendors without location data
           return !vendor.distanceKm || vendor.distanceKm <= distanceKm;
         });
       }
 
+      // Sort by distance if location filtering is active
       results.sort((a, b) => {
         const distA = a.distanceKm || Number.MAX_VALUE;
         const distB = b.distanceKm || Number.MAX_VALUE;
@@ -60,37 +68,6 @@ const Index = () => {
     setFilteredVendors(results);
     setHasSearched(true);
   }, [vendors, coordinates, calculateDistance]);
-
-  const handleCategorySelect = useCallback((category: string) => {
-    setSearchTerm(category);
-    
-    let results = vendors
-      .filter(vendor => vendor.category === category)
-      .sort((a, b) => b.rating - a.rating);
-    
-    if (isActive && coordinates) {
-      results = results.map(vendor => {
-        if (vendor.location) {
-          const distanceKm = calculateDistance(coordinates.lat, coordinates.lng, vendor.location.lat, vendor.location.lng);
-          return {
-            ...vendor,
-            distanceKm
-          };
-        }
-        return vendor;
-      });
-      
-      results.sort((a, b) => {
-        const scoreA = (a.rating * 2) - (a.distanceKm || 0) / 10;
-        const scoreB = (b.rating * 2) - (b.distanceKm || 0) / 10;
-        return scoreB - scoreA;
-      });
-    }
-    
-    setFilteredVendors(results);
-    setHasSearched(true);
-  }, [vendors, isActive, coordinates, calculateDistance]);
-
   useEffect(() => {
     let timeoutId: number | undefined;
     if (hasSearched && filteredVendors.length === 0) {
@@ -108,7 +85,6 @@ const Index = () => {
       if (timeoutId) window.clearTimeout(timeoutId);
     };
   }, [hasSearched, filteredVendors.length, toast]);
-
   return <Layout>
       {!hasSearched ? <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
           <div className="text-center mb-12 max-w-3xl mx-auto">
@@ -119,32 +95,19 @@ const Index = () => {
           
           <div className="w-full max-w-xl mx-auto px-4 relative">
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch} className="" mainPage={true} />
-            
-            <div className="mt-10 mb-8 w-full">
-              <h2 className="text-lg font-medium text-center mb-5">Popular Categories</h2>
-              <CategoryGrid onCategorySelect={handleCategorySelect} />
+            <div className="flex justify-center space-x-4 mt-6">
+              
             </div>
           </div>
         </div> : <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8">
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">Search Results</h2>
-              <button onClick={() => {
-                setHasSearched(false);
-                setSearchTerm('');
-              }} className="text-sm text-primary hover:text-primary/80">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Search Results</h2>
+            {filteredVendors.length > 0 && <button onClick={() => {
+          setHasSearched(false);
+          setSearchTerm('');
+        }} className="text-sm text-primary hover:text-primary/80">
                 Back to Explore
-              </button>
-            </div>
-            
-            <div className="mb-4">
-              <SearchBar 
-                searchTerm={searchTerm} 
-                setSearchTerm={setSearchTerm} 
-                onSearch={handleSearch} 
-                mainPage={false} 
-              />
-            </div>
+              </button>}
           </div>
           
           {filteredVendors.length === 0 ? <div className="text-center py-8">
@@ -161,5 +124,4 @@ const Index = () => {
         </div>}
     </Layout>;
 };
-
 export default Index;
