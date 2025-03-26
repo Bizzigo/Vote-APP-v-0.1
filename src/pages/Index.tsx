@@ -11,8 +11,6 @@ import { useLanguage } from '@/providers/LanguageProvider';
 import CategoryGrid from '@/components/CategoryGrid';
 import UserProfileBadge from '@/components/UserProfileBadge';
 import WeatherBadge from '@/components/WeatherBadge';
-import CryptoPrices from '@/components/CryptoPrices';
-import NameDay from '@/components/NameDay';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -114,12 +112,10 @@ const Index = () => {
               <UserProfileBadge className="py-2" />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div className="mt-4">
               {isActive && (
                 <WeatherBadge />
               )}
-              <CryptoPrices />
-              <NameDay />
             </div>
           </div>
         </div>
