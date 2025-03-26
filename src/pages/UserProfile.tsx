@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import Layout from '@/components/Layout';
@@ -39,6 +40,7 @@ import { SubscriptionPlans } from '@/components/subscription/SubscriptionPlans';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import VendorBadge from '@/components/vendor/VendorBadge';
 
 const formSchema = z.object({
   // Business info
@@ -796,3 +798,33 @@ const UserProfile = () => {
                             
                             <FormField
                               control={form.control}
+                              name="telegram"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Telegram</FormLabel>
+                                  <FormControl>
+                                    <div className="relative">
+                                      <MessageSquare className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                      <Input className="pl-10" {...field} />
+                                    </div>
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </TabsContent>
+                      </Tabs>
+                    )}
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default UserProfile;
