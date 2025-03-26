@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -12,7 +11,6 @@ import { useLanguage } from '@/providers/LanguageProvider';
 import CategoryGrid from '@/components/CategoryGrid';
 import UserProfileBadge from '@/components/UserProfileBadge';
 import WeatherBadge from '@/components/WeatherBadge';
-import NewsBadge from '@/components/NewsBadge';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -115,7 +113,6 @@ const Index = () => {
             </div>
             
             <div className="mt-4 space-y-4">
-              <NewsBadge />
               {isActive && (
                 <WeatherBadge />
               )}
