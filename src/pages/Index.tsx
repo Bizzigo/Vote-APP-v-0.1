@@ -1,10 +1,11 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
 import VendorCard from '@/components/vendor/VendorCard';
 import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
-import { aiSearchVendors } from '@/lib/aiSearch';
+import { aiSearchVendors, generateSearchSuggestions } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
 import { useLocationContext } from '@/providers/LocationProvider';
 

@@ -116,3 +116,45 @@ export const aiSearchVendors = (vendors: Vendor[], query: string): Vendor[] => {
   console.log(`AI search found ${sortedResults.length} results with keyword matching`);
   return sortedResults;
 };
+
+/**
+ * Generate search suggestions based on vendors data and current query
+ */
+export const generateSearchSuggestions = (vendors: Vendor[], query: string): string[] => {
+  if (!query || query.trim() === '') {
+    return [];
+  }
+  
+  const lowerQuery = query.toLowerCase().trim();
+  const suggestions = new Set<string>();
+  
+  // Collect keywords from matching vendors
+  vendors.forEach(vendor => {
+    // Add category if it matches
+    if (vendor.category.toLowerCase().includes(lowerQuery)) {
+      suggestions.add(vendor.category);
+    }
+    
+    // Add keywords that match
+    if (vendor.keywords && vendor.keywords.length > 0) {
+      vendor.keywords.forEach(keyword => {
+        if (keyword.toLowerCase().includes(lowerQuery)) {
+          suggestions.add(keyword);
+        }
+      });
+    }
+    
+    // Add city if it matches
+    if (vendor.city.toLowerCase().includes(lowerQuery)) {
+      suggestions.add(`${vendor.category} in ${vendor.city}`);
+    }
+    
+    // Add vendor name if it matches
+    if (vendor.name.toLowerCase().includes(lowerQuery)) {
+      suggestions.add(vendor.name);
+    }
+  });
+  
+  // Convert Set to Array, limit to 5 suggestions
+  return Array.from(suggestions).slice(0, 5);
+};
