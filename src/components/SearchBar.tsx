@@ -16,7 +16,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onSearch, 
   className = '' 
 }) => {
-  const [aiSearchToggle, setAiSearchToggle] = useState(true);
   const [placeholder, setPlaceholder] = useState('Search for service providers...');
   
   // Placeholder text rotation for better UX
@@ -41,18 +40,33 @@ const SearchBar: React.FC<SearchBarProps> = ({
   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSearch(searchTerm, aiSearchToggle);
+    onSearch(searchTerm, true);
   };
   
   // Handle clear button click
   const handleClear = () => {
     setSearchTerm('');
+    onSearch('', true);
   };
 
   // Handle key press for instant search
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      onSearch(searchTerm, aiSearchToggle);
+      onSearch(searchTerm, true);
+    }
+  };
+
+  // Handle input change with immediate search after short delay
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    
+    if (value.length > 2) {
+      // Trigger search after short delay
+      const timeoutId = setTimeout(() => {
+        onSearch(value, true);
+      }, 500);
+      return () => clearTimeout(timeoutId);
     }
   };
 
@@ -65,7 +79,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         <Input
           type="search"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           className="w-full pl-10 pr-12 h-12 text-base border border-input shadow-sm rounded-lg focus-visible:ring-primary"

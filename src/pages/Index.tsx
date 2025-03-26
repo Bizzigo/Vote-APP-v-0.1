@@ -9,10 +9,9 @@ import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
 import { aiSearchVendors } from '@/lib/aiSearch';
 import { useToast } from '@/hooks/use-toast';
-import { Button } from '@/components/ui/button';
-import { BadgeCheck, Briefcase, Building, Coffee, Construction, Hammer, Laptop, ServerCog, Shirt, Truck, Wrench, PlusCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
+import { PlusCircle, Briefcase, Building, Coffee, Construction, Hammer, Laptop, ServerCog, Shirt, Truck, Wrench } from 'lucide-react';
 
 const categories = [
   { name: 'IT Services', count: 247, icon: Laptop, slug: 'it-services' },
@@ -47,7 +46,7 @@ const Index = () => {
     // Use AI search on the vendors array
     const results = aiSearchVendors(vendors, query);
     setFilteredVendors(results);
-    console.log('AI search results:', results);
+    console.log('AI search results:', results.length, 'vendors found');
     
     setHasSearched(true);
   }, [vendors]);
@@ -86,14 +85,11 @@ const Index = () => {
             <p className="text-muted-foreground text-lg max-w-xl mx-auto mt-3 animate-fade-in">
               Vienkāršākais veids, kā atrast uzticamus un kvalificētus pakalpojumu sniedzējus Latvijā
             </p>
-            <div className="mt-8 flex justify-center gap-4">
-              <Button size="lg" className="px-6 rounded-md">
-                Izpētīt katalogs
-              </Button>
-              <Button variant="outline" size="lg" className="px-6 rounded-md">
-                <PlusCircle className="mr-2 h-4 w-4" />
+            <div className="mt-8">
+              <Link to="/signup" className="inline-block">
+                <PlusCircle className="mr-2 h-4 w-4 inline-block" />
                 Pievienot uzņēmumu
-              </Button>
+              </Link>
             </div>
           </div>
           

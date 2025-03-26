@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { Menu, X, MapPin, User } from 'lucide-react';
+import { Menu, X, MapPin, User, PlusCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Navbar: React.FC = () => {
@@ -97,6 +97,15 @@ const Navbar: React.FC = () => {
             />
           </button>
           
+          {!isLoggedIn && (
+            <Link to="/signup">
+              <Button variant="outline" size="sm" className="flex items-center gap-1">
+                <PlusCircle className="h-4 w-4" />
+                Sign Up
+              </Button>
+            </Link>
+          )}
+          
           {isLoggedIn ? (
             <div className="flex items-center gap-4">
               <Link to="/profile" className="flex items-center gap-2 text-sm">
@@ -161,6 +170,15 @@ const Navbar: React.FC = () => {
                 </span>
               </button>
             </div>
+            
+            {!isLoggedIn && (
+              <div className="py-2">
+                <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+                  <PlusCircle className="h-4 w-4" />
+                  <span>Sign Up</span>
+                </Link>
+              </div>
+            )}
             
             {isLoggedIn ? (
               <div className="py-2 border-t border-border/60 mt-2">
