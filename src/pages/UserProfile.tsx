@@ -1,323 +1,181 @@
-
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from '@/providers/AuthProvider';
+import { profileService } from '@/services/profileService';
 
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  businessName: z.string().optional(),
-  category: z.string().optional(),
-  city: z.string().optional(),
-  description: z.string().optional(),
-  keywords: z.string().optional(),
-  phone: z.string().optional(),
-  website: z.string().optional(),
-  facebook: z.string().optional(),
-  instagram: z.string().optional(),
-  twitter: z.string().optional(),
-  linkedin: z.string().optional(),
-});
+interface Profile {
+  id?: string;
+  email?: string;
+  name?: string;
+  bio?: string;
+  location?: string;
+  avatarUrl?: string;
+}
 
 const UserProfile = () => {
-  const { user, completeProfile } = useAuth();
-  const [isSubmitting, setSubmitting] = useState(false);
-  
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: user?.name || "",
-      businessName: "",
-      category: "",
-      city: "",
-      description: "",
-      keywords: "",
-      phone: "",
-      website: "",
-      facebook: "",
-      instagram: "",
-      twitter: "",
-      linkedin: "",
-    },
-    mode: "onChange",
-  });
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [profile, setProfile] = useState<Profile>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  useEffect(() => {
+    const loadProfile = async () => {
+      setIsLoading(true);
+      try {
+        if (user) {
+          const { data, error } = await profileService.getProfile(user.id);
+          if (error) {
+            toast({
+              title: "Failed to load profile",
+              description: error.message,
+              variant: "destructive",
+            });
+          } else {
+            setProfile(data || {});
+          }
+        }
+      } catch (err) {
+        toast({
+          title: "Error loading profile",
+          description: err instanceof Error ? err.message : "An unknown error occurred",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [user, toast]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setProfile(prevProfile => ({
+      ...prevProfile,
+      [name]: value,
+    }));
+  };
+
+  // Fix for the error in the saveProfile function:
+  const saveProfile = async () => {
+    setIsSaving(true);
     try {
-      setSubmitting(true);
+      const { user, error: updateError } = await profileService.updateProfile(profile);
       
-      if (!user) {
-        toast.error("You need to be logged in to update your profile");
-        return;
+      if (updateError) {
+        toast({
+          title: "Failed to update profile",
+          description: updateError.message,
+          variant: "destructive",
+        });
+      } else {
+        // Success
+        toast({
+          title: "Profile updated",
+          description: "Your profile has been successfully updated",
+        });
       }
-      
-      console.log("Form data to submit:", data);
-      
-      // Call the completeProfile function which updates the profile in Supabase
-      const result = await completeProfile(data);
-      
-      if (result && result.error) {
-        throw result.error;
-      }
-      
-      toast.success("Your profile has been updated successfully!");
-      // Removed navigation after saving profile - staying on the profile page
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error("Failed to update profile", {
-        description: "There was an error updating your profile. Please try again."
+    } catch (err) {
+      // Handle any unexpected errors
+      toast({
+        title: "Error updating profile",
+        description: err instanceof Error ? err.message : "An unknown error occurred",
+        variant: "destructive",
       });
     } finally {
-      setSubmitting(false);
+      setIsSaving(false);
     }
   };
 
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
+          <Card className="max-w-2xl w-full">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl font-bold">Loading Profile...</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-center">Please wait while we load your profile information.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
-      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-2xl">Complete Your Profile</CardTitle>
+      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
+        <Card className="max-w-2xl w-full">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold">Your Profile</CardTitle>
           </CardHeader>
-          
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your name" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        This is the name that will be displayed on your profile.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="businessName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Business Name (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your business name" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        If you are a vendor, enter your business name.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category (Optional)</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="restaurant">Restaurant</SelectItem>
-                          <SelectItem value="cafe">Cafe</SelectItem>
-                          <SelectItem value="bar">Bar</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Choose a category that best describes your business.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>City (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your city" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter the city where your business is located.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description (Optional)</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Write a short description about your business"
-                          className="resize-none"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Briefly describe your business to attract customers.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="keywords"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Keywords (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="pizza, burgers, pasta" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter keywords that describe your business, separated by commas.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your phone number" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter your business phone number.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="website"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Website (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your website URL" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter your business website URL.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="facebook"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Facebook (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your Facebook page URL" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter your business Facebook page URL.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="instagram"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Instagram (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your Instagram profile URL" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter your business Instagram profile URL.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="twitter"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Twitter (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your Twitter profile URL" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter your business Twitter profile URL.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="linkedin"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>LinkedIn (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your LinkedIn profile URL" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter your business LinkedIn profile URL.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-                  {isSubmitting ? "Submitting..." : "Submit"}
-                </Button>
-              </form>
-            </Form>
+          <CardContent className="space-y-4">
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                Name
+              </label>
+              <Input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your Name"
+                value={profile.name || ''}
+                onChange={handleChange}
+                disabled={isSaving}
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                Email
+              </label>
+              <Input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Your Email"
+                value={profile.email || ''}
+                onChange={handleChange}
+                disabled={true}
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="location">
+                Location
+              </label>
+              <Input
+                type="text"
+                id="location"
+                name="location"
+                placeholder="Your Location"
+                value={profile.location || ''}
+                onChange={handleChange}
+                disabled={isSaving}
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="bio">
+                Bio
+              </label>
+              <Input
+                type="textarea"
+                id="bio"
+                name="bio"
+                placeholder="Your Bio"
+                value={profile.bio || ''}
+                onChange={handleChange}
+                disabled={isSaving}
+              />
+            </div>
+            <Button onClick={saveProfile} disabled={isSaving} className="w-full">
+              {isSaving ? "Saving..." : "Save Profile"}
+            </Button>
           </CardContent>
         </Card>
       </div>
