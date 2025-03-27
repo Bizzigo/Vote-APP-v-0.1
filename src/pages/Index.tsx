@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SearchBar from '@/components/SearchBar';
@@ -12,7 +13,7 @@ import { useLanguage } from '@/providers/LanguageProvider';
 import CategoryGrid from '@/components/CategoryGrid';
 import UserProfileBadge from '@/components/UserProfileBadge';
 import WeatherBadge from '@/components/WeatherBadge';
-import MistralFallback from '@/components/MistralFallback';
+import OpenAIFallback from '@/components/OpenAIFallback';
 
 const Index = () => {
   const [vendors] = useState<Vendor[]>(mockVendors);
@@ -128,7 +129,7 @@ const Index = () => {
                   {t("noVendorsFound")}
                 </p>
                 
-                <MistralFallback searchTerm={searchTerm} />
+                <OpenAIFallback searchTerm={searchTerm} />
               </div>
             ) : (
               <div className="flex flex-col space-y-4">
