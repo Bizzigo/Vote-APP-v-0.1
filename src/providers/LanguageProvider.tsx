@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'lv';
@@ -32,12 +33,17 @@ export const translations: Translations = {
   },
   // Home page
   "heroText": {
-    en: "Find trusted and professional service providers. YES, find yours!",
-    lv: "Te ir uzticami un profesionāli pakalpojumu sniedzēji. JĀ, atrodi savu!"
+    en: "Find reliable professionals and services. Easy!",
+    lv: "Atrodi uzticamus profesionāļus un pakalpojumus. Vienkārši!"
   },
   "searchPlaceholder": {
-    en: "Search for local businesses...",
-    lv: "Meklēt vietējos uzņēmumus..."
+    en: "what do you want to find, for example,",
+    lv: "ko vēlies atrast, piemēram,"
+  },
+  // Random keywords for search
+  "randomKeywords": {
+    en: ["plumber", "electrician", "IT services", "lawyer", "accountant", "painter", "landscaper", "carpenter", "photographer", "designer", "mechanic", "dentist", "cleaning", "beauty salon", "translator"],
+    lv: ["santehniķis", "elektriķis", "IT pakalpojumi", "jurists", "grāmatvedis", "krāsotājs", "dārznieks", "galdnieks", "fotogrāfs", "dizainers", "mehāniķis", "zobārsts", "tīrīšana", "skaistumkopšana", "tulkotājs"]
   },
   // User profile badge
   "registeredUsers": {
@@ -178,6 +184,7 @@ type LanguageContextType = {
   language: Language;
   setLanguage: (language: Language) => void;
   t: (key: string) => string;
+  getRandomKeyword: () => string;
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -212,13 +219,19 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
     return translations[key][language] || key;
   };
   
+  // Function to get a random keyword based on current language
+  const getRandomKeyword = (): string => {
+    const keywords = translations.randomKeywords[language] as string[];
+    return keywords[Math.floor(Math.random() * keywords.length)];
+  };
+  
   // Update document language attribute
   useEffect(() => {
     document.documentElement.lang = language;
   }, [language]);
   
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, getRandomKeyword }}>
       {children}
     </LanguageContext.Provider>
   );

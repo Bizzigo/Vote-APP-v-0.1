@@ -54,6 +54,7 @@ const Navbar: React.FC = () => {
             ) : (
               <Link to="/login" className="text-foreground hover:text-primary transition-colors flex items-center gap-1">
                 <LogIn size={20} strokeWidth={1.5} className={iconClassName} />
+                <span>{t("login")}</span>
               </Link>
             )}
           </div>
