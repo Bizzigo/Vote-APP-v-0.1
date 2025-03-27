@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import { useToast } from '@/hooks/use-toast';
 import { mockVendors } from '@/lib/mockData';
 import { Vendor } from '@/lib/types';
+import SearchBar from '@/components/SearchBar';
 
 import VendorHeader from '@/components/vendor/VendorHeader';
 import VendorContactInfoCard from '@/components/vendor/VendorContactInfoCard';
@@ -191,9 +192,19 @@ const VendorProfile = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="flex justify-center items-center h-[50vh]">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          <p className="ml-4 text-lg">Loading vendor profile...</p>
+        <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-center w-full my-6">
+            <SearchBar 
+              searchTerm={searchTerm} 
+              setSearchTerm={setSearchTerm} 
+              onSearch={handleSearch} 
+              className="w-full max-w-xl" 
+            />
+          </div>
+          <div className="flex justify-center items-center h-[50vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            <p className="ml-4 text-lg">Loading vendor profile...</p>
+          </div>
         </div>
       </Layout>
     );
@@ -202,11 +213,21 @@ const VendorProfile = () => {
   if (notFound || !vendor) {
     return (
       <Layout>
-        <div className="flex flex-col justify-center items-center h-[50vh] space-y-4">
-          <p className="text-xl">Vendor not found</p>
-          <Link to="/" className="text-blue-600 hover:underline">
-            Return to Home
-          </Link>
+        <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-center w-full my-6">
+            <SearchBar 
+              searchTerm={searchTerm} 
+              setSearchTerm={setSearchTerm} 
+              onSearch={handleSearch} 
+              className="w-full max-w-xl" 
+            />
+          </div>
+          <div className="flex flex-col justify-center items-center h-[50vh] space-y-4">
+            <p className="text-xl">Vendor not found</p>
+            <Link to="/" className="text-blue-600 hover:underline">
+              Return to Home
+            </Link>
+          </div>
         </div>
       </Layout>
     );
@@ -214,40 +235,51 @@ const VendorProfile = () => {
   
   return (
     <Layout>
-      <VendorHeader
-        vendor={{...vendor, rating: averageRating || vendor.rating}}
-        registrationNumber={registrationNumber}
-        registrationDate={registrationDate}
-        reviewCount={reviewCount}
-        hasLursoftProfile={contactMethods.hasLursoftProfile}
-        jobVacancies={jobVacancies.length}
-        hasShop={shopItems.length > 0}
-        isOnline={isOnline}
-        onRatingClick={scrollToReviews}
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="md:col-span-2">
-          <VendorDescriptionCard vendor={vendor} />
+      <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center w-full my-6">
+          <SearchBar 
+            searchTerm={searchTerm} 
+            setSearchTerm={setSearchTerm} 
+            onSearch={handleSearch} 
+            className="w-full max-w-xl" 
+          />
         </div>
-        <div>
-          <VendorContactInfoCard vendorId={vendor.id} contactMethods={contactMethods} />
-        </div>
-      </div>
 
-      <div className="mb-6">
-        <VendorServiceTabs
-          services={services}
-          jobVacancies={jobVacancies}
-          shopItems={shopItems}
-          reviews={reviews}
-          ref={reviewsSectionRef}
+        <VendorHeader
+          vendor={{...vendor, rating: averageRating || vendor.rating}}
+          registrationNumber={registrationNumber}
+          registrationDate={registrationDate}
+          reviewCount={reviewCount}
+          hasLursoftProfile={contactMethods.hasLursoftProfile}
+          jobVacancies={jobVacancies.length}
+          hasShop={shopItems.length > 0}
+          isOnline={isOnline}
+          onRatingClick={scrollToReviews}
         />
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <VendorPaymentInfoCard paymentMethods={paymentMethods} />
-        <VendorKeywordsCard services={services} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="md:col-span-2">
+            <VendorDescriptionCard vendor={vendor} />
+          </div>
+          <div>
+            <VendorContactInfoCard vendorId={vendor.id} contactMethods={contactMethods} />
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <VendorServiceTabs
+            services={services}
+            jobVacancies={jobVacancies}
+            shopItems={shopItems}
+            reviews={reviews}
+            ref={reviewsSectionRef}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <VendorPaymentInfoCard paymentMethods={paymentMethods} />
+          <VendorKeywordsCard services={services} />
+        </div>
       </div>
     </Layout>
   );

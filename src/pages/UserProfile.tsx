@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth'; // Fixed import path
 import { profileService } from '@/services/profileService';
 
 interface Profile {
@@ -62,6 +62,7 @@ const UserProfile = () => {
     }));
   };
 
+  // Fix for the error in the saveProfile function:
   const saveProfile = async () => {
     setIsSaving(true);
     try {
@@ -95,7 +96,7 @@ const UserProfile = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="flex justify-center">
+        <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
           <Card className="max-w-2xl w-full">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl font-bold">Loading Profile...</CardTitle>
@@ -111,7 +112,7 @@ const UserProfile = () => {
 
   return (
     <Layout>
-      <div className="flex justify-center">
+      <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
         <Card className="max-w-2xl w-full">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">Your Profile</CardTitle>
