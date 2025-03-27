@@ -148,7 +148,6 @@ const VendorProfile = () => {
     new Date(Date.now() - Math.floor(Math.random() * 5 * 365 * 24 * 60 * 60 * 1000))
       .toLocaleDateString('en-GB'), []);
   const reviewCount = React.useMemo(() => reviews.length, [reviews]);
-  const isOnline = React.useMemo(() => Math.random() > 0.5, []);
 
   useEffect(() => {
     if (!vendorSlug) return;
@@ -253,7 +252,6 @@ const VendorProfile = () => {
           hasLursoftProfile={contactMethods.hasLursoftProfile}
           jobVacancies={jobVacancies.length}
           hasShop={shopItems.length > 0}
-          isOnline={isOnline}
           onRatingClick={scrollToReviews}
         />
 
