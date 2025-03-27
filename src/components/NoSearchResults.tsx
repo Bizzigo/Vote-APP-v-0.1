@@ -15,16 +15,16 @@ const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
   const getMessage = () => {
     const messages = {
       en: [
-        `We couldn't find any matches for "${searchTerm}". We're adding new vendors daily!`,
-        `No results for "${searchTerm}" yet. Try different keywords or check back soon!`,
-        `Nothing found for "${searchTerm}". We're expanding our database every day.`,
-        `Sorry, no vendors match "${searchTerm}" at the moment. Try another search term?`
+        `No information found for "${searchTerm}" yet. We're adding new vendors daily! Try again...`,
+        `No results for "${searchTerm}" yet. We're expanding our database every day. Try again...`,
+        `Nothing found for "${searchTerm}" at the moment. Try different keywords. Try again...`,
+        `Sorry, no vendors match "${searchTerm}" at this time. Check back soon! Try again...`
       ],
       lv: [
-        `Nevarējām atrast rezultātus meklējumam "${searchTerm}". Mēs katru dienu pievienojam jaunus pakalpojumus! Mēģini vēl.`,
-        `Pagaidām nav rezultātu meklējumam "${searchTerm}". Pamēģiniet citus atslēgvārdus! Mēģini vēl.`,
-        `Nekas netika atrasts meklējumam "${searchTerm}". Mēs katru dienu papildinām mūsu datubāzi. Mēģini vēl.`,
-        `Diemžēl šobrīd nav pakalpojumu sniedzēju, kas atbilst "${searchTerm}". Pamēģiniet citu meklēšanas terminu? Mēģini vēl.`
+        `Vēl nav šādas informācijas par "${searchTerm}". Mēs katru dienu pievienojam jaunus pakalpojumus! Mēģiniet vēl...`,
+        `Vēl nav šādas informācijas par "${searchTerm}". Pamēģiniet citus atslēgvārdus! Mēģiniet vēl...`,
+        `Vēl nav šādas informācijas par "${searchTerm}". Mēs katru dienu papildinām mūsu datubāzi. Mēģiniet vēl...`,
+        `Vēl nav šādas informācijas par "${searchTerm}". Pamēģiniet citu meklēšanas terminu. Mēģiniet vēl...`
       ]
     };
     
@@ -55,7 +55,7 @@ const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
   }, [searchTerm]);
   
   return (
-    <div className="typewriter text-sm text-muted-foreground mb-3 py-1 px-4 bg-background/50 border border-muted rounded-md shadow-sm w-full max-w-full">
+    <div className="typewriter text-sm text-muted-foreground mb-3 py-1 px-4 bg-background/50 border border-muted rounded-md shadow-sm w-full max-w-full overflow-visible">
       {displayText}
       <span className="animate-pulse">|</span>
     </div>
