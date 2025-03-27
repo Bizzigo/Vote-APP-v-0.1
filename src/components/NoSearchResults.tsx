@@ -21,10 +21,10 @@ const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
         `Sorry, no vendors match "${searchTerm}" at the moment. Try another search term?`
       ],
       lv: [
-        `Nevarējām atrast rezultātus meklējumam "${searchTerm}". Mēs katru dienu pievienojam jaunus pakalpojumus!`,
-        `Pagaidām nav rezultātu meklējumam "${searchTerm}". Pamēģiniet citus atslēgvārdus!`,
-        `Nekas netika atrasts meklējumam "${searchTerm}". Mēs katru dienu papildinām mūsu datubāzi.`,
-        `Diemžēl šobrīd nav pakalpojumu sniedzēju, kas atbilst "${searchTerm}". Pamēģiniet citu meklēšanas terminu?`
+        `Nevarējām atrast rezultātus meklējumam "${searchTerm}". Mēs katru dienu pievienojam jaunus pakalpojumus! Mēģini vēl.`,
+        `Pagaidām nav rezultātu meklējumam "${searchTerm}". Pamēģiniet citus atslēgvārdus! Mēģini vēl.`,
+        `Nekas netika atrasts meklējumam "${searchTerm}". Mēs katru dienu papildinām mūsu datubāzi. Mēģini vēl.`,
+        `Diemžēl šobrīd nav pakalpojumu sniedzēju, kas atbilst "${searchTerm}". Pamēģiniet citu meklēšanas terminu? Mēģini vēl.`
       ]
     };
     
@@ -55,7 +55,7 @@ const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
   }, [searchTerm]);
   
   return (
-    <div className="typewriter text-sm text-muted-foreground mb-3 mx-auto py-1 px-4 bg-background/50 border border-muted rounded-md shadow-sm">
+    <div className="typewriter text-sm text-muted-foreground mb-3 py-1 px-4 bg-background/50 border border-muted rounded-md shadow-sm w-full max-w-full">
       {displayText}
       <span className="animate-pulse">|</span>
     </div>
