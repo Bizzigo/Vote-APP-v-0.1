@@ -30,53 +30,16 @@ const SearchBar = ({
   
   // Local state for standalone usage (when props aren't provided)
   const [localSearchTerm, setLocalSearchTerm] = useState('');
-  const [placeholderText, setPlaceholderText] = useState('');
-  const [currentKeyword, setCurrentKeyword] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
-  const [charIndex, setCharIndex] = useState(0);
+  const [placeholderKeyword, setPlaceholderKeyword] = useState('');
   
   // Use either provided props or local state
   const term = searchTerm !== undefined ? searchTerm : localSearchTerm;
   const setTerm = setSearchTerm || setLocalSearchTerm;
 
-  // Typing effect for placeholder
+  // Set a random keyword on initial load and when language changes
   useEffect(() => {
-    if (!currentKeyword) {
-      setCurrentKeyword(getRandomKeyword());
-      return;
-    }
-
-    // Typing animation
-    if (isTyping) {
-      if (charIndex < currentKeyword.length) {
-        const typingTimer = setTimeout(() => {
-          setPlaceholderText(currentKeyword.substring(0, charIndex + 1));
-          setCharIndex(charIndex + 1);
-        }, 100); // typing speed
-        return () => clearTimeout(typingTimer);
-      } else {
-        setIsTyping(false);
-        const pauseTimer = setTimeout(() => {
-          setIsTyping(false);
-        }, 2000); // pause at the end
-        return () => clearTimeout(pauseTimer);
-      }
-    } else {
-      // Erasing animation
-      if (charIndex > 0) {
-        const erasingTimer = setTimeout(() => {
-          setPlaceholderText(currentKeyword.substring(0, charIndex - 1));
-          setCharIndex(charIndex - 1);
-        }, 50); // erasing speed (faster than typing)
-        return () => clearTimeout(erasingTimer);
-      } else {
-        // Get a new keyword after erasing
-        const newKeyword = getRandomKeyword();
-        setCurrentKeyword(newKeyword);
-        setIsTyping(true);
-      }
-    }
-  }, [charIndex, currentKeyword, isTyping, getRandomKeyword]);
+    setPlaceholderKeyword(getRandomKeyword());
+  }, [getRandomKeyword]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,7 +92,7 @@ const SearchBar = ({
           <Input
             ref={inputRef}
             type="text"
-            placeholder={`${t("searchPlaceholder")} ${placeholderText}?`}
+            placeholder={`${t("searchPlaceholder")} ${placeholderKeyword}?`}
             value={term}
             onChange={handleInputChange}
             className={inputClasses}

@@ -136,56 +136,6 @@ const VendorProfile = () => {
     };
   }, [vendorSlug]);
   
-  useEffect(() => {
-    const fetchVendor = () => {
-      setLoading(true);
-      
-      if (!vendorSlug) {
-        setNotFound(true);
-        setLoading(false);
-        return;
-      }
-      
-      console.log("Fetching vendor with slug:", vendorSlug);
-      console.log("Available vendors:", mockVendors);
-      
-      let foundVendor = mockVendors.find(v => v.id === vendorSlug);
-      
-      if (!foundVendor) {
-        foundVendor = mockVendors.find(v => {
-          const vendorNameSlug = v.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-          return vendorNameSlug === vendorSlug;
-        });
-      }
-      
-      if (foundVendor) {
-        console.log("Found vendor:", foundVendor);
-        setVendor(foundVendor);
-        
-        if (foundVendor.keywords && foundVendor.keywords.length > 0) {
-          setServices(foundVendor.keywords);
-        }
-        
-        toast({
-          title: "Vendor loaded",
-          description: `Viewing ${foundVendor.name}`
-        });
-      } else {
-        console.log("Vendor not found");
-        setNotFound(true);
-        toast({
-          title: "Vendor not found",
-          description: "Could not find the requested vendor",
-          variant: "destructive"
-        });
-      }
-      
-      setLoading(false);
-    };
-    
-    fetchVendor();
-  }, [vendorSlug, toast]);
-  
   const averageRating = React.useMemo(() => {
     if (reviews.length === 0) return 0;
     const total = reviews.reduce((sum, review) => sum + review.rating, 0);
