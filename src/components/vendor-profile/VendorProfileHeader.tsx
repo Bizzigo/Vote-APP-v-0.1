@@ -1,6 +1,6 @@
 
 import React from 'react';
-import SearchHeader from '@/components/SearchHeader';
+import SearchBar from '@/components/SearchBar';
 
 interface VendorProfileHeaderProps {
   searchTerm: string;
@@ -14,11 +14,14 @@ const VendorProfileHeader: React.FC<VendorProfileHeaderProps> = ({
   handleSearch
 }) => {
   return (
-    <SearchHeader
-      searchTerm={searchTerm}
-      setSearchTerm={setSearchTerm}
-      handleSearch={handleSearch}
-    />
+    <div className="flex justify-center w-full mb-8">
+      <SearchBar 
+        searchTerm={searchTerm} 
+        setSearchTerm={setSearchTerm} 
+        onSearch={handleSearch} 
+        className="w-full max-w-xl" 
+      />
+    </div>
   );
 };
 
