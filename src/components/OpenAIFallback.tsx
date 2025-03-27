@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -19,6 +18,26 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
       try {
         setIsLoading(true);
         
+        // Create default fallback responses based on language
+        const fallbackResponses = {
+          lv: [
+            "Hmm, par \"" + searchTerm + "\" man nav nekādas asprātīgas atbildes. Mēģini meklēt ko citu!",
+            "\"" + searchTerm + "\"? Tas izklausās interesanti, bet šobrīd man par to nav nekādas informācijas.",
+            "Man ļoti žēl, bet es nevaru atrast informāciju par \"" + searchTerm + "\". Varbūt izmēģini citu meklēšanas terminu?",
+            "Mana humora shēma šobrīd ir nedaudz iztukšojusies. Pamēģini meklēt kaut ko citu!",
+          ],
+          en: [
+            "Hmm, I don't have any witty responses about \"" + searchTerm + "\" right now. Try searching for something else!",
+            "\"" + searchTerm + "\"? Sounds interesting, but I don't have any info on that at the moment.",
+            "I'd love to help with \"" + searchTerm + "\", but I can't find anything on it. Maybe try a different search term?",
+            "My humor circuits seem to be a bit empty at the moment. Try searching for something else!",
+          ]
+        };
+        
+        // Select a random fallback response
+        const randomIndex = Math.floor(Math.random() * fallbackResponses[language].length);
+        const fallbackMessage = fallbackResponses[language][randomIndex];
+        
         // Determine system message language
         const systemMessage = language === 'lv' 
           ? 'Tu esi asprātīgs asistents. Atbildi ar jautrām un vieglām ziņām sarunvalodas stilā. Turi atbildes īsākas par 100 vārdiem. Nesāc ar frāzēm "Man žēl" vai "Diemžēl".'
@@ -29,48 +48,57 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
           ? `Es meklēju "${searchTerm}", bet nevarēju atrast nekādus rezultātus. Vai vari pateikt kaut ko jautru vai interesantu par to?`
           : `I searched for "${searchTerm}" but couldn't find any results. Can you say something funny or interesting about this?`;
         
-        const result = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer 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`
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [
-              {
-                role: 'system',
-                content: systemMessage
-              },
-              {
-                role: 'user',
-                content: userPrompt
-              }
-            ],
-            temperature: 0.7,
-            max_tokens: 150
-          })
-        });
+        // Create a mock response for development/testing
+        const mockResponse = (language === 'lv')
+          ? `Par "${searchTerm}"? Tas ir kā meklēt vienradzi veikalā - teoretiski varētu būt, bet visdrīzāk atradīsi tikai rotaļlietas un T-kreklus ar tā attēlu. Varbūt mēģini meklēt kaut ko mazāk mitologisku vai vienkārši apsver domu par saldējumu pauzes laikā?`
+          : `Looking for "${searchTerm}"? That's like searching for a unicorn in a department store - theoretically possible, but you'll probably just find toys and t-shirts with pictures of them. Maybe try searching for something less mythical, or simply consider having ice cream during your break?`;
         
-        const data = await result.json();
+        // First display a fallback message immediately
+        setResponse(fallbackMessage);
         
-        if (data.choices && data.choices[0] && data.choices[0].message) {
-          setResponse(data.choices[0].message.content);
-        } else {
-          setResponse(language === 'lv' 
-            ? "Hmm, šķiet, ka man pašlaik nav asprātīgu atbilžu. Varbūt pamēģini meklēt kaut ko citu?" 
-            : "Hmm, I seem to be out of witty responses at the moment. Maybe try searching for something else?");
+        // Then attempt the API call
+        try {
+          const result = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer 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`
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [
+                {
+                  role: 'system',
+                  content: systemMessage
+                },
+                {
+                  role: 'user',
+                  content: userPrompt
+                }
+              ],
+              temperature: 0.7,
+              max_tokens: 150
+            })
+          });
+          
+          const data = await result.json();
+          
+          if (data.choices && data.choices[0] && data.choices[0].message) {
+            setResponse(data.choices[0].message.content);
+          } else if (data.error) {
+            console.error("OpenAI API error:", data.error);
+            // Keep the fallback message already set
+          }
+        } catch (apiError) {
+          console.error("Error fetching from OpenAI API:", apiError);
+          // API failed, but we already have a fallback message displayed
         }
       } catch (error) {
-        console.error("Error fetching from OpenAI API:", error);
+        console.error("General error in OpenAIFallback:", error);
+        // If all else fails, ensure we have a response
         setResponse(language === 'lv'
           ? "Mana humora shēma šobrīd ir nedaudz sajukusi. Varbūt pamēģini meklēt kaut ko citu?"
           : "My humor circuits are a bit frazzled right now. Maybe try searching for something else?");
-        toast({
-          title: t("Error"),
-          description: language === 'lv' ? "Nevarēja ģenerēt jautru atbildi" : "Could not generate a fun response",
-          variant: "destructive",
-        });
       } finally {
         setIsLoading(false);
       }
