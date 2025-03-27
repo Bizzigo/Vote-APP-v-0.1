@@ -8,14 +8,12 @@ import MovingCircles from './MovingCircles';
 
 interface LayoutProps {
   children: React.ReactNode;
-  hideBreadcrumbs?: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, hideBreadcrumbs = false }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isLegalPage = ['/cookies', '/privacy', '/terms'].includes(location.pathname);
-  const shouldShowBreadcrumbs = !isHomePage && !isLegalPage && !hideBreadcrumbs;
 
   // Scroll to top when location changes
   useEffect(() => {
@@ -27,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children, hideBreadcrumbs = false }) =>
       <MovingCircles />
       <Navbar />
       <main className="flex-1 w-full relative z-10">
-        {shouldShowBreadcrumbs && (
+        {!isHomePage && !isLegalPage && (
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumbs />
           </div>
