@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -55,7 +56,7 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
         try {
           console.log("Attempting to call OpenAI API...");
           
-          const apiKey = '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';
+          const apiKey = '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';
           
           const result = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
