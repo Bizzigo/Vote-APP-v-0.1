@@ -9,7 +9,6 @@ import { useLanguage } from '@/providers/LanguageProvider';
 import { useToast } from '@/hooks/use-toast';
 import { aiSearchVendors } from '@/lib/aiSearch';
 import { mockVendors } from '@/lib/mockData';
-import MistralFallback from '@/components/MistralFallback';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -107,18 +106,11 @@ const Search = () => {
           />
         </div>
         
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold">{t("searchResults")}</h2>
-          {searchTerm && <p className="text-muted-foreground mt-1">{t("searchingFor")}: "{searchTerm}"</p>}
-        </div>
-        
         {filteredVendors.length === 0 ? (
           <div className="text-center py-4">
             <p className="text-muted-foreground mb-6">
               {t("noVendorsFound")}
             </p>
-            
-            <MistralFallback searchTerm={searchTerm} />
           </div>
         ) : (
           <div className="flex flex-col space-y-4">

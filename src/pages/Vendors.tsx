@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -54,12 +53,8 @@ const Vendors = () => {
   });
 
   const handleSearch = (query: string) => {
-    // If we're on the vendors page and want to use the search functionality
-    // we update the search query locally
-    setSearchQuery(query);
-    
-    // Navigate to dedicated search page for complex searches
-    if (query.length > 0 && query.includes(' ')) {
+    // Navigate to dedicated search page
+    if (query.trim().length > 0) {
       navigate(`/search?q=${encodeURIComponent(query)}`);
     }
   };

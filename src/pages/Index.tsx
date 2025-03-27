@@ -13,7 +13,6 @@ import { useLanguage } from '@/providers/LanguageProvider';
 import CategoryGrid from '@/components/CategoryGrid';
 import UserProfileBadge from '@/components/UserProfileBadge';
 import WeatherBadge from '@/components/WeatherBadge';
-import MistralFallback from '@/components/MistralFallback';
 
 const Index = () => {
   const navigate = useNavigate();

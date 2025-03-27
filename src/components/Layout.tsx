@@ -14,6 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isLegalPage = ['/cookies', '/privacy', '/terms'].includes(location.pathname);
+  const isSearchPage = location.pathname === '/search';
 
   // Scroll to top when location changes
   useEffect(() => {
@@ -25,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <MovingCircles />
       <Navbar />
       <main className="flex-1 w-full relative z-10">
-        {!isHomePage && !isLegalPage && (
+        {!isHomePage && !isLegalPage && !isSearchPage && (
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Breadcrumbs />
           </div>

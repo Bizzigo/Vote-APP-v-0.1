@@ -32,6 +32,7 @@ const Navbar: React.FC = () => {
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2 text-foreground hover:text-primary/80 transition-colors">
             <Home size={20} strokeWidth={1.5} className={iconClassName} />
+            <span className="font-medium">Home</span>
           </Link>
         </div>
 
@@ -68,6 +69,12 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {mobileMenuOpen && <div className="md:hidden">
           <div className="space-y-1 px-4 pb-3 pt-2">
+            {/* Home link in mobile menu */}
+            <Link to="/" className="flex items-center gap-2 py-2 text-base text-foreground" onClick={() => setMobileMenuOpen(false)}>
+              <Home size={18} strokeWidth={1.5} className={iconClassName} />
+              <span>Home</span>
+            </Link>
+            
             {/* Language options in mobile menu */}
             <div className="flex items-center justify-between py-2 border-t border-border">
               <div className="text-base text-foreground">
