@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/providers/LanguageProvider';
+import SearchBar from '@/components/SearchBar';
 
 interface NoSearchResultsProps {
   searchTerm: string;
@@ -22,6 +23,12 @@ const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
       clearTimeout(timer);
     };
   }, [navigate]);
+
+  const handleSearch = (query: string, useLocation: boolean, distanceKm?: number) => {
+    if (query.trim()) {
+      navigate(`/vendors?q=${encodeURIComponent(query.trim())}`);
+    }
+  };
 
   return (
     <div className="py-4">
