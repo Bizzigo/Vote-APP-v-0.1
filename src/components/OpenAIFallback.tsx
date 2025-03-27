@@ -34,9 +34,12 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
           ]
         };
         
-        // Select a random fallback response
+        // Select a random fallback response for immediate display
         const randomIndex = Math.floor(Math.random() * fallbackResponses[language].length);
         const fallbackMessage = fallbackResponses[language][randomIndex];
+        
+        // Set fallback message immediately
+        setResponse(fallbackMessage);
         
         // Determine system message language
         const systemMessage = language === 'lv' 
@@ -48,21 +51,17 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
           ? `Es meklēju "${searchTerm}", bet nevarēju atrast nekādus rezultātus. Vai vari pateikt kaut ko jautru vai interesantu par to?`
           : `I searched for "${searchTerm}" but couldn't find any results. Can you say something funny or interesting about this?`;
         
-        // Create a mock response for development/testing
-        const mockResponse = (language === 'lv')
-          ? `Par "${searchTerm}"? Tas ir kā meklēt vienradzi veikalā - teoretiski varētu būt, bet visdrīzāk atradīsi tikai rotaļlietas un T-kreklus ar tā attēlu. Varbūt mēģini meklēt kaut ko mazāk mitologisku vai vienkārši apsver domu par saldējumu pauzes laikā?`
-          : `Looking for "${searchTerm}"? That's like searching for a unicorn in a department store - theoretically possible, but you'll probably just find toys and t-shirts with pictures of them. Maybe try searching for something less mythical, or simply consider having ice cream during your break?`;
-        
-        // First display a fallback message immediately
-        setResponse(fallbackMessage);
-        
-        // Then attempt the API call
+        // Make the API call to OpenAI
         try {
+          console.log("Attempting to call OpenAI API...");
+          
+          const apiKey = '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';
+          
           const result = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer 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`
+              'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
               model: 'gpt-4o-mini',
@@ -81,12 +80,21 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
             })
           });
           
+          console.log("API response status:", result.status);
+          
+          if (!result.ok) {
+            const errorText = await result.text();
+            console.error("OpenAI API error:", errorText);
+            throw new Error(`API returned status ${result.status}: ${errorText}`);
+          }
+          
           const data = await result.json();
+          console.log("API response data:", data);
           
           if (data.choices && data.choices[0] && data.choices[0].message) {
             setResponse(data.choices[0].message.content);
           } else if (data.error) {
-            console.error("OpenAI API error:", data.error);
+            console.error("OpenAI API error response:", data.error);
             // Keep the fallback message already set
           }
         } catch (apiError) {
