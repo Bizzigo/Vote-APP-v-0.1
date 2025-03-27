@@ -12,7 +12,6 @@ import { useLocationContext } from '@/providers/LocationProvider';
 import { useLanguage } from '@/providers/LanguageProvider';
 import CategoryGrid from '@/components/CategoryGrid';
 import UserProfileBadge from '@/components/UserProfileBadge';
-import WeatherBadge from '@/components/WeatherBadge';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -63,12 +62,6 @@ const Index = () => {
             
             <div className="mt-6 mb-4">
               <UserProfileBadge className="py-2" />
-            </div>
-            
-            <div className="mt-4 space-y-4">
-              {isActive && (
-                <WeatherBadge />
-              )}
             </div>
           </div>
         </div>

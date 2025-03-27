@@ -13,6 +13,7 @@ export interface User {
   subscriptionStatus?: 'active' | 'canceled' | 'past_due';
   profileCompleted?: boolean;
   provider?: 'google' | 'facebook' | 'email';
+  avatarUrl?: string;
 }
 
 export interface Vendor {

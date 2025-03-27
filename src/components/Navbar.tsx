@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Menu, X, Home, LogIn, User, LogOut } from 'lucide-react';
 import { useLanguage } from '@/providers/LanguageProvider';
 import LanguageSwitcher from './LanguageSwitcher';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -43,8 +44,15 @@ const Navbar: React.FC = () => {
             {isLoggedIn ? (
               <>
                 <Link to="/profile" className="text-foreground hover:text-primary transition-colors flex items-center gap-1">
-                  <User size={20} strokeWidth={1.5} className={iconClassName} />
-                  <span>{t("profile")}</span>
+                  <Avatar className="h-8 w-8">
+                    {user?.avatarUrl ? (
+                      <AvatarImage src={user.avatarUrl} alt={user.name || "User"} />
+                    ) : (
+                      <AvatarFallback className="bg-primary/10 text-primary">
+                        {user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || "U"}
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
                 </Link>
                 <button onClick={handleLogout} className="text-foreground hover:text-primary transition-colors flex items-center gap-1">
                   <LogOut size={20} strokeWidth={1.5} className={iconClassName} />
@@ -85,20 +93,28 @@ const Navbar: React.FC = () => {
             
             {isLoggedIn ? (
               <>
-                <Link to="/profile" className="flex items-center gap-2 py-2 text-base text-foreground" onClick={() => setMobileMenuOpen(false)}>
-                  <User size={18} strokeWidth={1.5} className={iconClassName} />
+                <Link to="/profile" className="flex items-center gap-2 py-2 text-base text-foreground border-t border-border" onClick={() => setMobileMenuOpen(false)}>
+                  <Avatar className="h-6 w-6">
+                    {user?.avatarUrl ? (
+                      <AvatarImage src={user.avatarUrl} alt={user.name || "User"} />
+                    ) : (
+                      <AvatarFallback className="bg-primary/10 text-primary">
+                        {user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || "U"}
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
                   <span>{t("profile")}</span>
                 </Link>
                 <button onClick={() => {
                   handleLogout();
                   setMobileMenuOpen(false);
-                }} className="flex items-center gap-2 py-2 text-base text-foreground w-full text-left">
+                }} className="flex items-center gap-2 py-2 text-base text-foreground w-full text-left border-t border-border">
                   <LogOut size={18} strokeWidth={1.5} className={iconClassName} />
                   <span>{t("logout")}</span>
                 </button>
               </>
             ) : (
-              <Link to="/login" className="flex items-center gap-2 py-2 text-base text-foreground" onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/login" className="flex items-center gap-2 py-2 text-base text-foreground border-t border-border" onClick={() => setMobileMenuOpen(false)}>
                 <LogIn size={18} strokeWidth={1.5} className={iconClassName} />
                 <span>{t("login")}</span>
               </Link>

@@ -51,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                   subscriptionStatus: profile.subscription_status as any || undefined,
                   profileCompleted: profile.profile_completed || false,
                   provider: profile.provider as any || 'google',
+                  avatarUrl: profile.avatar_url || session.user.user_metadata.avatar_url || undefined,
                 };
                 
                 setUser(mappedUser);
