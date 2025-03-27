@@ -72,8 +72,8 @@ export const translations: Translations = {
     lv: "Nav atrasts neviens pakalpojuma sniedzējs"
   },
   "returningToHome": {
-    en: "Returning to home page in 3 seconds...",
-    lv: "Atgriežamies uz sākumlapu pēc 3 sekundēm..."
+    en: "Returning to home page in 2 seconds...",
+    lv: "Atgriežamies uz sākumlapu pēc 2 sekundēm..."
   },
   // Login/Signup pages
   "welcomeBack": {

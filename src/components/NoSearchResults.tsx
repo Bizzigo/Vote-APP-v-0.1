@@ -8,7 +8,7 @@ interface NoSearchResultsProps {
 }
 
 const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
-  const [countdown, setCountdown] = useState<number>(3);
+  const [countdown, setCountdown] = useState<number>(2);
   const { language } = useLanguage();
   const navigate = useNavigate();
   
@@ -19,7 +19,7 @@ const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
         if (prev <= 1) {
           clearInterval(timer);
           // Navigate to home page
-          navigate('/');
+          navigate('/', { replace: true });
           return 0;
         }
         return prev - 1;
