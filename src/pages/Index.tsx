@@ -41,33 +41,35 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
-        <div className="text-center mb-2 max-w-3xl mx-auto">
-          <p className="text-muted-foreground max-w-xl mt-0 mb-3 animate-fade-in text-lg mx-auto">
-            {t("heroText")}
-          </p>
-        </div>
-        
-        <div className="w-full max-w-xl mx-auto px-4 relative">
-          <SearchBar 
-            searchTerm={searchTerm} 
-            setSearchTerm={setSearchTerm} 
-            onSearch={handleSearch} 
-            className="" 
-            mainPage={true} 
-          />
-          <div className="mt-8 w-full">
-            <CategoryGrid onCategorySelect={category => handleSearch(category, isActive)} />
+      <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-300px)]">
+          <div className="text-center mb-2 max-w-3xl mx-auto">
+            <p className="text-muted-foreground max-w-xl mt-0 mb-3 animate-fade-in text-lg mx-auto">
+              {t("heroText")}
+            </p>
           </div>
           
-          <div className="mt-6 mb-4">
-            <UserProfileBadge className="py-2" />
-          </div>
-          
-          <div className="mt-4 space-y-4">
-            {isActive && (
-              <WeatherBadge />
-            )}
+          <div className="w-full max-w-xl mx-auto relative">
+            <SearchBar 
+              searchTerm={searchTerm} 
+              setSearchTerm={setSearchTerm} 
+              onSearch={handleSearch} 
+              className="" 
+              mainPage={true} 
+            />
+            <div className="mt-8 w-full">
+              <CategoryGrid onCategorySelect={category => handleSearch(category, isActive)} />
+            </div>
+            
+            <div className="mt-6 mb-4">
+              <UserProfileBadge className="py-2" />
+            </div>
+            
+            <div className="mt-4 space-y-4">
+              {isActive && (
+                <WeatherBadge />
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -150,6 +151,36 @@ const VendorProfile = () => {
   const reviewCount = React.useMemo(() => reviews.length, [reviews]);
   const isOnline = React.useMemo(() => Math.random() > 0.5, []);
 
+  // Add useEffect to fetch vendor data
+  useEffect(() => {
+    if (!vendorSlug) return;
+    
+    // Simulate vendor loading from API
+    setLoading(true);
+    
+    // Find the vendor in mock data based on slug
+    setTimeout(() => {
+      const foundVendor = mockVendors.find(v => 
+        v.slug === vendorSlug || 
+        v.name.toLowerCase().replace(/\s+/g, '-') === vendorSlug.toLowerCase()
+      );
+      
+      if (foundVendor) {
+        setVendor(foundVendor);
+        setNotFound(false);
+      } else {
+        setNotFound(true);
+        toast({
+          title: "Vendor not found",
+          description: "We couldn't find the requested vendor profile",
+          variant: "destructive"
+        });
+      }
+      
+      setLoading(false);
+    }, 500);
+  }, [vendorSlug, toast]);
+
   const scrollToReviews = () => {
     if (reviewsSectionRef.current) {
       reviewsSectionRef.current.scrollIntoView({ 
@@ -166,8 +197,19 @@ const VendorProfile = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="flex justify-center items-center h-[70vh]">
-          <p className="text-xl">Loading vendor profile...</p>
+        <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-center w-full my-6">
+            <SearchBar 
+              searchTerm={searchTerm} 
+              setSearchTerm={setSearchTerm} 
+              onSearch={handleSearch} 
+              className="w-full max-w-xl" 
+            />
+          </div>
+          <div className="flex justify-center items-center h-[50vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            <p className="ml-4 text-lg">Loading vendor profile...</p>
+          </div>
         </div>
       </Layout>
     );
@@ -176,11 +218,21 @@ const VendorProfile = () => {
   if (notFound || !vendor) {
     return (
       <Layout>
-        <div className="flex flex-col justify-center items-center h-[70vh] space-y-4">
-          <p className="text-xl">Vendor not found</p>
-          <Link to="/" className="text-blue-600 hover:underline">
-            Return to Home
-          </Link>
+        <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-center w-full my-6">
+            <SearchBar 
+              searchTerm={searchTerm} 
+              setSearchTerm={setSearchTerm} 
+              onSearch={handleSearch} 
+              className="w-full max-w-xl" 
+            />
+          </div>
+          <div className="flex flex-col justify-center items-center h-[50vh] space-y-4">
+            <p className="text-xl">Vendor not found</p>
+            <Link to="/" className="text-blue-600 hover:underline">
+              Return to Home
+            </Link>
+          </div>
         </div>
       </Layout>
     );
@@ -188,8 +240,8 @@ const VendorProfile = () => {
   
   return (
     <Layout>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex justify-center w-full mb-8">
+      <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center w-full my-6">
           <SearchBar 
             searchTerm={searchTerm} 
             setSearchTerm={setSearchTerm} 

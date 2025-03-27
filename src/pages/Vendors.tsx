@@ -66,18 +66,20 @@ const Vendors = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-3xl font-bold mb-6">Explore Vendors</h1>
         
+        <div className="flex justify-center w-full my-6">
+          <SearchBar 
+            searchTerm={searchQuery} 
+            setSearchTerm={setSearchQuery} 
+            onSearch={handleSearch} 
+            className="w-full max-w-xl" 
+          />
+        </div>
+        
         <div className="flex flex-col md:flex-row gap-4 mb-8">
-          <div className="w-full md:w-2/3">
-            <SearchBar 
-              searchTerm={searchQuery} 
-              setSearchTerm={setSearchQuery} 
-              onSearch={handleSearch} 
-            />
-          </div>
-          <div className="w-full md:w-1/3">
+          <div className="w-full">
             <DistrictFilter 
               vendors={vendors} 
               selectedDistrict={selectedDistrict} 
