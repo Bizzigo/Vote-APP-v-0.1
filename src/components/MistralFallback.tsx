@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/providers/LanguageProvider';
+import { useNavigate } from 'react-router-dom';
 
 interface MistralFallbackProps {
   searchTerm: string;
@@ -11,8 +12,10 @@ interface MistralFallbackProps {
 const MistralFallback: React.FC<MistralFallbackProps> = ({ searchTerm }) => {
   const [response, setResponse] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [countdown, setCountdown] = useState<number>(3);
   const { toast } = useToast();
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const generateFunResponse = async () => {
@@ -80,6 +83,30 @@ const MistralFallback: React.FC<MistralFallbackProps> = ({ searchTerm }) => {
       generateFunResponse();
     }
   }, [searchTerm, toast, t, language]);
+  
+  // Add countdown and navigation effect
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    
+    if (!isLoading && response) {
+      // Start countdown
+      timer = setInterval(() => {
+        setCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            // Navigate to home page
+            navigate('/');
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isLoading, response, navigate]);
 
   return (
     <div className="py-4">
@@ -93,8 +120,15 @@ const MistralFallback: React.FC<MistralFallbackProps> = ({ searchTerm }) => {
       ) : (
         <div className="prose dark:prose-invert max-w-none">
           <p className="text-muted-foreground">{response}</p>
-          <div className="text-xs text-right mt-4 text-muted-foreground">
-            Powered by Mistral AI
+          <div className="flex flex-col items-center mt-4">
+            <p className="text-sm text-muted-foreground">
+              {language === 'lv' 
+                ? `Atgriežamies sākumlapā pēc ${countdown} sekundēm...` 
+                : `Returning to home page in ${countdown} seconds...`}
+            </p>
+            <div className="text-xs text-right mt-2 text-muted-foreground">
+              Powered by Mistral AI
+            </div>
           </div>
         </div>
       )}
