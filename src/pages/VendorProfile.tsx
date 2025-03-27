@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -35,7 +34,7 @@ const VendorProfile = () => {
   const reviewsSectionRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const [services, setServices] = useState<string[]>([
+  const [services] = useState([
     'Web Development', 'Mobile Apps', 'Cloud Services', 'Consulting', 
     'UI/UX Design', 'DevOps', 'Data Analytics', 'AI Solutions', 
     'IT Infrastructure', 'Cybersecurity'
@@ -151,18 +150,14 @@ const VendorProfile = () => {
   const reviewCount = React.useMemo(() => reviews.length, [reviews]);
   const isOnline = React.useMemo(() => Math.random() > 0.5, []);
 
-  // Add useEffect to fetch vendor data
   useEffect(() => {
     if (!vendorSlug) return;
     
-    // Simulate vendor loading from API
     setLoading(true);
     
-    // Find the vendor in mock data based on slug
     setTimeout(() => {
       const foundVendor = mockVendors.find(v => 
-        v.slug === vendorSlug || 
-        v.name.toLowerCase().replace(/\s+/g, '-') === vendorSlug.toLowerCase()
+        v.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === vendorSlug.toLowerCase()
       );
       
       if (foundVendor) {
