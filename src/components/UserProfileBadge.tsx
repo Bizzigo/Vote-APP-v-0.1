@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/providers/LanguageProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { AvatarWithStatus } from '@/components/ui/avatar-with-status';
+import { useOnlineUsers } from '@/contexts/OnlineUsersContext';
+import { UserStatus } from '@/lib/userStatus';
 
 interface UserProfileBadgeProps {
   className?: string;
@@ -13,6 +15,7 @@ const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({ className = "" }) =
   const [count, setCount] = useState(0);
   const [finalCount, setFinalCount] = useState(0);
   const countRef = useRef<HTMLSpanElement>(null);
+  const { onlineUsers } = useOnlineUsers();
   
   useEffect(() => {
     // Initial fetch of user count
@@ -70,8 +73,22 @@ const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({ className = "" }) =
     return () => clearInterval(timer);
   }, [finalCount]);
   
-  // User statuses for demo avatars
-  const statuses = ['online', 'online', 'away', 'busy', 'offline', 'online'];
+  // Sample user IDs for demo avatars
+  const demoUserIds = [
+    "user1", "user2", "user3", "user4", "user5", "user6"
+  ];
+  
+  // Get statuses from online users context or use fallbacks for demo
+  const getStatus = (userId: string): UserStatus => {
+    if (Object.keys(onlineUsers).length > 0) {
+      return onlineUsers[userId] || 'offline';
+    }
+    
+    // Use preset statuses for demo when no real statuses are available
+    const demoStatuses: UserStatus[] = ['online', 'online', 'away', 'busy', 'offline', 'online'];
+    const index = demoUserIds.indexOf(userId);
+    return demoStatuses[index % demoStatuses.length];
+  };
   
   return (
     <div className={`flex items-center justify-center ${className}`}>
@@ -90,7 +107,7 @@ const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({ className = "" }) =
               src={src}
               fallback={`U${index}`}
               size="sm"
-              status={statuses[index] as any}
+              status={getStatus(demoUserIds[index])}
               className="-mx-0.5 ring-2 ring-white dark:ring-foreground"
             />
           ))}

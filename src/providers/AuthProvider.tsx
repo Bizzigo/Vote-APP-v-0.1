@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Session } from '@supabase/supabase-js';
 import AuthContext from '@/contexts/AuthContext';
 import * as authService from '@/services/authService';
+import { OnlineUsersProvider } from '@/contexts/OnlineUsersContext';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -151,21 +152,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isLoggedIn = !!user;
   const isAdmin = user?.role === 'admin';
 
-  return <AuthContext.Provider value={{
-    user,
-    login,
-    logout,
-    voteForCandidate,
-    isLoggedIn,
-    isAdmin,
-    updateUser,
-    completeProfile
-  }}>{loading ? (
-    <div className="flex justify-center items-center h-screen">
-      <div className="text-center">
-        <div className="mb-4 w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin mx-auto"></div>
-        <p className="text-xl font-medium">Loading...</p>
-      </div>
-    </div>
-  ) : children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{
+      user,
+      login,
+      logout,
+      voteForCandidate,
+      isLoggedIn,
+      isAdmin,
+      updateUser,
+      completeProfile
+    }}>
+      <OnlineUsersProvider>
+        {loading ? (
+          <div className="flex justify-center items-center h-screen">
+            <div className="text-center">
+              <div className="mb-4 w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin mx-auto"></div>
+              <p className="text-xl font-medium">Loading...</p>
+            </div>
+          </div>
+        ) : children}
+      </OnlineUsersProvider>
+    </AuthContext.Provider>
+  );
 };

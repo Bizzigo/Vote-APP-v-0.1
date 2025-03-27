@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Menu, X, Home, LogIn, User, LogOut } from 'lucide-react';
+import { Menu, X, Home, LogIn, LogOut } from 'lucide-react';
 import { useLanguage } from '@/providers/LanguageProvider';
 import LanguageSwitcher from './LanguageSwitcher';
-import { AvatarWithStatus } from '@/components/ui/avatar-with-status';
+import UserStatusSelector from './UserStatusSelector';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -28,17 +28,6 @@ const Navbar: React.FC = () => {
   
   const iconClassName = 'text-foreground transition-colors';
   
-  // Get initials for avatar fallback
-  const getInitials = () => {
-    if (user?.name) {
-      return user.name.charAt(0).toUpperCase();
-    }
-    if (user?.email) {
-      return user.email.charAt(0).toUpperCase();
-    }
-    return 'U';
-  };
-  
   return <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-2">
@@ -55,12 +44,7 @@ const Navbar: React.FC = () => {
             {isLoggedIn ? (
               <>
                 <Link to="/profile" className="text-foreground hover:text-primary transition-colors flex items-center gap-1">
-                  <AvatarWithStatus 
-                    src={user?.avatarUrl} 
-                    fallback={getInitials()}
-                    status="online"
-                    size="sm"
-                  />
+                  <UserStatusSelector />
                 </Link>
                 <button onClick={handleLogout} className="text-foreground hover:text-primary transition-colors flex items-center gap-1">
                   <LogOut size={20} strokeWidth={1.5} className={iconClassName} />
@@ -102,12 +86,7 @@ const Navbar: React.FC = () => {
             {isLoggedIn ? (
               <>
                 <Link to="/profile" className="flex items-center gap-2 py-2 text-base text-foreground border-t border-border" onClick={() => setMobileMenuOpen(false)}>
-                  <AvatarWithStatus 
-                    src={user?.avatarUrl} 
-                    fallback={getInitials()}
-                    status="online"
-                    size="sm"
-                  />
+                  <UserStatusSelector />
                   <span>{t("profile")}</span>
                 </Link>
                 <button onClick={() => {
