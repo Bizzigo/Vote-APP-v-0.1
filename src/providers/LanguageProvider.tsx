@@ -2,7 +2,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'lv';
-type Translations = Record<string, Record<Language, string>>;
+type TranslationValue = string | string[];
+type Translations = Record<string, Record<Language, TranslationValue>>;
 
 // Translations dictionary
 export const translations: Translations = {
@@ -216,7 +217,16 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       console.warn(`Translation key not found: ${key}`);
       return key;
     }
-    return translations[key][language] || key;
+    
+    const translation = translations[key][language];
+    
+    // If translation is an array, return an error
+    if (Array.isArray(translation)) {
+      console.warn(`Translation for key "${key}" is an array, but a string was expected.`);
+      return key;
+    }
+    
+    return translation as string || key;
   };
   
   // Function to get a random keyword based on current language
