@@ -67,7 +67,6 @@ const VendorCard: React.FC<VendorCardProps> = ({
                 hasLursoftProfile={Math.random() > 0.5}
                 jobVacancies={0}
                 hasShop={false}
-                isOnline={Math.random() > 0.5}
                 distance={distance}
               />
             </div>

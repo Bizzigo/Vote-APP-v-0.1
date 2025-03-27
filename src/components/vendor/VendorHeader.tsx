@@ -14,7 +14,6 @@ interface VendorHeaderProps {
   hasLursoftProfile: boolean;
   jobVacancies: number;
   hasShop: boolean;
-  isOnline: boolean;
   onRatingClick: () => void;
 }
 
@@ -26,7 +25,6 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
   hasLursoftProfile,
   jobVacancies,
   hasShop,
-  isOnline,
   onRatingClick
 }) => {
   return (
@@ -64,7 +62,6 @@ const VendorHeader: React.FC<VendorHeaderProps> = ({
               hasLursoftProfile={hasLursoftProfile}
               jobVacancies={jobVacancies}
               hasShop={hasShop}
-              isOnline={isOnline}
               distance={null}
             />
           </div>

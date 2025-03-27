@@ -12,7 +12,7 @@ interface VendorInfoBadgesProps {
   hasLursoftProfile: boolean;
   jobVacancies: number;
   hasShop: boolean;
-  isOnline: boolean;
+  isOnline?: boolean; // Made optional as we're removing this
   distance: string | null;
 }
 
@@ -24,7 +24,6 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
   hasLursoftProfile,
   jobVacancies,
   hasShop,
-  isOnline,
   distance
 }) => {
   return (
@@ -67,23 +66,6 @@ const VendorInfoBadges: React.FC<VendorInfoBadgesProps> = ({
           scrollToId="shop-section"
         />
       )}
-      
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <VendorBadge
-                icon={<span className={`inline-block h-2 w-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}></span>}
-                label={isOnline ? 'Online' : 'Offline'}
-                className={`${isOnline ? 'text-green-600' : 'text-gray-500'} whitespace-nowrap`}
-              />
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            {isOnline ? 'You can send a direct message to this vendor' : 'Vendor is currently offline'}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
       
       <VendorBadge
         icon={<Star className="h-3 w-3 text-yellow-500" />}
