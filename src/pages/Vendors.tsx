@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams, useNavigate } from 'react-router-dom';
@@ -118,10 +117,6 @@ const Vendors = () => {
           </div>
         ) : filteredVendors.length === 0 ? (
           <div className="text-center py-12">
-            <h2 className="text-2xl font-semibold mb-2">No vendors found</h2>
-            <p className="text-muted-foreground mb-6">
-              Try adjusting your search criteria or district filter.
-            </p>
             {searchQuery && <NoSearchResults searchTerm={searchQuery} />}
           </div>
         ) : (

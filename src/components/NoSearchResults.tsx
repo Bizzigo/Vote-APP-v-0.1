@@ -9,7 +9,7 @@ interface NoSearchResultsProps {
 
 const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
   const [countdown, setCountdown] = useState<number>(3);
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const navigate = useNavigate();
   
   // Add countdown and navigation effect
@@ -27,7 +27,7 @@ const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
     }, 1000);
     
     return () => {
-      if (timer) clearInterval(timer);
+      clearInterval(timer);
     };
   }, [navigate]);
 
@@ -36,8 +36,8 @@ const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
       <div className="prose dark:prose-invert max-w-none">
         <p className="text-muted-foreground">
           {language === 'lv' 
-            ? `Nevarēja atrast neko par "${searchTerm}". Mēģiniet citu meklēšanas vārdu.` 
-            : `Couldn't find anything about "${searchTerm}". Try a different search term.`}
+            ? `Nav šāda informācija mūsu datu bāzē. Mēģiniet savādāk...` 
+            : `No such information in our database. Try differently...`}
         </p>
         <div className="flex flex-col items-center mt-4">
           <p className="text-sm text-muted-foreground">

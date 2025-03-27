@@ -125,10 +125,6 @@ const Index = () => {
           
           {filteredVendors.length === 0 ? (
             <div className="text-center py-4">
-              <p className="text-muted-foreground mb-6">
-                {t("noVendorsFound")}
-              </p>
-              
               <NoSearchResults searchTerm={searchTerm} />
             </div>
           ) : (

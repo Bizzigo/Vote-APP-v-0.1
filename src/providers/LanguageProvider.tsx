@@ -50,8 +50,8 @@ export const translations: Translations = {
     lv: "Meklēšanas rezultāti"
   },
   "noVendorsFound": {
-    en: "No vendors found. Try adjusting your search.",
-    lv: "Nav atrasts neviens pakalpojuma sniedzējs. Pamēģiniet pielāgot meklēšanu."
+    en: "No such information in our database. Try differently...",
+    lv: "Nav šāda informācija mūsu datu bāzē. Mēģiniet savādāk..."
   },
   "distanceEnabled": {
     en: "Location enabled",
