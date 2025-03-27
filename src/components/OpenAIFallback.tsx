@@ -20,7 +20,7 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
         setIsLoading(true);
 
         // OpenAI API key
-        const apiKey = "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";
+        const apiKey = "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";
 
         // Create a prompt based on the search term and language
         const promptText = language === 'lv' 
