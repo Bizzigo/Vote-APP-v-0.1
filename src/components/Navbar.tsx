@@ -32,7 +32,6 @@ const Navbar: React.FC = () => {
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2 text-foreground hover:text-primary/80 transition-colors">
             <Home size={20} strokeWidth={1.5} className={iconClassName} />
-            <span className="font-medium">Home</span>
           </Link>
         </div>
 
