@@ -15,29 +15,61 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
   const { t, language } = useLanguage();
 
   useEffect(() => {
-    const generateFunResponse = async () => {
+    const generateOpenAIResponse = async () => {
       try {
         setIsLoading(true);
+
+        // OpenAI API key
+        const apiKey = "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";
+
+        // Create a prompt based on the search term and language
+        const promptText = language === 'lv' 
+          ? `Lietotājs meklēja "${searchTerm}" bet nekas netika atrasts. Lūdzu, uzraksti īsu, draudzīgu un cilvēcīgu atbildi (1-2 teikumus) latviešu valodā, kas informē, ka nekas netika atrasts. Atbilde var būt ar humora pieskaņu, bet jābūt pieklājīgai un laipnai. Svarīgi: Atbildē nav jāpiemin OpenAI vai AI, vai cits AI modelis.`
+          : `The user searched for "${searchTerm}" but nothing was found. Please write a short, friendly and human-like response (1-2 sentences) in English, informing that nothing was found. The response can have a touch of humor but should be polite and kind. Important: The response should not mention OpenAI or AI, or any other AI model.`;
+
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              { role: 'user', content: promptText }
+            ],
+            max_tokens: 150,
+            temperature: 0.7
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('OpenAI API error:', errorData);
+          throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
+        }
+
+        const data = await response.json();
+        const aiResponse = data.choices[0].message.content.trim();
         
-        // Create default fallback responses based on language
+        setResponse(aiResponse);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error generating OpenAI response:", error);
+        
+        // Fallback responses if API call fails
         const fallbackResponses = {
           lv: [
-            "Hmm, par \"" + searchTerm + "\" man nav nekādas asprātīgas atbildes. Mēģini meklēt ko citu!",
-            "\"" + searchTerm + "\"? Tas izklausās interesanti, bet šobrīd man par to nav nekādas informācijas.",
-            "Man ļoti žēl, bet es nevaru atrast informāciju par \"" + searchTerm + "\". Varbūt izmēģini citu meklēšanas terminu?",
-            "Mana humora shēma šobrīd ir nedaudz iztukšojusies. Pamēģini meklēt kaut ko citu!",
-            "Par \"" + searchTerm + "\" mums pagaidām nav informācijas. Bet mēs strādājam, lai to uzlabotu!",
-            "\"" + searchTerm + "\" - interesants meklējums! Diemžēl šobrīd nav atbilstošu rezultātu.",
-            "Meklējot \"" + searchTerm + "\" pēc mūsu datiem nekas netika atrasts, mēģini citu atslēgvārdu.",
+            "Hmm, par \"" + searchTerm + "\" šobrīd nav nekādas informācijas. Pamēģini meklēt ko citu!",
+            "\"" + searchTerm + "\"? Interesanti, bet diemžēl mums par to nav nekādas informācijas.",
+            "Par \"" + searchTerm + "\" mums pagaidām nav informācijas. Varbūt mēģini citu meklēšanas terminu?",
+            "Meklējot \"" + searchTerm + "\" pēc mūsu datiem nekas netika atrasts. Mēs turpinām pilnveidot mūsu datubāzi!"
           ],
           en: [
-            "Hmm, I don't have any witty responses about \"" + searchTerm + "\" right now. Try searching for something else!",
-            "\"" + searchTerm + "\"? Sounds interesting, but I don't have any info on that at the moment.",
-            "I'd love to help with \"" + searchTerm + "\", but I can't find anything on it. Maybe try a different search term?",
-            "My humor circuits seem to be a bit empty at the moment. Try searching for something else!",
-            "We don't have any information about \"" + searchTerm + "\" yet. But we're working on improving!",
-            "\"" + searchTerm + "\" - interesting search! Unfortunately, there are no matching results right now.",
-            "Looking for \"" + searchTerm + "\" didn't return any results in our database, try another keyword.",
+            "Hmm, I couldn't find anything about \"" + searchTerm + "\" right now. Try searching for something else!",
+            "\"" + searchTerm + "\"? Sounds interesting, but unfortunately we don't have any info on that at the moment.",
+            "I'd love to help with \"" + searchTerm + "\", but I couldn't find anything on it. Maybe try a different search term?",
+            "Looking for \"" + searchTerm + "\" didn't return any results in our database. We're continuously improving our search capabilities!"
           ]
         };
         
@@ -45,23 +77,13 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
         const randomIndex = Math.floor(Math.random() * fallbackResponses[language].length);
         const fallbackMessage = fallbackResponses[language][randomIndex];
         
-        // Set fallback message
         setResponse(fallbackMessage);
-        
-        // Make sure to eventually stop loading
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error in OpenAIFallback:", error);
-        // If all else fails, ensure we have a response
-        setResponse(language === 'lv'
-          ? "Mana humora shēma šobrīd ir nedaudz sajukusi. Varbūt pamēģini meklēt kaut ko citu?"
-          : "My humor circuits are a bit frazzled right now. Maybe try searching for something else?");
         setIsLoading(false);
       }
     };
 
     if (searchTerm) {
-      generateFunResponse();
+      generateOpenAIResponse();
     }
   }, [searchTerm, toast, t, language]);
 
@@ -71,7 +93,7 @@ const OpenAIFallback: React.FC<OpenAIFallbackProps> = ({ searchTerm }) => {
         <div className="flex items-center justify-center py-6">
           <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
           <span className="ml-2 text-muted-foreground">
-            {language === 'lv' ? "Domāju par kaut ko asprātīgu..." : "Thinking of something clever..."}
+            {language === 'lv' ? "Meklēju citas iespējas..." : "Looking for alternatives..."}
           </span>
         </div>
       ) : (
