@@ -22,9 +22,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="min-h-screen flex flex-col w-full bg-background text-foreground overflow-x-hidden relative">
       <MovingCircles />
       <Navbar />
-      <main className="flex-1 w-full relative z-10 max-w-screen-xl mx-auto">
+      
+      {/* Add search bar below navbar for all pages */}
+      <div className="w-full py-6 bg-white/50 backdrop-blur-sm border-b border-border/10 relative z-10">
+        <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+          <SearchBar 
+            searchTerm="" 
+            setSearchTerm={() => {}} 
+            onSearch={() => {}} 
+            className="w-full max-w-xl mx-auto" 
+          />
+        </div>
+      </div>
+      
+      <main className="flex-1 w-full relative z-10 max-w-screen-xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {children}
       </main>
+      
       <Footer />
     </div>
   );
