@@ -8,3 +8,7 @@ BEGIN
   WHERE id = candidate_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Enable realtime for user presence tracking
+ALTER TABLE public.profiles REPLICA IDENTITY FULL;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
