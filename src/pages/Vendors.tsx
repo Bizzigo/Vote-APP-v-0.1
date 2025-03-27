@@ -7,6 +7,7 @@ import SearchBar from '@/components/SearchBar';
 import DistrictFilter from '@/components/DistrictFilter';
 import { Vendor } from '@/lib/types';
 import { supabase } from '@/integrations/supabase/client';
+import NoSearchResults from '@/components/NoSearchResults';
 
 const Vendors = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -86,6 +87,7 @@ const Vendors = () => {
           </div>
         ) : filteredVendors.length === 0 ? (
           <div className="text-center py-12">
+            <NoSearchResults searchTerm={searchQuery} />
             <h2 className="text-2xl font-semibold mb-2">No vendors found</h2>
             <p className="text-muted-foreground">
               Try adjusting your search criteria or district filter.
