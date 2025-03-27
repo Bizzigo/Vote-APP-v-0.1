@@ -49,8 +49,12 @@ const AuthCallback = () => {
               : "Welcome! Please complete your profile."
           });
           
-          // Always redirect to profile page for profile completion if not completed
-          navigate('/profile');
+          // Redirect to home if profile is completed, otherwise to profile page
+          if (profile && profile.profile_completed) {
+            navigate('/');
+          } else {
+            navigate('/profile');
+          }
         } else {
           console.error('No session established after authentication');
           toast.error("Authentication failed", {

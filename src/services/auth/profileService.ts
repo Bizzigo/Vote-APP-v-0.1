@@ -8,6 +8,8 @@ export const updateUser = async (currentUser: User, updates: Partial<User>) => {
       return { error: { message: 'No user logged in' } };
     }
     
+    console.log('Updating user profile:', { userId: currentUser.id, updates });
+    
     // Update the profile in Supabase
     const { data, error } = await supabase
       .from('profiles')
@@ -33,6 +35,7 @@ export const updateUser = async (currentUser: User, updates: Partial<User>) => {
     
     return { user: updatedUser, error: null };
   } catch (error: any) {
+    console.error('Unexpected error updating user:', error);
     return { error };
   }
 };

@@ -46,6 +46,8 @@ const updateProfile = async (profile: Profile): Promise<UpdateProfileResponse> =
       return { error: { message: 'Profile ID is required' } };
     }
     
+    console.log('Updating profile with data:', profile);
+    
     const { data, error } = await supabase
       .from('profiles')
       .update({

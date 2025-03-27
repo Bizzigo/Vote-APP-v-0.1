@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from '@/hooks/useAuth'; // Fixed import path
+import { useAuth } from '@/hooks/useAuth';
 import { profileService } from '@/services/profileService';
 
 interface Profile {
@@ -37,7 +37,10 @@ const UserProfile = () => {
               variant: "destructive",
             });
           } else {
-            setProfile(data || {});
+            setProfile({
+              ...data,
+              id: user.id // Ensure ID is always set
+            });
           }
         }
       } catch (err) {
@@ -62,27 +65,36 @@ const UserProfile = () => {
     }));
   };
 
-  // Fix for the error in the saveProfile function:
   const saveProfile = async () => {
     setIsSaving(true);
+    
     try {
-      const { user, error: updateError } = await profileService.updateProfile(profile);
+      // Make sure the ID is always set
+      const profileToUpdate = {
+        ...profile,
+        id: user?.id
+      };
       
-      if (updateError) {
+      console.log('Saving profile:', profileToUpdate);
+      
+      const { user: updatedUser, error } = await profileService.updateProfile(profileToUpdate);
+      
+      if (error) {
+        console.error('Profile update error:', error);
         toast({
           title: "Failed to update profile",
-          description: updateError.message,
+          description: error.message || "An unknown error occurred",
           variant: "destructive",
         });
       } else {
-        // Success
+        console.log('Profile updated successfully:', updatedUser);
         toast({
           title: "Profile updated",
           description: "Your profile has been successfully updated",
         });
       }
     } catch (err) {
-      // Handle any unexpected errors
+      console.error('Unexpected error saving profile:', err);
       toast({
         title: "Error updating profile",
         description: err instanceof Error ? err.message : "An unknown error occurred",
