@@ -15,16 +15,16 @@ const NoSearchResults: React.FC<NoSearchResultsProps> = ({ searchTerm }) => {
   const getMessage = () => {
     const messages = {
       en: [
-        `No information found for "${searchTerm}" yet. We're adding new vendors daily! Try again...`,
-        `No results for "${searchTerm}" yet. We're expanding our database every day. Try again...`,
-        `Nothing found for "${searchTerm}" at the moment. Try different keywords. Try again...`,
-        `Sorry, no vendors match "${searchTerm}" at this time. Check back soon! Try again...`
+        `No results for "${searchTerm}" yet. We're adding new vendors daily! Try again...`,
+        `Nothing found for "${searchTerm}". Check back soon! Try again...`,
+        `No matches for "${searchTerm}". We're growing every day! Try again...`,
+        `Can't find "${searchTerm}" yet. Keep checking! Try again...`
       ],
       lv: [
-        `Vēl nav šādas informācijas par "${searchTerm}". Mēs katru dienu pievienojam jaunus pakalpojumus! Mēģiniet vēl...`,
-        `Vēl nav šādas informācijas par "${searchTerm}". Pamēģiniet citus atslēgvārdus! Mēģiniet vēl...`,
-        `Vēl nav šādas informācijas par "${searchTerm}". Mēs katru dienu papildinām mūsu datubāzi. Mēģiniet vēl...`,
-        `Vēl nav šādas informācijas par "${searchTerm}". Pamēģiniet citu meklēšanas terminu. Mēģiniet vēl...`
+        `Nav rezultātu "${searchTerm}". Drīz būs jauni piedāvājumi! Mēģiniet vēl...`,
+        `Nekas nav atrasts "${searchTerm}". Drīz būs! Mēģiniet vēl...`,
+        `Nav atrasts "${searchTerm}". Mēs augam katru dienu! Mēģiniet vēl...`,
+        `Pagaidām nav "${searchTerm}". Mēģiniet vēlreiz! Mēģiniet vēl...`
       ]
     };
     
