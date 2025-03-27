@@ -8,6 +8,14 @@ export interface UserPresence {
   lastSeen: number;
 }
 
+// Define the shape of the presence data we're tracking
+interface PresenceState {
+  user_id: string;
+  status: UserStatus;
+  lastSeen: number;
+  presence_ref: string;
+}
+
 export const createOnlineUsersTracker = (userId: string) => {
   // Channel for realtime presence
   const channel = supabase.channel('online-users');
@@ -62,7 +70,7 @@ export const createOnlineUsersTracker = (userId: string) => {
     
     const handleActivity = () => {
       // Get current presence from state (if any)
-      const presences = channel.presenceState();
+      const presences = channel.presenceState() as Record<string, PresenceState[]>;
       const myCurrentPresence = presences[userId];
       
       // Only update if we're currently away and the window is visible
@@ -85,7 +93,7 @@ export const createOnlineUsersTracker = (userId: string) => {
       
       // If window becomes visible and we were away, set back to online
       if (isWindowVisible) {
-        const presences = channel.presenceState();
+        const presences = channel.presenceState() as Record<string, PresenceState[]>;
         const myCurrentPresence = presences[userId];
         
         if (myCurrentPresence && myCurrentPresence[0]?.status === 'away') {
@@ -104,7 +112,7 @@ export const createOnlineUsersTracker = (userId: string) => {
   // Handle presence sync (when other users update their status)
   const setupPresenceSync = (callback: (users: Record<string, UserStatus>) => void) => {
     channel.on('presence', { event: 'sync' }, () => {
-      const presences = channel.presenceState();
+      const presences = channel.presenceState() as Record<string, PresenceState[]>;
       
       // Convert presences to a simpler format for the UI
       const users: Record<string, UserStatus> = {};
