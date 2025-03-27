@@ -13,13 +13,15 @@ const SearchBar = ({
   setSearchTerm, 
   onSearch, 
   className = "",
-  mainPage = false 
+  mainPage = false,
+  initialValue = "" 
 }: { 
   searchTerm?: string; 
   setSearchTerm?: React.Dispatch<React.SetStateAction<string>>; 
   onSearch?: (query: string, useLocation: boolean, distanceKm?: number) => void;
   className?: string;
   mainPage?: boolean;
+  initialValue?: string;
 }) => {
   const navigate = useNavigate();
   const { isActive, toggleLocation } = useLocationContext();
@@ -29,7 +31,7 @@ const SearchBar = ({
   const { toast } = useToast();
   
   // Local state for standalone usage (when props aren't provided)
-  const [localSearchTerm, setLocalSearchTerm] = useState('');
+  const [localSearchTerm, setLocalSearchTerm] = useState(initialValue || '');
   
   // Use either provided props or local state
   const term = searchTerm !== undefined ? searchTerm : localSearchTerm;
