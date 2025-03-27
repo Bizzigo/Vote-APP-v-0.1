@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import VendorCard from '@/components/vendor/VendorCard';
@@ -9,6 +10,8 @@ import { Vendor } from '@/lib/types';
 import { supabase } from '@/integrations/supabase/client';
 
 const Vendors = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   
@@ -51,7 +54,14 @@ const Vendors = () => {
   });
 
   const handleSearch = (query: string) => {
+    // If we're on the vendors page and want to use the search functionality
+    // we update the search query locally
     setSearchQuery(query);
+    
+    // Navigate to dedicated search page for complex searches
+    if (query.length > 0 && query.includes(' ')) {
+      navigate(`/search?q=${encodeURIComponent(query)}`);
+    }
   };
 
   const handleDistrictChange = (district: string | null) => {
@@ -65,7 +75,11 @@ const Vendors = () => {
         
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <div className="w-full md:w-2/3">
-            <SearchBar onSearch={handleSearch} />
+            <SearchBar 
+              searchTerm={searchQuery} 
+              setSearchTerm={setSearchQuery} 
+              onSearch={handleSearch} 
+            />
           </div>
           <div className="w-full md:w-1/3">
             <DistrictFilter 

@@ -23,6 +23,7 @@ import Cookies from "./pages/Cookies";
 import AuthCallback from "./pages/AuthCallback";
 import Vendors from "./pages/Vendors";
 import VendorDashboard from "./pages/VendorDashboard";
+import Search from "./pages/Search";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -66,6 +67,7 @@ const App = () => {
                       <Route path="/privacy" element={<Privacy />} />
                       <Route path="/cookies" element={<Cookies />} />
                       <Route path="/auth/callback" element={<AuthCallback />} />
+                      <Route path="/search" element={<Search />} />
                       <Route path="/404" element={<NotFound />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
