@@ -13,6 +13,7 @@ export const updateUser = async (currentUser: User, updates: Partial<User>) => {
       .from('profiles')
       .update({
         name: updates.name,
+        avatar_url: updates.avatarUrl,
         // Add other fields as needed
       })
       .eq('id', currentUser.id)
@@ -64,6 +65,7 @@ export const completeProfile = async (
         instagram: profileData.instagram,
         twitter: profileData.twitter,
         linkedin: profileData.linkedin,
+        avatar_url: profileData.avatarUrl || currentUser.avatarUrl,
         profile_completed: true // Mark the profile as completed
       })
       .eq('id', currentUser.id)
@@ -81,6 +83,7 @@ export const completeProfile = async (
     const updatedUser: User = {
       ...currentUser,
       name: profileData.name,
+      avatarUrl: profileData.avatarUrl || currentUser.avatarUrl,
       profileCompleted: true
     };
     
