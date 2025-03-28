@@ -22,6 +22,8 @@ interface UpdateProfileResponse {
 
 const getProfile = async (userId: string): Promise<ProfileResponse> => {
   try {
+    console.log('Fetching profile for user:', userId);
+    
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
@@ -33,6 +35,7 @@ const getProfile = async (userId: string): Promise<ProfileResponse> => {
       return { error };
     }
     
+    console.log('Profile fetched successfully:', data);
     return { data };
   } catch (err) {
     console.error('Unexpected error in getProfile:', err);
@@ -43,6 +46,7 @@ const getProfile = async (userId: string): Promise<ProfileResponse> => {
 const updateProfile = async (profile: Profile): Promise<UpdateProfileResponse> => {
   try {
     if (!profile.id) {
+      console.error('Profile update failed: No ID provided');
       return { error: { message: 'Profile ID is required' } };
     }
     
@@ -54,6 +58,7 @@ const updateProfile = async (profile: Profile): Promise<UpdateProfileResponse> =
         name: profile.name,
         bio: profile.bio,
         location: profile.location,
+        avatar_url: profile.avatarUrl,
       })
       .eq('id', profile.id)
       .select()
@@ -64,6 +69,7 @@ const updateProfile = async (profile: Profile): Promise<UpdateProfileResponse> =
       return { error };
     }
     
+    console.log('Profile updated successfully:', data);
     return { user: data };
   } catch (err) {
     console.error('Unexpected error in updateProfile:', err);

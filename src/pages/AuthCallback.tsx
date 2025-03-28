@@ -10,6 +10,12 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
+        console.log('Auth callback processing...');
+        
+        // Extract the hash fragment
+        const hashParams = window.location.hash;
+        console.log('Hash parameters:', hashParams);
+        
         // Get the current session
         const { data, error } = await supabase.auth.getSession();
         
@@ -23,7 +29,7 @@ const AuthCallback = () => {
         }
         
         if (data?.session) {
-          console.log('Auth successful, session established');
+          console.log('Auth successful, session established:', data.session.user.id);
           
           // Check if profile is completed
           const { data: profile, error: profileError } = await supabase
